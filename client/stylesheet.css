@@ -1,0 +1,252 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-size: 16px;
+    line-height: 1.5;
+    background: #eeeeee;
+    color: #333333;
+}
+
+body, input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input {
+    font-size: 100%;
+}
+
+a, a:visited, a:active {
+    color: #258;
+}
+
+h3 {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 120%;
+    padding: 8px 6px;
+    text-align: center;
+}
+
+.table_header{
+    white-space: nowrap
+}
+
+#top-tag-filter, #main-pane, #side-pane, #bottom-pane {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#top-tag-filter {
+    left: 200px;
+    height: 44px;
+    bottom: auto;
+    background: #ddd;
+    border-bottom: 1px solid #999;
+    color: blue;
+}
+
+#help {
+    padding: 8px;
+}
+
+#main-pane {
+    top: 45px;
+    bottom: 0;
+    left: 220px;
+    overflow: auto;
+}
+
+#side-pane {
+    width: 200px;
+    right: auto;
+    overflow: auto;
+    background: #eee;
+    border-right: 1px solid #999;
+    background: #ddd;
+}
+
+.tag {
+    cursor: pointer;
+    float: left;
+    margin: 5px;
+    padding: 2px 7px;
+    font-size: 80%;
+    font-weight: bold;
+    background: #999;
+    color: #fff;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+
+    opacity: 1;
+    transition: opacity 0.3s linear;
+    -moz-transition: opacity 0.3s linear;
+    -webkit-transition: opacity 0.3s linear;
+    -o-transition: opacity 0.3s linear;
+
+    position: relative;
+}
+
+#tag-filter .label {
+    margin-top: 9px;
+    margin-left: 12px;
+    margin-right: 8px;
+
+}
+
+#tag-filter .tag {
+    margin-top: 10px;
+    border: 1px solid #777;
+}
+
+#tag-filter .selected {
+    background: #69d;
+}
+
+#tag-filter .count {
+    font-weight: normal;
+    padding-left: 2px;
+}
+
+#lists .list {
+    padding: 3px 6px;
+}
+
+#lists .selected {
+    padding: 2px 6px;
+    background: #9be;
+    font-weight: bold;
+}
+
+#lists .list-name {
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+#createList {
+    padding: 3px 6px;
+    margin-top: 5px;
+}
+
+#createList input {
+    width: 180px;
+}
+
+#new-todo-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 60px;
+    margin-right: 20px;
+    font-size: 160%;
+    position: relative;
+    height: 40px;
+}
+
+#new-todo {
+   position: absolute;
+   width: 100%;
+}
+
+#items-view {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+#item-list .todo {
+    display: block;
+    height: 50px;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid #ccc;
+}
+
+#item-list .todo .destroy {
+    cursor: pointer;
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    height: 20px;
+    width: 20px;
+}
+
+#item-list .todo .display, #item-list .todo .edit {
+    margin-left: 30px;
+    height: 100%;
+    width: auto;
+    float: left;
+    padding-top: 18px;
+    line-height: 1;
+}
+
+#todo-input {
+    width: 300px;
+    position: relative;
+    top: -3px;
+}
+ 
+    body {
+    background: #eee !important;    
+}
+
+.wrapper {  
+    margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+}
+  .form-signin-heading,.checkbox {
+      margin-bottom: 30px;
+    }
+
+    .checkbox {
+      font-weight: normal;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+        /*include box-sizing(border-box);
+
+        &:focus {
+          z-index: 2;
+        }*/
+    }
+
+    input[type="text"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+}
+}
