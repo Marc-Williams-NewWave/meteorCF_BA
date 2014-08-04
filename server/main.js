@@ -1,20 +1,16 @@
 Meteor.publish('apps', function() {
     return Apps.find({});
 });
-// Meteor.publish('clients', function() {
-//     return Client.find({});
-// });
+
+Meteor.publish('userList', function() {
+    return Meteor.users.find({});
+});
 
 
 Meteor.startup(function () {
-
-console.log("Checking in on the server side - MW");
-// Users2.remove({});
-
+    var allUsers = Meteor.users.find({}).fetch();
+    for(i = 0; i < allUsers.length; i++){
+        console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t"+ allUsers[i].password + "\n");
+    }
+    console.log("Checking in on the server side - MW");
 });
-
-// console.log(Client.find({}));
-// // Client.insert({first: "fName", last: "lName", email: "email"});
-// var client2 = Client.find({}).fetch();
-// console.log(client2);
-// console.log(Client.find().count());

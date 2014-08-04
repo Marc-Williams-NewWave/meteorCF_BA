@@ -1,174 +1,199 @@
-<head> 
-  <title>BA Demo</title> 
+<head>
+    <title>BA Demo</title>
 </head>
 
 
 <template name="loginScreen">
-<!-- <h3>Hi!</h3> -->
+    <!-- <form id="login-form" action="action">
+      <div>
+        <input type="email" id="login-email" />
+        <input type="password" id="login-password" />
+        <input type="submit" id="login-button" value="Sign in" />
+     </div>
+   </form>  -->
+    <div class="wrapper">
+        <form class="form-signin" id="login-form" action="action">
+            <h2 class="form-signin-heading">Please login</h2>
+            <input type="text" id="login-username" class="form-control" name="username" placeholder="Username" required="" autofocus />
+            <input type="password" id="login-password" class="form-control" name="password" placeholder="Password" required=""/>
+            <!--  <label class="checkbox">
+               <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
+             </label> -->
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login</button>
+            <!-- <button class="btn btn-lg btn-primary btn-block" id="registerNewUser-button" value="Register">Create Account</button> -->
+            <a href="{{ pathFor 'registerScreen' }}">Create Account</a>
+        </form>
+    </div>
+</template>
 
-<div align="center">
-  {{> loginButtons }}
-</div>
-<body>
-  <div>
-    hi
+<template name="registerScreen">
+    <!-- <form id="register-form" action="action">
+          <div>
+          <input type="text" id="account-username" />
+           <input type="email" id="account-email" /> -->
+    <!-- <input type="password" id="account-password" />
+    <input type="submit" id="create-account" value="Create an Account" />
   </div>
-</body>
-
+</form> -->
+    <div class="wrapper">
+        <form class="form-signin" id="register-form" action="action">
+            <h2 class="form-signin-heading">Account Info</h2>
+            <input type="text" id="account-username" class="form-control" name="username" placeholder="Username" required="" autofocus />
+            <input type="password" id="account-password" class="form-control" name="password" placeholder="Password" required=""/>
+            <!--  <label class="checkbox">
+               <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
+             </label> -->
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="register-button" value="Create">Create</button>
+            <!-- <button class="btn btn-lg btn-primary btn-block" id="registerNewUser-button" value="Register">Create Account</button> -->
+        </form>
+    </div>
 </template>
 
 <template name="layout">
-  <div id="top-tag-filter">
-    {{> tag_filter}}
-  </div>
+    <div id="top-tag-filter">
+        {{> tag_filter}}
+    </div>
 
-  <div id="main-pane">
-    {{> yield}}
-  </div>
+    <div id="main-pane">
+        {{> yield}}
+    </div>
 
-  <div id="side-pane">
-    {{> homePage}}
-  </div>
+    <div id="side-pane">
+        {{> homePage}}
+    </div>
 </template>
 
 <template name="layout2">
-  <div>
-    {{> yield}}
-  </div>
+    <div>
+        {{> yield}}
+    </div>
 </template>
 
 
 <template name="tag_filter">
-  <div align="center">
-    <div class="label" style="color:black;font-size:24px"> 
-      Demo Space
+    <div align="center">
+        <div class="label" style="color:black;font-size:24px">
+            Demo Space
+        </div>
     </div>
-  </div>
 </template>
 
 <template name="homePage"> 
-  <h3><a href="{{ pathFor 'cfInfo' }}">Menu</a></h3>
-  <div class="huh">
-    <div class="panel-group" id="accordion">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Application Management</a>
-                </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <ul>
-                      <li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>
-                      <li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>
-                      <li><a href="{{ pathFor 'statusApp' }}">Status</a></li>
-                    </ul>
+    <h3><a href="{{ pathFor 'cfInfo' }}">Menu</a></h3>
+    <div class="huh">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Application Management</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>
+                            <li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>
+                            <li><a href="{{ pathFor 'statusApp' }}">Status</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Service Management</a>
-                </h4>
-            </div>
-            <div id="collapseTwo" class="panel-collapse collapse">
-                <div class="panel-body">
-                <ul>
-                      <li><a href="{{ pathFor 'createService' }}">Create</a></li>
-                      <li><a href="{{ pathFor 'deleteService' }}">Delete</a></li>
-                      <li><a href="{{ pathFor 'listService' }}">List</a></li>
-                      <li><a href="{{ pathFor 'bindService' }}">Bind</a></li>
-                      <li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>
-                  </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Service Management</a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li><a href="{{ pathFor 'createService' }}">Create</a></li>
+                            <li><a href="{{ pathFor 'deleteService' }}">Delete</a></li>
+                            <li><a href="{{ pathFor 'listService' }}">List</a></li>
+                            <li><a href="{{ pathFor 'bindService' }}">Bind</a></li>
+                            <li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
-        <!-- If you want to exclude the Service Broker Management Section, just comment out everything between this line and ..... -->
+            <!-- If you want to exclude the Service Broker Management Section, just comment out everything between this line and ..... -->
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>
-                </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse">
-                <div class="panel-body">
-                <ul>
-                      <li><a href="{{ pathFor 'option1SBM' }}">Option 1</a></li>
-                      <li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>
-                      <li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>
-                </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li><a href="{{ pathFor 'option1SBM' }}">Option 1</a></li>
+                            <li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>
+                            <li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- HERE -->
+            <!-- HERE -->
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cloud Info</a>
-                </h4>
-            </div>
-              <div id="collapseFour" class="panel-collapse collapse">
-                <div class="panel-body">
-                   <ul>
-                      <li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>
-                      <li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>
-                      <li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>
-                    </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cloud Info</a>
+                    </h4>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>
+                            <li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>
+                            <li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <template name="placeHolder">
 </template>
 
 <template name="launchApp">
-<div align="center" style="">
-  <div align="right">
-    <button id="launchBtn" name="Launch">Launch</button>
-    <button id="launchBtn" name="Delete">Delete</button>
-  </div>
-  <table class="table" id="appTable">
-    <thead>
-      <tr>
-        <th><div align="center"><input type="checkbox"></div></th>
-        <th class="table_header">Name</th>
-        <th class="table_header">Current State</th>
-        <th class="table_header">Running Since</th>
-        <th class="table_header">CPU Usage</th>
-        <th class="table_header">Memory Usage</th>
-        <th class="table_header">Disk Usage</th>
-        <th class="table_header">Bound Serives</th>
-      </tr>
-    </thead>
+    <div align="center" style="">
+        <div align="right">
+            <button id="launchBtn1" name="Launch">Launch</button>
+            <button id="deleteBtn1" name="Delete">Delete</button>
+        </div>
 
-    {{#each apps}}
-    <tr>
-      <td><div align="center"><input type="checkbox"></div></td>
-      <td>{{name}}</td>
-      <td>{{state}}</td>
-      <td>{{since}}</td>
-      <td>{{cpuUsage}}</td>
-      <td>{{memUsage}}</td>
-      <td>{{diskUsage}}</td>
-      <td>{{boundSerives}}</td> <!-- Here there will be some sort of dropdown populated with the services bouded to the application -->
-    </tr>
-    {{/each}}
-    </table>
-    <!-- {{users2}} -->
-   <!--  {{#each users2}}
-      <h1>{{first}}</h1>
-    {{/each}} -->
-</div>
- </template>
+
+        <!--<table class="table" id="appTable">-->
+        <!--<thead>-->
+        <!--<tr>-->
+        <!--<th><div align="center"><input type="checkbox"></div></th>-->
+        <!--<th class="table_header">Name</th>-->
+        <!--<th class="table_header">Current State</th>-->
+        <!--<th class="table_header">Running Since</th>-->
+        <!--<th class="table_header">CPU Usage</th>-->
+        <!--<th class="table_header">Memory Usage</th>-->
+        <!--<th class="table_header">Disk Usage</th>-->
+        <!--<th class="table_header">Bound Serives</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+
+        <!--&lt;!&ndash;   {{#each userlist}}-->
+        <!--{{username}}-->
+        <!--{{/each}} &ndash;&gt;-->
+        <!--</table>-->
+        <!--&lt;!&ndash; {{users2}} &ndash;&gt;-->
+        <!--&lt;!&ndash;  {{#each users2}}-->
+        <!--<h1>{{first}}</h1>-->
+        <!--{{/each}} &ndash;&gt;-->
+    </div>
+</template>
 
 
 <!-- <template name="jqGridTemplate">
@@ -180,85 +205,104 @@
 </template> -->
 
 <template name="deleteApp">
-<!--   <div>
-    From here you can delete your launched application. 
-    {{> reactiveTable collection=apps settings=tableSettings}}
-  </div> -->
-  <!-- <div>Hi</div> -->
-  <div id="reactiveTableSpace">
-    <!-- {{> reactiveTable collection=apps settings=tableSettings}} -->
-    {{> reactiveTable collection=apps}}
-  </div>
+    <!--   <div>
+        From here you can delete your launched application.
+        {{> reactiveTable collection=apps settings=tableSettings}}
+      </div> -->
+    <!-- <div>Hi</div> -->
+    <div align="right">
+        <button id="launchBtn" name="Launch">Launch</button>
+        <button id="deleteBtn" name="Delete">Delete</button>
+    </div>
+    <div id="reactiveTableSpace">
+        <!-- {{> reactiveTable collection=apps settings=tableSettings}} -->
+        {{> reactiveTable collection=apps}}
+    </div>
 </template>
 
 <template name="statusApp">
-  <div>
-    Here you'll check the status of your applicaion.
-  </div>
+    <div>
+        Here you'll check the status of your applicaion.
+    </div>
 </template>
 
 <template name="createService">
-  <div>
-    From here you can create a service.
-  </div>
+    <div>
+        From here you can create a service.
+    </div>
 </template>
 
 <template name="deleteService">
-  <div>
-    From here you can delete a service.
-  </div>
+    <div>
+        From here you can delete a service.
+    </div>
 </template>
 
 <template name="listService">
-  <div>
-    From here you can list your current services.
-  </div>
+    <div>
+        From here you can list your current services.
+    </div>
 </template>
 
 <template name="bindService">
-  <div>
-    From here you can bind a service.
-  </div>
+    <div>
+        From here you can bind a service.
+    </div>
 </template>
 
 <template name="unbindService">
-  <div>
-    From here you can unbind a service.
-  </div>
+    <div>
+        From here you can unbind a service.
+    </div>
 </template>
 
 <template name="option1SBM">
-  <div>
-    Here you can manage your service brokers.
-  </div>
+    <div>
+        Here you can manage your service brokers.
+    </div>
 </template>
 
 <template name="option2SBM">
-  <div>
-    Here you can manage your service brokers.
-  </div>
+    <div>
+        Here you can manage your service brokers.
+    </div>
 </template>
 
 <template name="option3SBM">
-  <div>
-    Here you can manage your service brokers.
-  </div>
+    <div>
+        Here you can manage your service brokers.
+    </div>
 </template>
 
 <template name="cfInfo">
-  <div>
-    Here you can view the Cloud Foundary info.
-  </div>
+
+    <div align="center">
+        <!-- NewWave Logo -->
+        <div class="panel panel-primary" style="width: 50%" align="left">
+            <div class="panel-heading">
+                <h3 panel-title>{{currentUser.username}}'s Info</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>API Endpoint: *app address*</li>
+                    <li>user: {{currentUser.username}}</li>
+                    <li>org: *the current's user's role group*</li>
+                    <li>space:</li>
+                    <li>userID: {{currentUser._id}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="boshInfo">
-  <div>
-    Here you can view the Bosh info.
-  </div>
+    <div>
+        Here you can view the Bosh info.
+    </div>
 </template>
 
 <template name="openstackInfo">
-  <div>
-    Here you can view the Openstack info.
-  </div>
+    <div>
+        Here you can view the Openstack info.
+    </div>
 </template>
