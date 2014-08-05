@@ -2,7 +2,7 @@ Meteor.subscribe("apps");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
-    // populate();
+    populate();
 });
 Router.configure({
     layoutTemplate: 'layout'
