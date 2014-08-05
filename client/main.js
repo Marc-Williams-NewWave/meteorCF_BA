@@ -2,7 +2,9 @@ Meteor.subscribe("apps");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
-    populate();
+
+     populate();
+//    Apps.remove({});
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -58,6 +60,12 @@ Template.deleteApp.tableSettings = function () {
         useFontAwesome: true
     };
 };
+
+Template.statusApp.events({
+   'click #deleteBtn' : function(){
+       Meteor.call('removeApps');
+   }
+});
 
 Template.loginScreen.events({
     'submit #login-form' : function(e,t){
