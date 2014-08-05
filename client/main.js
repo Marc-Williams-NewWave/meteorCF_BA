@@ -45,7 +45,7 @@ Template.cfInfo.currentUser = function () {
     return Meteor.user();
 }
 
-Template.deleteApp.apps = function(){
+Template.statusApp.apps = function(){
     return Apps.find();
 }
 
@@ -64,7 +64,7 @@ Template.loginScreen.events({
         e.preventDefault();
         var username = t.find('#login-username').value; //trim '@xyz.com'
         var password = t.find('#login-password').value;
-        alert("Username: " + username + "\nPassword: " + password);
+//        alert("Username: " + username + "\nPassword: " + password);
 
         //validate fields
         //Upon success
@@ -80,9 +80,9 @@ Template.loginScreen.events({
         });
 
         Router.go('cfInfo');
-        var curr = this.userId;
-        alert(this.userId);
-        alert(curr);
+//        var curr = this.userId;
+//        alert(this.userId);
+//        alert(curr);
         return false;
     }
 });
@@ -97,9 +97,9 @@ Template.registerScreen.events({
         //Upon success
         // alert("Username: " + username + "\nPassword: " + password);
         Accounts.createUser({username: username, password: password}, function(err){
-            alert("Success1");
+//            alert("Success1");
             if(err){
-                alert("Success!");
+//                alert("Success!");
             } else{
 
             }

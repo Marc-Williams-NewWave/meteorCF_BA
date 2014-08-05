@@ -91,8 +91,8 @@
                 <div id="collapseOne" class="panel-collapse collapse">
                     <div class="panel-body">
                         <ul>
-                            <li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>
-                            <li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>
+                            <!--<li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>-->
+                            <!--<li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>-->
                             <li><a href="{{ pathFor 'statusApp' }}">Status</a></li>
                         </ul>
                     </div>
@@ -205,6 +205,22 @@
 </template> -->
 
 <template name="deleteApp">
+    <!--&lt;!&ndash;   <div>-->
+        <!--From here you can delete your launched application.-->
+        <!--{{> reactiveTable collection=apps settings=tableSettings}}-->
+      <!--</div> &ndash;&gt;-->
+    <!--&lt;!&ndash; <div>Hi</div> &ndash;&gt;-->
+    <!--<div align="right">-->
+        <!--<button id="launchBtn" name="Launch">Launch</button>-->
+        <!--<button id="deleteBtn" name="Delete">Delete</button>-->
+    <!--</div>-->
+    <!--<div id="reactiveTableSpace">-->
+        <!--&lt;!&ndash; {{> reactiveTable collection=apps settings=tableSettings}} &ndash;&gt;-->
+        <!--{{> reactiveTable collection=apps}}-->
+    <!--</div>-->
+</template>
+
+<template name="statusApp">
     <!--   <div>
         From here you can delete your launched application.
         {{> reactiveTable collection=apps settings=tableSettings}}
@@ -217,12 +233,6 @@
     <div id="reactiveTableSpace">
         <!-- {{> reactiveTable collection=apps settings=tableSettings}} -->
         {{> reactiveTable collection=apps}}
-    </div>
-</template>
-
-<template name="statusApp">
-    <div>
-        Here you'll check the status of your applicaion.
     </div>
 </template>
 
