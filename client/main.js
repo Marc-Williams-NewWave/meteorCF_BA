@@ -40,21 +40,29 @@ Template.cfInfo.currentUser = function () {
 
 Template.terminalPage.output = function () {
     var text;
-    Meteor.call('sendCommand', function (err, result){
+    var curlServices = 'cf curl /v2/services';
+    Meteor.call('sendCommand', curlServices, function (err, result){
         if(result){
             text = result;
         }
     });
-//    var x = text + "";
-//    alert(text);
+
     Meteor.call('blah');
     console.log('1 ' + text);
     console.log('2 ' + text);
      alert(text);
-    console.log('3 ' + text);
-//    '#terminalOutput'.text("<p>This is a test.</p>");
-//    Deps.flush();
-    return text;
+
+    var jsonResponse_Services = JSON.parse(text);
+
+    var serviceLabel = jsonResponse_Services.resources[0].entity.label;
+    var servicePlansURL = "";
+    //get plans for mongo collection by executing curl
+//    Meteor.call('sendCommand', servicePlansURL)
+
+    var serviceDescription = jsonResponse_Services.resources[0].entity.description;
+
+    alert(serviceLabel + " & " + serviceDescription);
+    return serviceLabel + " & " + serviceDescription;
     }
 
 //Template.terminalPage.rendered = function () {
@@ -72,7 +80,8 @@ Template.terminalPage.output = function () {
 
 Template.terminalPage.events({
    'click #terminalBtn' : function(){
-   Meteor.call('sendCommand', function (err, result){
+       var curlServices = 'cf curl /v2/services';
+   Meteor.call('sendCommand', curlServices, function (err, result){
        if(result){
            alert(result);
        }
@@ -179,6 +188,8 @@ $('#example').dataTable({
         "sLengthMenu": "_MENU_ records per page"
     }
 });
+
+
 
 
 var populate = function(){

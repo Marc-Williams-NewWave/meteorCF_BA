@@ -8,7 +8,8 @@
       },
       "reactive-table": {},
       "datatables": {},
-      "npm": {}
+      "npm": {},
+      "bootboxjs": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -35,6 +36,11 @@
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "bootboxjs": {
+        "git": "https://github.com/TimHeckel/meteor-bootboxjs.git",
+        "tag": "v4.2.1-master.1",
+        "commit": "c125969c1f3aef30e2a2ff20252bd3b2e4014b2f"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

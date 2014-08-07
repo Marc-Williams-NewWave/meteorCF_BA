@@ -43,8 +43,8 @@ Meteor.methods({
     blah : function(){
       console.log('killing some time');
     },
-    sendCommand : function(){
-        var result = sh.exec('cf curl /v2/service_plans');
+    sendCommand : function(command){
+        var result = sh.exec(command);
         console.log("return code " + result.code);
         console.log("stdout + stderr " + result.stdout);
 //         Session.set("output", result.stdout);
