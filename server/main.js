@@ -38,20 +38,20 @@ Meteor.methods({
     removeServices : function() {
         console.log("clearing Services");
         return Services.remove({});
-    },
-
-    blah : function(){
-      console.log('killing some time');
-    },
-    sendCommand : function(){
-        var result = sh.exec('cf curl /v2/service_plans');
-        console.log("return code " + result.code);
-        console.log("stdout + stderr " + result.stdout);
-//         Session.set("output", result.stdout);
-
-            return result.stdout;
-
-//        return result.stdout;
     }
+
+//    blah : function(){
+//      console.log('killing some time');
+//    },
+//    sendCommand : function(){
+//        var result = sh.exec('cf curl /v2/service_plans');
+//        console.log("return code " + result.code);
+//        console.log("stdout + stderr " + result.stdout);
+////         Session.set("output", result.stdout);
+//
+//            return result.stdout;
+//
+////        return result.stdout;
+//    }
 
 });
