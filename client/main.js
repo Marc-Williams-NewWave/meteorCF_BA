@@ -1,10 +1,9 @@
 Meteor.subscribe("apps");
+Meteor.subscribe("services");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
-
-     populate();
-//    Apps.remove({});
+//     populate();
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -28,43 +27,97 @@ Router.map(function () {
     this.route('cfInfo', {path: '/cfInfo'});
     this.route('boshInfo');
     this.route('openstackInfo');
+    this.route('jqGridTemplate');
+    this.route('terminalPage');
 });
 
-
+//Session.setDefault("output", "huh?");
+//Meteor.subscribe("output");
 
 Template.cfInfo.currentUser = function () {
-    // insertClient();
-    // var count = Apps.find().count();
-    // return Users2.find().count();
-
-    // return Meteor.users.find();
-//     var count = userList.find().count();
-//     alert(count);
-//    return userList.findOne({_id:"xvvwgAbLjkf2Z5KT6"});
-    // return count;
-//     var curr = Meteor.users.findOne({username:"Loki"});
-//     alert(curr.username);
     return Meteor.user();
 }
+
+Template.terminalPage.output = function () {
+    var text;
+    Meteor.call('sendCommand', function (err, result){
+        if(result){
+            text = result;
+        }
+    });
+//    var x = text + "";
+//    alert(text);
+    Meteor.call('blah');
+    console.log('1 ' + text);
+    console.log('2 ' + text);
+     alert(text);
+    console.log('3 ' + text);
+//    '#terminalOutput'.text("<p>This is a test.</p>");
+//    Deps.flush();
+    return text;
+    }
+
+//Template.terminalPage.rendered = function () {
+//    var text;
+//    Meteor.call('sendCommand', function (err, result){
+//        if(result){
+//            text = result;
+//        }
+//    });
+//    return text;
+//
+////    alert(text);
+//}
+
+
+Template.terminalPage.events({
+   'click #terminalBtn' : function(){
+   Meteor.call('sendCommand', function (err, result){
+       if(result){
+           alert(result);
+       }
+   });
+//       var z = Session.get("output");
+//       alert(z);
+//       alert(output);
+
+
+   }
+});
 
 Template.statusApp.apps = function(){
     return Apps.find();
 }
 
-Template.deleteApp.tableSettings = function () {
-    return {
-        fields: [
-            { key: 'state', label: 'State' },
-            { key: 'since', label: 'Since'}
-        ],
-        useFontAwesome: true
-    };
-};
+Template.option1SBM.services = function() {
+    return Services.find();
+}
+
+Template.jqGridTemplate.service = function(){
+
+    return Services.find();
+}
+
+//Template.deleteApp.tableSettings = function () {
+//    return {
+//        fields: [
+//            { key: 'state', label: 'State' },
+//            { key: 'since', label: 'Since'}
+//        ],
+//        useFontAwesome: true
+//    };
+//};
 
 Template.statusApp.events({
    'click #deleteBtn' : function(){
        Meteor.call('removeApps');
    }
+});
+
+Template.jqGridTemplate.events({
+    'click #deleteService' : function(){
+        Meteor.call('removeServices');
+    }
 });
 
 Template.loginScreen.events({
@@ -117,18 +170,13 @@ Template.registerScreen.events({
     }
 });
 
-Template.launchApp.events({
-    'click #launchBtn1' : function(){
-        alert("launch clicked");
-        var count = Meteor.users.find().count();
-        alert(count);
 
-        var user = Meteor.user();
-        alert(user.username);
-//        var curr = Meteor.users.findOne({username:"Loki"});
-//        var curr = this.userId;
-//        alert(this.userId);
-//        alert(curr);
+
+$('#example').dataTable({
+    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>"
+    , "sPaginationType": "bootstrap"
+    , "oLanguage": {
+        "sLengthMenu": "_MENU_ records per page"
     }
 });
 
@@ -137,8 +185,10 @@ var populate = function(){
     for(i = 0; i < 5; i++){
         if(i % 2 == 0){
             Apps.insert({name: "app_" + i + "", state: "running", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
         } else {
             Apps.insert({name: "app_" + i + "", state: "stopped", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
         }
     }
 }
