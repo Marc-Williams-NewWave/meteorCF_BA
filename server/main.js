@@ -1,7 +1,7 @@
-var sys = Meteor.require('sys');
-var exec = Meteor.require('child_process').exec;
-
-var sh = Meteor.require('execSync');
+//var sys = Meteor.require('sys');
+//var exec = Meteor.require('child_process').exec;
+//
+//var sh = Meteor.require('execSync');
 
 Meteor.publish('apps', function() {
     return Apps.find({});
