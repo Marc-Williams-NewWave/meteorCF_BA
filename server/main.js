@@ -50,8 +50,6 @@ Meteor.methods({
 //         Session.set("output", result.stdout);
 
             return result.stdout;
-
-//        return result.stdout;
     }
 
 });
