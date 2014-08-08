@@ -40,16 +40,32 @@ Meteor.methods({
         return Services.remove({});
     },
 
+    serverSays : function(message){
+        Future = Npm.require('fibers/future');
+
+        var myFuture = new Future();
+
+//        console.log(message);
+
+        myFuture.return(message);
+
+        return myFuture.wait();
+    },
     blah : function(){
       console.log('killing some time');
     },
     sendCommand : function(command){
+        Future = Npm.require('fibers/future');
+
+        var myFuture = new Future();
+
         var result = sh.exec(command);
         console.log("return code " + result.code);
         console.log("stdout + stderr " + result.stdout);
 //         Session.set("output", result.stdout);
+        myFuture.return(result.stdout);
 
-            return result.stdout;
+//            return result.stdout;
+        return myFuture.wait();
     }
-
 });

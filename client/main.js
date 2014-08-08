@@ -46,71 +46,65 @@ Template.cfInfo.currentUser = function () {
 }
 
 Template.terminalPage.output = function () {
-    var text;
-    var curlServices = 'cf curl /v2/services';
-    var label;
-//    var x;
-    Meteor.call('sendCommand', curlServices, function (err, result){
-        if(result){
-//            Meteor.call('blah');
-//            Session.set('resultingInfo', result);
-//            x = speak(Session.get('resultingInfo'));
-//            alert("from within call --->>> " + JSON.parse(result).resources[0].entity.label);
-//            label = JSON.parse(result).resources[0].entity.label;
-            text = result;
-            alert(text);
-
-        }
-    });
-
-//    Meteor.call('blah');
-//    console.log('1 ' + text);
-//    console.log('2 ' + text);
-//    x = Session.get("resultingInfo");
-//alert("looks like session var is " + Session.get('resultingInfo'));
-//    alert(x);
-    alert(text);
-
-    var jsonResponse_Services = JSON.parse(text);
-
-    var serviceLabel = jsonResponse_Services.resources[0].entity.label; // get service name (label)
-    var servicePlansURL = jsonResponse_Services.resources[0].entity.service_plans_url; //get service_plans_url
-    var serviceDescription = jsonResponse_Services.resources[0].entity.description; // get service description
-
-    //get plans for mongo collection by executing curl
-    var plansText;
-    var curlPlans = 'cf curl ' + servicePlansURL;
-
-    Meteor.call('sendCommand', curlPlans, function (err, result){
-        if(result){
-            alert(curlPlans);
-            plansText = result;
-            alert("results were --->>>> \n\n\n" + result);
-        }
-    });
-    Meteor.call('blah');
-    console.log('1 ' + plansText);
-    console.log('2 ' + plansText);
-    alert(plansText);
-
-
-    alert("service plan url " + servicePlansURL);
-    alert(serviceLabel + " & " + serviceDescription);
-
-    return serviceLabel + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> planText " + plansText;
-    }
-
-//Template.terminalPage.rendered = function () {
 //    var text;
-//    Meteor.call('sendCommand', function (err, result){
+//    var curlServices = 'cf curl /v2/services';
+//    Meteor.call('sendCommand', curlServices, function (err, result){
 //        if(result){
-//            text = result;
+//            Session.set('serviceCurl', result);
 //        }
 //    });
-//    return text;
-//
-////    alert(text);
-//}
+//    text = Session.get('serviceCurl');
+//    text = serviceCuler();
+//    var jsonResponse_Services = JSON.parse(text);
+
+    var jsonResponse_Services = serviceCuler('cf curl /v2/services');
+    var serviceGUID = jsonResponse_Services.resources[0].metadata.guid; // get service guid
+    var serviceName = jsonResponse_Services.resources[0].entity.label; // get service name (label)
+    var serviceDescription = jsonResponse_Services.resources[0].entity.description; // get service description
+    var servicePlansURL = jsonResponse_Services.resources[0].entity.service_plans_url; //get service_plans_url
+
+    //get plans for mongo collection by executing curl
+//    var plansText;
+//    var curlPlans = 'cf curl ' + servicePlansURL;
+//    alert(curlPlans);
+
+//    Meteor.call('sendCommand', curlPlans, function (err, result){
+//        if(result){
+//           Sesssion.set('plansCurl', result);
+//        }
+//    });
+//    var plansText = planCuler(curlPlans);
+    var jsonResponse_Plans = planCuler('cf curl ' + servicePlansURL);
+    var planGUID = jsonResponse_Plans.resources[0].metadata.guid; // get plan guid
+    var planName = jsonResponse_Plans.resources[0].entity.name; // get plan name
+    var planDescription = jsonResponse_Plans.resources[0].entity.description; // get plan description
+    var planSerivceGUID = jsonResponse_Plans.resources[0].entity.service_guid; // get plan's service_guid
+
+//    if(planSerivceGUID == serviceGUID){
+//        alert("YES!");
+//    }
+    return serviceGUID + " " + serviceName + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> plan info " + planGUID + " " + planName + " " + planDescription  + " " + planSerivceGUID;
+    }
+
+var serviceCuler = function(curlCommand){
+    Meteor.call('sendCommand', curlCommand, function (err, result){
+        if(result){
+            Session.set('curlOutput_Services', result);
+        }
+    });
+
+    return JSON.parse(Session.get('curlOutput_Services'));
+}
+
+var planCuler = function(curlCommand){
+    Meteor.call('sendCommand', curlCommand, function (err, result){
+        if(result){
+            Session.set('curlOutput_Plans', result);
+        }
+    });
+
+    return JSON.parse(Session.get('curlOutput_Plans'));
+}
 
 
 //Template.terminalPage.events({
@@ -128,6 +122,17 @@ Template.terminalPage.output = function () {
 //
 //   }
 //});
+
+Template.terminalPage.serverReturn = function () {
+    var x = "";
+    Meteor.call('serverSays', 'Hi There!', function(err, result){
+//        alert(result);
+//    x = result;
+        Session.set('textout', result);
+});
+//    alert(Session.get('textout'));
+    return Session.get('textout');
+}
 
 
 
