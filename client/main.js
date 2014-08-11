@@ -1,9 +1,12 @@
 Meteor.subscribe("apps");
 Meteor.subscribe("services");
+Meteor.subscribe("plans");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
 //     populate();
+//    populateServicesAndPlans();
+
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -29,6 +32,7 @@ Router.map(function () {
     this.route('openstackInfo');
     this.route('jqGridTemplate');
     this.route('terminalPage');
+    this.route('modal');
 });
 
 //Session.setDefault("output", "huh?");
@@ -62,9 +66,39 @@ Template.terminalPage.output = function () {
 //    if(planSerivceGUID == serviceGUID){
 //        alert("YES!");
 //    }
-    return serviceGUID + " " + serviceName + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> plan info " + planGUID + " " + planName + " " + planDescription + " " + planSerivceGUID;
+    return jsonResponse_Services.resources.length;//serviceGUID + " " + serviceName + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> plan info " + planGUID + " " + planName + " " + planDescription + " " + planSerivceGUID;
 }
 
+
+
+
+var populateServicesAndPlans = function(){
+    var jsonResponse_Services = serviceCuler('cf curl /v2/services');
+    var jsonResponse_Plans = planCuler('cf curl ' + servicePlansURL);
+
+    var serviceCount = jsonResponse_Services.resources.length;
+    var planCount = jsonResponse_Plans.resources.length;
+
+    for(i = 0; i < serviceCount; i++){
+        var serviceGUID = jsonResponse_Services.resources[i].metadata.guid; // get service guid
+        var serviceName = jsonResponse_Services.resources[i].entity.label; // get service name (label)
+        var serviceDescription = jsonResponse_Services.resources[i].entity.description; // get service description
+        var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
+//        Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
+
+        Services.insert( {guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL} );
+    }
+
+    for(z = 0; z < planCount; z++){
+        var planGUID = jsonResponse_Plans.resources[0].metadata.guid; // get plan guid
+        var planName = jsonResponse_Plans.resources[0].entity.name; // get plan name
+        var planDescription = jsonResponse_Plans.resources[0].entity.description; // get plan description
+        var planSerivceGUID = jsonResponse_Plans.resources[0].entity.service_guid; // get plan's service_guid
+
+        Plans.insert( {guid: planGUID, name: planName, description: planDescription, service_guid: planSerivceGUID} );
+    }
+
+}
 var serviceCuler = function(curlCommand){
     Meteor.call('sendCommand', curlCommand, function (err, result){
         if(result){
@@ -148,6 +182,79 @@ Template.statusApp.apps = function(){
 
 Template.option1SBM.services = function() {
     return Services.find();
+}
+
+Template.option1SBM.plans = function() {
+    return Plans.find();
+}
+
+Template.option1SBM.helpers({
+    settings: function () {
+        return {
+            rowsPerPage: 10,
+            showFilter: true,
+            fields: [
+                { key: 'name', label: 'Service Name' },
+                { key: 'description', label: 'Description'},
+                { key: 'service_plan_url', label: 'Plan URL'}
+            ]
+        };
+    },
+
+    serviceJoinPlan: function(){
+        alert(this.guid + " from service Join");
+
+     var neededPlans = Plans.find({service_guid : this.guid});
+//    alert(Plans.find({service_guid : this.guid}));
+//        alert(neededPlans.length);
+
+      return neededPlans;
+    },
+
+    currentPlan: function(planGUID){
+//        var currPlan = Plans.find({guid : planGUID})
+        alert(this + " from currentPlan");
+
+//        return neededPlans;
+    }
+
+});
+
+Template.option1SBM.events({
+    'click .viewPlan': function () {
+        alert(this.name + " .viewPlan event");
+//        var currentObj = this;
+//        alert(currentObj._id);
+
+//        var testVar = Template.option1SBM.serviceJoinPlan();
+
+//        alert(JSON.stringify(testVar));
+
+
+//        console.log("length of testVar = " + testVar);
+
+
+
+//        console.log("length of testVar = " + testVar[1]);
+
+        getCurrentPlanHelper(this.guid);
+
+//        $('#myModalLabel').text(currentObj.name);
+        $('#myModal').modal();
+//        Route.go('modal');
+    }
+})
+
+
+var getCurrentPlanHelper = function(planGUID){
+    alert(planGUID + " from helper");
+    var currPlan = Plans.findOne( {guid : planGUID} );
+    var parentPlan = Services.findOne({guid: currPlan.service_guid});
+
+    $('#planTitle').text(currPlan.name);
+    $('#myModalLabel').text(parentPlan.name);
+
+    return currPlan;
 }
 
 Template.jqGridTemplate.service = function(){
@@ -238,13 +345,17 @@ $('#example').dataTable({
 });
 
 var populate = function(){
-    for(i = 0; i < 5; i++){
-        if(i % 2 == 0){
-            Apps.insert({name: "app_" + i + "", state: "running", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
-            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
-        } else {
-            Apps.insert({name: "app_" + i + "", state: "stopped", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
-            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
-        }
-    }
+//    for(i = 0; i < 5; i++){
+//        if(i % 2 == 0){
+//            Apps.insert({name: "app_" + i + "", state: "running", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+//            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
+//        } else {
+//            Apps.insert({name: "app_" + i + "", state: "stopped", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+//            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
+//        }
+//    }
+//    alert("placing new service");
+//    Services.insert( {guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e", name: "Marc's Service", description: "Marc Will Made It", service_plan_url: "beMe.blogspot/lulz"} );
+//    Plans.insert( {guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e", name: "Marc's Dummy Plan", description: "Marc Will Made It (dos)", service_guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e"} );
+
 }

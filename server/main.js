@@ -11,6 +11,10 @@ Meteor.publish('services', function() {
     return Services.find({});
 });
 
+Meteor.publish('plans', function() {
+    return Plans.find({});
+});
+
 Meteor.publish('userList', function() {
     return Meteor.users.find({});
 });
@@ -22,6 +26,8 @@ Meteor.startup(function () {
         console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t"+ allUsers[i].password + "\n");
     }
     console.log("Checking in on the server side - MW");
+
+//    console.log(Services.find());
 
 //    var result = sh.exec('touch ~/Desktop/fileFromMeteor.doc');
 //    console.log("return code " + result.code);
