@@ -7,6 +7,8 @@
     "reactive-table": {},
     "datatables": {},
     "npm": {},
-    "bootboxjs": {}
+    "bootboxjs": {},
+    "just-i18n": {},
+    "blaze-layout": {}
   }
 }
