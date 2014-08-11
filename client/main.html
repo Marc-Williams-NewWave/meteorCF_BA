@@ -107,11 +107,12 @@
                 <div id="collapseTwo" class="panel-collapse collapse">
                     <div class="panel-body">
                         <ul>
-                            <li><a href="{{ pathFor 'createService' }}">Create</a></li>
-                            <li><a href="{{ pathFor 'deleteService' }}">Delete</a></li>
-                            <li><a href="{{ pathFor 'listService' }}">List</a></li>
-                            <li><a href="{{ pathFor 'bindService' }}">Bind</a></li>
-                            <li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>
+                            <!--<li><a href="{{ pathFor 'createService' }}">Create</a></li>-->
+                            <!--<li><a href="{{ pathFor 'deleteService' }}">Delete</a></li>-->
+                            <!--<li><a href="{{ pathFor 'listService' }}">List</a></li>-->
+                            <!--<li><a href="{{ pathFor 'bindService' }}">Bind</a></li>-->
+                            <!--<li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>-->
+                            <li><a href="{{ pathFor 'jqGridTemplate' }}">Status</a></li>
                         </ul>
                     </div>
                 </div>
@@ -129,7 +130,7 @@
                 <div id="collapseThree" class="panel-collapse collapse">
                     <div class="panel-body">
                         <ul>
-                            <li><a href="{{ pathFor 'option1SBM' }}">Option 1</a></li>
+                            <li><a href="{{ pathFor 'option1SBM' }}">Status</a></li>
                             <li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>
                             <li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>
                         </ul>
@@ -151,6 +152,7 @@
                             <li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>
                             <li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>
                             <li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>
+                            <li><a href="{{ pathFor 'terminalPage' }}">Terminal Page</a></li>
                         </ul>
                     </div>
                 </div>
@@ -159,41 +161,17 @@
     </div>
 </template>
 
-<template name="placeHolder">
-</template>
+<!--<template name="placeHolder">-->
+<!--</template>-->
 
-<template name="launchApp">
-    <div align="center" style="">
-        <div align="right">
-            <button id="launchBtn1" name="Launch">Launch</button>
-            <button id="deleteBtn1" name="Delete">Delete</button>
-        </div>
-
-
-        <!--<table class="table" id="appTable">-->
-        <!--<thead>-->
-        <!--<tr>-->
-        <!--<th><div align="center"><input type="checkbox"></div></th>-->
-        <!--<th class="table_header">Name</th>-->
-        <!--<th class="table_header">Current State</th>-->
-        <!--<th class="table_header">Running Since</th>-->
-        <!--<th class="table_header">CPU Usage</th>-->
-        <!--<th class="table_header">Memory Usage</th>-->
-        <!--<th class="table_header">Disk Usage</th>-->
-        <!--<th class="table_header">Bound Serives</th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-
-        <!--&lt;!&ndash;   {{#each userlist}}-->
-        <!--{{username}}-->
-        <!--{{/each}} &ndash;&gt;-->
-        <!--</table>-->
-        <!--&lt;!&ndash; {{users2}} &ndash;&gt;-->
-        <!--&lt;!&ndash;  {{#each users2}}-->
-        <!--<h1>{{first}}</h1>-->
-        <!--{{/each}} &ndash;&gt;-->
-    </div>
-</template>
+<!--<template name="launchApp">-->
+<!--<div align="center" style="">-->
+<!--<div align="right">-->
+<!--<button id="launchBtn1" name="Launch">Launch</button>-->
+<!--<button id="deleteBtn1" name="Delete">Delete</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</template>-->
 
 
 <!-- <template name="jqGridTemplate">
@@ -205,33 +183,14 @@
 </template> -->
 
 <template name="deleteApp">
-    <!--&lt;!&ndash;   <div>-->
-        <!--From here you can delete your launched application.-->
-        <!--{{> reactiveTable collection=apps settings=tableSettings}}-->
-      <!--</div> &ndash;&gt;-->
-    <!--&lt;!&ndash; <div>Hi</div> &ndash;&gt;-->
-    <!--<div align="right">-->
-        <!--<button id="launchBtn" name="Launch">Launch</button>-->
-        <!--<button id="deleteBtn" name="Delete">Delete</button>-->
-    <!--</div>-->
-    <!--<div id="reactiveTableSpace">-->
-        <!--&lt;!&ndash; {{> reactiveTable collection=apps settings=tableSettings}} &ndash;&gt;-->
-        <!--{{> reactiveTable collection=apps}}-->
-    <!--</div>-->
 </template>
 
 <template name="statusApp">
-    <!--   <div>
-        From here you can delete your launched application.
-        {{> reactiveTable collection=apps settings=tableSettings}}
-      </div> -->
-    <!-- <div>Hi</div> -->
     <div align="right">
         <button id="launchBtn" name="Launch">Launch</button>
         <button id="deleteBtn" name="Delete">Delete</button>
     </div>
     <div id="reactiveTableSpace">
-        <!-- {{> reactiveTable collection=apps settings=tableSettings}} -->
         {{> reactiveTable collection=apps}}
     </div>
 </template>
@@ -267,9 +226,62 @@
 </template>
 
 <template name="option1SBM">
-    <div>
-        Here you can manage your service brokers.
-    </div>
+    <table class="table table-striped table-bordered table-hover" style="width: 70%">
+        <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Description</th>
+            <th>Plan URL</th>
+            <th>Plans</th>
+        </tr>
+        </thead>
+    {{#each services}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>{{service_plan_url}}</td>
+            <td>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">{{name}}</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <h4 class="modal-title" id="planTitle"></h4>
+                                <form id="serviceName">
+                                    <input type="text" name=myText value="Enter the Name of Your Service">
+                                </form>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+
+                <select>
+                    <option value="default" selected="selected">Select Plan</option>
+                    <!--{{#each plans}}-->
+                    <!--<option value={{name}}>{{name}}</option>-->
+                    <!--{{/each}}-->
+
+                    {{#each serviceJoinPlan}}
+                    <option value="" class="viewPlan">{{name}}</option>
+                    {{/each}}
+                </select>
+
+            </td>
+        </tr>
+        {{/each}}
+    </table>
 </template>
 
 <template name="option2SBM">
@@ -282,6 +294,60 @@
     <div>
         Here you can manage your service brokers.
     </div>
+</template>
+
+
+
+<template name="jqGridTemplate">
+    <!--<div align="right">-->
+        <!--<button id="launchService" name="Launch">Launch</button>-->
+        <button id="deleteService" name="Delete">Delete All Services</button>
+    <!--</div>-->
+    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" style="width: 90%; margin-top: 5%">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Plans</th>
+            <!--<th></th>-->
+        </tr>
+        </thead>
+        <tbody>
+        {{#each service}}
+        <tr class="odd gradeX">
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>
+
+               <!--<button>View Plans</button>-->
+
+                <select>
+                    <!--{{#each plans}}-->
+                    <!--<option value="{{plans}}">{{plans}}</option>-->
+                    <option value="default" selected="selected">Select Plan</option>
+                    <option value="plan1">Plan 1</option>
+                    <option value="plan2">Plan 2</option>
+                    <option value="plan3">Plan 3</option>
+                    <!--{{/each}}-->
+                </select>
+
+
+
+            </td>
+            <!--<td>-->
+                <button>Create</button>
+
+            <!--</td>-->
+            <!--<td>Trident</td>-->
+            <!--<td>Internet-->
+            <!--Explorer 4.0</td>-->
+            <!--<td>Win 95+</td>-->
+            <!--<td class="center"> 4</td>-->
+            <!--<td class="center">X</td>-->
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
 </template>
 
 <template name="cfInfo">
@@ -315,4 +381,16 @@
     <div>
         Here you can view the Openstack info.
     </div>
+</template>
+
+<template name="terminalPage">
+    <button id="terminalBtn">View Terminal Output</button>
+    <!--<div>-->
+        <!--<p id="terminalOutput">-->
+
+        <!--</p>-->
+    <!--</div>-->
+
+    {{output}}
+    <!--{{serverReturn}}-->
 </template>
