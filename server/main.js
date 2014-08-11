@@ -3,7 +3,7 @@ var exec = Meteor.require('child_process').exec;
 
 var sh = Meteor.require('execSync');
 
-Meteor.publish('apps', function() {
+Meteor.publish('apps_1', function() {
     return Apps.find({});
 });
 
