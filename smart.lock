@@ -9,7 +9,9 @@
       "reactive-table": {},
       "datatables": {},
       "npm": {},
-      "bootboxjs": {}
+      "bootboxjs": {},
+      "just-i18n": {},
+      "blaze-layout": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -24,8 +26,8 @@
       },
       "reactive-table": {
         "git": "https://github.com/ecohealthalliance/reactive-table.git",
-        "tag": "v0.3.17",
-        "commit": "19ae3d81852a478ca873f90ff98aacee8d622da7"
+        "tag": "v0.3.18",
+        "commit": "a5381cadf712acd2a18d3e1dc4f3e72256760c8d"
       },
       "datatables": {
         "git": "https://github.com/TimHeckel/meteor-datatables.git",
@@ -42,15 +44,15 @@
         "tag": "v4.2.1-master.1",
         "commit": "c125969c1f3aef30e2a2ff20252bd3b2e4014b2f"
       },
-      "blaze-layout": {
-        "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.4",
-        "commit": "b40e9b0612329288d75cf52ad14a7da64bb8618f"
-      },
       "just-i18n": {
         "git": "https://github.com/subhog/meteor-just-i18n.git",
         "tag": "v0.3.0",
         "commit": "a60e7f4350fb9648d6f6b4a01acbbc114c4f4343"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.2.5",
+        "commit": "273e3ab7d005d91a1a59c71bd224533b4dae2fbd"
       }
     }
   }

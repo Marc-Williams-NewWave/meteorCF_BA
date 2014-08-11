@@ -1,11 +1,11 @@
-Meteor.subscribe("apps");
+Meteor.subscribe("apps_1");
 Meteor.subscribe("services_1");
 Meteor.subscribe("plans_1");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
 //     populate();
-//    populateServicesAndPlans();
+//    populateServices();
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -23,7 +23,7 @@ Router.map(function () {
     this.route('listService');
     this.route('bindService');
     this.route('unbindService');
-    this.route('option1SBM');
+    this.route('serviceStatus');
     this.route('option2SBM');
     this.route('option3SBM');
     this.route('cfInfo', {path: '/cfInfo'});
@@ -65,48 +65,52 @@ Template.terminalPage.output = function () {
 //    if(planSerivceGUID == serviceGUID){
 //        alert("YES!");
 //    }
-    return jsonResponse_Services.resources.length;//serviceGUID + " " + serviceName + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> plan info " + planGUID + " " + planName + " " + planDescription + " " + planSerivceGUID;
+    return serviceGUID + " " + serviceName + " & " + serviceDescription + "\n\n" + servicePlansURL + "  ---->>> plan info " + planGUID + " " + planName + " " + planDescription + " " + planSerivceGUID;
 }
 
 
 
 
-var populateServicesAndPlans = function(){
-    var jsonResponse_Services = serviceCuler('cf curl /v2/services');
+var populateServices = function(){
+    var jsonResponse_Services = serviceCurler('cf curl /v2/services');
 
 
     var serviceCount = jsonResponse_Services.resources.length;
-    var planCount = jsonResponse_Plans.resources.length;
+
 
     for(i = 0; i < serviceCount; i++){
         var serviceGUID = jsonResponse_Services.resources[i].metadata.guid; // get service guid
         var serviceName = jsonResponse_Services.resources[i].entity.label; // get service name (label)
         var serviceDescription = jsonResponse_Services.resources[i].entity.description; // get service description
         var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
-//        Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
 
         Services.insert( {guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL} );
-    }
-
-    var jsonResponse_Plans = planCuler('cf curl ' + jsonResponse_Services.resources[i].entity.service_plans_url);
-
-    for(z = 0; z < planCount; z++){
-        var planGUID = jsonResponse_Plans.resources[0].metadata.guid; // get plan guid
-        var planURL = jsonResponse_Plans.resources[0].metadata.url; // get plan url
-        var planCreatedDate = jsonResponse_Plans.resources[0].metadata.created_at; // get plan creation date
-        var planUpdatedDate = jsonResponse_Plans.resources[0].metadata.updated_at; // get plan updated date
-
-        var planName = jsonResponse_Plans.resources[0].entity.name; // get plan name
-        var planDescription = jsonResponse_Plans.resources[0].entity.description; // get plan description
-        var planSerivceGUID = jsonResponse_Plans.resources[0].entity.service_guid; // get plan's service_guid
-        var planSerivceURL = jsonResponse_Plans.resources[0].entity.service_url; // get plan's service_url
-        var planSerivceInstancesURL = jsonResponse_Plans.resources[0].entity.service_instances_url; // get plan's service_instances_url
-
-        Plans.insert( {guid: planGUID, url: planURL, created_at : planCreatedDate, updated_at : planUpdatedDate, name: planName, description: planDescription, service_guid: planSerivceGUID, service_url : planSerivceURL, service_instances_url: planSerivceInstancesURL} );
+        populatePlans(servicePlansURL);
     }
 
 }
-var serviceCuler = function(curlCommand){
+
+var populatePlans = function(servicePlanURL){
+    var jsonResponse_Plans = planCurler('cf curl ' + servicePlanURL);
+    var planCount = jsonResponse_Plans.resources.length;
+
+    for(z = 0; z < planCount; z++){
+        var planGUID = jsonResponse_Plans.resources[z].metadata.guid; // get plan guid
+        var planURL = jsonResponse_Plans.resources[z].metadata.url; // get plan url
+        var planCreatedDate = jsonResponse_Plans.resources[z].metadata.created_at; // get plan creation date
+        var planUpdatedDate = jsonResponse_Plans.resources[z].metadata.updated_at; // get plan updated date
+
+        var planName = jsonResponse_Plans.resources[z].entity.name; // get plan name
+        var planDescription = jsonResponse_Plans.resources[z].entity.description; // get plan description
+        var planSerivceGUID = jsonResponse_Plans.resources[z].entity.service_guid; // get plan's service_guid
+        var planSerivceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
+        var planSerivceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
+
+        Plans.insert( {guid: planGUID, url: planURL, created_at : planCreatedDate, updated_at : planUpdatedDate, name: planName, description: planDescription, service_guid: planSerivceGUID, service_url : planSerivceURL, service_instances_url: planSerivceInstancesURL} );
+    }
+}
+
+var serviceCurler = function(curlCommand){
     Meteor.call('sendCommand', curlCommand, function (err, result){
         if(result){
             Session.set('curlOutput_Services', result);
@@ -116,7 +120,7 @@ var serviceCuler = function(curlCommand){
     return JSON.parse(Session.get('curlOutput_Services'));
 }
 
-var planCuler = function(curlCommand){
+var planCurler = function(curlCommand){
     Meteor.call('sendCommand', curlCommand, function (err, result){
         if(result){
             Session.set('curlOutput_Plans', result);
@@ -187,15 +191,15 @@ Template.statusApp.apps = function(){
     return Apps.find();
 }
 
-Template.option1SBM.services = function() {
+Template.serviceStatus.services = function() {
     return Services.find();
 }
 
-Template.option1SBM.plans = function() {
+Template.serviceStatus.plans = function() {
     return Plans.find();
 }
 
-Template.option1SBM.helpers({
+Template.serviceStatus.helpers({
     settings: function () {
         return {
             rowsPerPage: 10,
@@ -227,19 +231,18 @@ Template.option1SBM.helpers({
 
 });
 
-Template.option1SBM.events({
+Template.serviceStatus.events({
     'click .viewPlan': function () {
         alert(this.name + " .viewPlan event");
 //        var currentObj = this;
 //        alert(currentObj._id);
 
-//        var testVar = Template.option1SBM.serviceJoinPlan();
+//        var testVar = Template.serviceStatus.serviceJoinPlan();
 
 //        alert(JSON.stringify(testVar));
 
 
 //        console.log("length of testVar = " + testVar);
-
 
 
 //        console.log("length of testVar = " + testVar[1]);
@@ -249,11 +252,12 @@ Template.option1SBM.events({
 //        $('#myModalLabel').text(currentObj.name);
         $('#myModal').modal();
 //        Route.go('modal');
-    },
-    'click #populateCollections': function(){
-        populateServicesAndPlans();
-        alert("Done!");
     }
+//    },
+//    'click #populateCollections': function(){
+//        populateServices();
+//        alert("Done!");
+//    }
 })
 
 
@@ -359,16 +363,51 @@ $('#example').dataTable({
     }
 });
 
+var populateApps = function() {
+    var jsonResponse_Apps = planCurler('cf curl /v2/apps');
+    var appCount = jsonResponse_Apps.resources.length;
+
+    for (i = 0; i < appCount; i++) {
+        var appGUID = jsonResponse_Apps.resources[i].metadata.guid;
+        var appURL = jsonResponse_Apps.resources[i].metadata.url;
+        var appCreatedDate = jsonResponse_Apps.resources[i].metadata.created_at;
+        var appUpdatedDate = jsonResponse_Apps.resources[i].metadata.updated_at;
+
+        var appName = jsonResponse_Apps.resources[i].entity.name;
+        var appProductionStatus = jsonResponse_Apps.resources[i].entity.production;
+        var appMemory = jsonResponse_Apps.resources[i].entity.memory;
+        var appInstanceCount = jsonResponse_Apps.resources[i].entity.instances;
+        var appDiskQuota = jsonResponse_Apps.resources[i].entity.disk_quota;
+
+
+    }
+
+
+    var planCount = jsonResponse_Plans.resources.length;
+
+    for (z = 0; z < planCount; z++) {
+        var planGUID = jsonResponse_Plans.resources[0].metadata.guid; // get plan guid
+        var planURL = jsonResponse_Plans.resources[0].metadata.url; // get plan url
+        var planCreatedDate = jsonResponse_Plans.resources[0].metadata.created_at; // get plan creation date
+        var planUpdatedDate = jsonResponse_Plans.resources[0].metadata.updated_at; // get plan updated date
+
+        var planName = jsonResponse_Plans.resources[0].entity.name; // get plan name
+        var planDescription = jsonResponse_Plans.resources[0].entity.description; // get plan description
+        var planSerivceGUID = jsonResponse_Plans.resources[0].entity.service_guid; // get plan's service_guid
+        var planSerivceURL = jsonResponse_Plans.resources[0].entity.service_url; // get plan's service_url
+        var planSerivceInstancesURL = jsonResponse_Plans.resources[0].entity.service_instances_url; // get plan's service_instances_url
+    }
+}
 var populate = function(){
-//    for(i = 0; i < 5; i++){
-//        if(i % 2 == 0){
-//            Apps.insert({name: "app_" + i + "", state: "running", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+    for(i = 0; i < 5; i++){
+        if(i % 2 == 0){
+            Apps.insert({name: "app_" + i + "", state: "running", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
 //            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
-//        } else {
-//            Apps.insert({name: "app_" + i + "", state: "stopped", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
+        } else {
+            Apps.insert({name: "app_" + i + "", state: "stopped", since: "{start date}", cpuUsage: "n out of 1MB", memUsage: "n out of 2GB", diskUsage: "n out of 1GB", boundServices: "N/A"});
 //            Services.insert({name: "service_" + i + "", description: "lorem ipsum", plans: ["Plan 1", "Plan 2", "Plan 3"]});
-//        }
-//    }
+        }
+    }
 //    alert("placing new service");
 //    Services.insert( {guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e", name: "Marc's Service", description: "Marc Will Made It", service_plan_url: "beMe.blogspot/lulz"} );
 //    Plans.insert( {guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e", name: "Marc's Dummy Plan", description: "Marc Will Made It (dos)", service_guid: "91d2dfe7-hhhh-hhhh-hhhh-9412f9f8103e"} );

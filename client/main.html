@@ -112,7 +112,7 @@
                             <!--<li><a href="{{ pathFor 'listService' }}">List</a></li>-->
                             <!--<li><a href="{{ pathFor 'bindService' }}">Bind</a></li>-->
                             <!--<li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>-->
-                            <li><a href="{{ pathFor 'jqGridTemplate' }}">Status</a></li>
+                            <li><a href="{{ pathFor 'serviceStatus' }}">Status</a></li>
                         </ul>
                     </div>
                 </div>
@@ -121,22 +121,22 @@
 
             <!-- If you want to exclude the Service Broker Management Section, just comment out everything between this line and ..... -->
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>
-                    </h4>
-                </div>
-                <div id="collapseThree" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>
-                            <li><a href="{{ pathFor 'option1SBM' }}">Status</a></li>
-                            <li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>
-                            <li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                    <!--<h4 class="panel-title">-->
+                        <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>-->
+                    <!--</h4>-->
+                <!--</div>-->
+                <!--<div id="collapseThree" class="panel-collapse collapse">-->
+                    <!--<div class="panel-body">-->
+                        <!--<ul>-->
+                            <!--<li><a href="{{ pathFor 'option1SBM' }}">Status</a></li>-->
+                            <!--<li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>-->
+                            <!--<li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 
             <!-- HERE -->
 
@@ -152,7 +152,7 @@
                             <li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>
                             <li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>
                             <li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>
-                            <li><a href="{{ pathFor 'terminalPage' }}">Terminal Page</a></li>
+                            <!--<li><a href="{{ pathFor 'terminalPage' }}">Terminal Page</a></li>-->
                         </ul>
                     </div>
                 </div>
@@ -225,7 +225,7 @@
     </div>
 </template>
 
-<template name="option1SBM">
+<template name="serviceStatus">
     <table class="table table-striped table-bordered table-hover" style="width: 70%">
         <thead>
         <tr>
@@ -283,7 +283,7 @@
         {{/each}}
     </table>
 
-    <button id="populateCollections">Populate Collections</button>
+    <!--<button id="populateCollections">Populate Collections</button>-->
 </template>
 
 <template name="option2SBM">
@@ -300,57 +300,57 @@
 
 
 
-<template name="jqGridTemplate">
-    <!--<div align="right">-->
-        <!--<button id="launchService" name="Launch">Launch</button>-->
-        <button id="deleteService" name="Delete">Delete All Services</button>
-    <!--</div>-->
-    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" style="width: 90%; margin-top: 5%">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Plans</th>
-            <!--<th></th>-->
-        </tr>
-        </thead>
-        <tbody>
-        {{#each service}}
-        <tr class="odd gradeX">
-            <td>{{name}}</td>
-            <td>{{description}}</td>
-            <td>
-
-               <!--<button>View Plans</button>-->
-
-                <select>
-                    <!--{{#each plans}}-->
-                    <!--<option value="{{plans}}">{{plans}}</option>-->
-                    <option value="default" selected="selected">Select Plan</option>
-                    <option value="plan1">Plan 1</option>
-                    <option value="plan2">Plan 2</option>
-                    <option value="plan3">Plan 3</option>
-                    <!--{{/each}}-->
-                </select>
-
-
-
-            </td>
+<!--<template name="jqGridTemplate">-->
+    <!--&lt;!&ndash;<div align="right">&ndash;&gt;-->
+        <!--&lt;!&ndash;<button id="launchService" name="Launch">Launch</button>&ndash;&gt;-->
+        <!--<button id="deleteService" name="Delete">Delete All Services</button>-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" style="width: 90%; margin-top: 5%">-->
+        <!--<thead>-->
+        <!--<tr>-->
+            <!--<th>Name</th>-->
+            <!--<th>Description</th>-->
+            <!--<th>Plans</th>-->
+            <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--{{#each service}}-->
+        <!--<tr class="odd gradeX">-->
+            <!--<td>{{name}}</td>-->
+            <!--<td>{{description}}</td>-->
             <!--<td>-->
-                <button>Create</button>
+
+               <!--&lt;!&ndash;<button>View Plans</button>&ndash;&gt;-->
+
+                <!--<select>-->
+                    <!--&lt;!&ndash;{{#each plans}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;<option value="{{plans}}">{{plans}}</option>&ndash;&gt;-->
+                    <!--<option value="default" selected="selected">Select Plan</option>-->
+                    <!--<option value="plan1">Plan 1</option>-->
+                    <!--<option value="plan2">Plan 2</option>-->
+                    <!--<option value="plan3">Plan 3</option>-->
+                    <!--&lt;!&ndash;{{/each}}&ndash;&gt;-->
+                <!--</select>-->
+
+
 
             <!--</td>-->
-            <!--<td>Trident</td>-->
-            <!--<td>Internet-->
-            <!--Explorer 4.0</td>-->
-            <!--<td>Win 95+</td>-->
-            <!--<td class="center"> 4</td>-->
-            <!--<td class="center">X</td>-->
-        </tr>
-        {{/each}}
-        </tbody>
-    </table>
-</template>
+            <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                <!--<button>Create</button>-->
+
+            <!--&lt;!&ndash;</td>&ndash;&gt;-->
+            <!--&lt;!&ndash;<td>Trident</td>&ndash;&gt;-->
+            <!--&lt;!&ndash;<td>Internet&ndash;&gt;-->
+            <!--&lt;!&ndash;Explorer 4.0</td>&ndash;&gt;-->
+            <!--&lt;!&ndash;<td>Win 95+</td>&ndash;&gt;-->
+            <!--&lt;!&ndash;<td class="center"> 4</td>&ndash;&gt;-->
+            <!--&lt;!&ndash;<td class="center">X</td>&ndash;&gt;-->
+        <!--</tr>-->
+        <!--{{/each}}-->
+        <!--</tbody>-->
+    <!--</table>-->
+<!--</template>-->
 
 <template name="cfInfo">
 
