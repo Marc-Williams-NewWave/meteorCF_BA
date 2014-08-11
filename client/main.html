@@ -251,9 +251,9 @@
                             </div>
 
                             <div class="modal-body">
-                                <h4 class="modal-title" id="planTitle" class="input-group"></h4>
+                                <h4 class="modal-title" id="planTitle"></h4>
                                 <form id="serviceName">
-                                    <input type="text" name=myText value="Enter the Name of Your Service">
+                                    <input type="text" value="Enter the Name of Your Service" class="form-control">
                                 </form>
 
                             </div>
@@ -282,6 +282,8 @@
         </tr>
         {{/each}}
     </table>
+
+    <button id="populateCollections">Populate Collections</button>
 </template>
 
 <template name="option2SBM">

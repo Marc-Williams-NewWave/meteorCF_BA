@@ -1,12 +1,11 @@
 Meteor.subscribe("apps");
-Meteor.subscribe("services");
-Meteor.subscribe("plans");
+Meteor.subscribe("services_1");
+Meteor.subscribe("plans_1");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
 //     populate();
 //    populateServicesAndPlans();
-
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -74,7 +73,7 @@ Template.terminalPage.output = function () {
 
 var populateServicesAndPlans = function(){
     var jsonResponse_Services = serviceCuler('cf curl /v2/services');
-    var jsonResponse_Plans = planCuler('cf curl ' + servicePlansURL);
+
 
     var serviceCount = jsonResponse_Services.resources.length;
     var planCount = jsonResponse_Plans.resources.length;
@@ -89,13 +88,21 @@ var populateServicesAndPlans = function(){
         Services.insert( {guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL} );
     }
 
+    var jsonResponse_Plans = planCuler('cf curl ' + jsonResponse_Services.resources[i].entity.service_plans_url);
+
     for(z = 0; z < planCount; z++){
         var planGUID = jsonResponse_Plans.resources[0].metadata.guid; // get plan guid
+        var planURL = jsonResponse_Plans.resources[0].metadata.url; // get plan url
+        var planCreatedDate = jsonResponse_Plans.resources[0].metadata.created_at; // get plan creation date
+        var planUpdatedDate = jsonResponse_Plans.resources[0].metadata.updated_at; // get plan updated date
+
         var planName = jsonResponse_Plans.resources[0].entity.name; // get plan name
         var planDescription = jsonResponse_Plans.resources[0].entity.description; // get plan description
         var planSerivceGUID = jsonResponse_Plans.resources[0].entity.service_guid; // get plan's service_guid
+        var planSerivceURL = jsonResponse_Plans.resources[0].entity.service_url; // get plan's service_url
+        var planSerivceInstancesURL = jsonResponse_Plans.resources[0].entity.service_instances_url; // get plan's service_instances_url
 
-        Plans.insert( {guid: planGUID, name: planName, description: planDescription, service_guid: planSerivceGUID} );
+        Plans.insert( {guid: planGUID, url: planURL, created_at : planCreatedDate, updated_at : planUpdatedDate, name: planName, description: planDescription, service_guid: planSerivceGUID, service_url : planSerivceURL, service_instances_url: planSerivceInstancesURL} );
     }
 
 }
@@ -242,6 +249,10 @@ Template.option1SBM.events({
 //        $('#myModalLabel').text(currentObj.name);
         $('#myModal').modal();
 //        Route.go('modal');
+    },
+    'click #populateCollections': function(){
+        populateServicesAndPlans();
+        alert("Done!");
     }
 })
 
@@ -250,6 +261,10 @@ var getCurrentPlanHelper = function(planGUID){
     alert(planGUID + " from helper");
     var currPlan = Plans.findOne( {guid : planGUID} );
     var parentPlan = Services.findOne({guid: currPlan.service_guid});
+
+//    var jsonResponse_Services = serviceCuler('cf curl /v2/services');
+//    var jsonResponse_Plans = planCuler('cf curl ' + parentPlan.service_plans_url);
+
 
     $('#planTitle').text(currPlan.name);
     $('#myModalLabel').text(parentPlan.name);

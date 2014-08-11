@@ -7,11 +7,11 @@ Meteor.publish('apps', function() {
     return Apps.find({});
 });
 
-Meteor.publish('services', function() {
+Meteor.publish('services_1', function() {
     return Services.find({});
 });
 
-Meteor.publish('plans', function() {
+Meteor.publish('plans_1', function() {
     return Plans.find({});
 });
 
