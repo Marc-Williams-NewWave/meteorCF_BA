@@ -1,6 +1,7 @@
 meteorCF_BA
 ===========
 
+Run application with: meteor --release 0.8.2
 
 Required packages:
 - Meteor (aquire via mrt add <package_name>):
