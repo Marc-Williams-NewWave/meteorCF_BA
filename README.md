@@ -16,7 +16,7 @@ Required packages:
   - bootboxjs
   - blaze-layout
 
-- Npm:
+- Npm (aquire via npm install <package_name>):
   - execSync
 
 
