@@ -5,7 +5,7 @@ Meteor.subscribe("userList");
 
 Meteor.startup(function () {
 //     populate();
-    populateServices();
+//    populateServices();
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -113,7 +113,7 @@ var populatePlans = function(servicePlanURL){
         var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
         var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
 
-//        Plans.insert( {guid: planGUID, url: planURL, created_at : planCreatedDate, updated_at : planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url : planServiceURL, service_instances_url: planServiceInstancesURL} );
+        Plans.insert( {guid: planGUID, url: planURL, created_at : planCreatedDate, updated_at : planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url : planServiceURL, service_instances_url: planServiceInstancesURL} );
     }
 }
 
@@ -123,16 +123,18 @@ var serviceCurler = function(curlCommand){
             Session.set('curlOutput_Services', result);
         }
     });
-        alert("DONE! in service");
+
+    alert("DONE! in service");
     return JSON.parse(Session.get('curlOutput_Services'));
 }
 
 var planCurler = function(curlCommand){
-    Meteor.call('sendCommand', curlCommand, function (err, result){
+    Meteor.call('sendCommand2', curlCommand, function (err, result){
         if(result){
             Session.set('curlOutput_Plans', result);
         }
     });
+
     alert("DONE! in plan");
     return JSON.parse(Session.get('curlOutput_Plans'));
 }

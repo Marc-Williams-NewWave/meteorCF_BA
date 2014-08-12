@@ -59,5 +59,16 @@ Meteor.methods({
         console.log("stdout + stderr " + result.stdout);
         myFuture.return(result.stdout);
         return myFuture.wait();
+    },
+    sendCommand2 : function(command){
+        Future = Npm.require('fibers/future');
+
+        var myFuture2 = new Future();
+
+        var result = sh.exec(command);
+        console.log("return code " + result.code);
+        console.log("stdout + stderr " + result.stdout);
+        myFuture2.return(result.stdout);
+        return myFuture2.wait();
     }
 });
