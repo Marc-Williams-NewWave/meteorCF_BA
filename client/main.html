@@ -186,12 +186,13 @@
 </template>
 
 <template name="statusApp">
-    <div align="right">
-        <button id="launchBtn" name="Launch">Launch</button>
-        <button id="deleteBtn" name="Delete">Delete</button>
-    </div>
+    <!--<div align="right">-->
+        <!--<button id="launchBtn" name="Launch">Launch</button>-->
+        <!--<button id="deleteBtn" name="Delete">Delete</button>-->
+    <!--</div>-->
+    <!--<button id="launchBtn_1" name="Launch">Launch</button>-->
     <div id="reactiveTableSpace">
-        {{> reactiveTable collection=apps}}
+        {{> reactiveTable collection=apps settings=settings}}
     </div>
 </template>
 

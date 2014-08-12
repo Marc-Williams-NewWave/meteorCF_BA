@@ -3,7 +3,7 @@ var exec = Meteor.require('child_process').exec;
 
 var sh = Meteor.require('execSync');
 
-Meteor.publish('apps_1', function() {
+Meteor.publish('apps', function() {
     return Apps.find({});
 });
 
@@ -50,6 +50,7 @@ Meteor.methods({
       console.log('killing some time');
     },
     sendCommand : function(command){
+        console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
 
         var myFuture = new Future();
@@ -61,6 +62,7 @@ Meteor.methods({
         return myFuture.wait();
     },
     sendCommand2 : function(command){
+        console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
 
         var myFuture2 = new Future();
