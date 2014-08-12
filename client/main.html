@@ -252,16 +252,25 @@
                             </div>
 
                             <div class="modal-body">
-                                <h4 class="modal-title" id="planTitle"></h4>
+                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title" id="planTitle"></h4>
                                 <form id="serviceName">
-                                    <input type="text" value="Enter the Name of Your Service" class="form-control">
+                                    <br />
+                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" class="form-control"> <br />
+                                    <label id="urlLabel">URL: </label><span id="urlSpan"></span>
+                                    <label id="createdLabel">Created Date: </label><span id="createdSpan"></span>
+                                    <label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>
+                                    <label id="descriptionLabel">Description: </label><span id="descriptionSpan"></span>
+                                    <label id="serviceURLLabel">Service URL: </label><span id="serviceURLSpan"></span>
+                                    <label id="serviceInstanceURLLabel">Service Instance URL: </label><span id="serviceInstanceURLSpan"></span>
                                 </form>
+
 
                             </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-primary" id="launchService">Launch</button>
                             </div>
                         </div>
                     </div>
@@ -299,60 +308,6 @@
     </div>
 </template>
 
-
-
-<!--<template name="jqGridTemplate">-->
-    <!--&lt;!&ndash;<div align="right">&ndash;&gt;-->
-        <!--&lt;!&ndash;<button id="launchService" name="Launch">Launch</button>&ndash;&gt;-->
-        <!--<button id="deleteService" name="Delete">Delete All Services</button>-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" style="width: 90%; margin-top: 5%">-->
-        <!--<thead>-->
-        <!--<tr>-->
-            <!--<th>Name</th>-->
-            <!--<th>Description</th>-->
-            <!--<th>Plans</th>-->
-            <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--{{#each service}}-->
-        <!--<tr class="odd gradeX">-->
-            <!--<td>{{name}}</td>-->
-            <!--<td>{{description}}</td>-->
-            <!--<td>-->
-
-               <!--&lt;!&ndash;<button>View Plans</button>&ndash;&gt;-->
-
-                <!--<select>-->
-                    <!--&lt;!&ndash;{{#each plans}}&ndash;&gt;-->
-                    <!--&lt;!&ndash;<option value="{{plans}}">{{plans}}</option>&ndash;&gt;-->
-                    <!--<option value="default" selected="selected">Select Plan</option>-->
-                    <!--<option value="plan1">Plan 1</option>-->
-                    <!--<option value="plan2">Plan 2</option>-->
-                    <!--<option value="plan3">Plan 3</option>-->
-                    <!--&lt;!&ndash;{{/each}}&ndash;&gt;-->
-                <!--</select>-->
-
-
-
-            <!--</td>-->
-            <!--&lt;!&ndash;<td>&ndash;&gt;-->
-                <!--<button>Create</button>-->
-
-            <!--&lt;!&ndash;</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td>Trident</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td>Internet&ndash;&gt;-->
-            <!--&lt;!&ndash;Explorer 4.0</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td>Win 95+</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td class="center"> 4</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td class="center">X</td>&ndash;&gt;-->
-        <!--</tr>-->
-        <!--{{/each}}-->
-        <!--</tbody>-->
-    <!--</table>-->
-<!--</template>-->
-
 <template name="cfInfo">
 
     <div align="center">
@@ -367,7 +322,6 @@
                     <li>user: {{currentUser.username}}</li>
                     <li>org: *the current's user's role group*</li>
                     <li>space:</li>
-                    <li>userID: {{currentUser._id}}</li>
                 </ul>
             </div>
         </div>
