@@ -9,6 +9,7 @@
     "npm": {},
     "bootboxjs": {},
     "just-i18n": {},
-    "blaze-layout": {}
+    "blaze-layout": {},
+    "kadira": {}
   }
 }

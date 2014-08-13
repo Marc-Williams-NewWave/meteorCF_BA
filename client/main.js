@@ -249,7 +249,7 @@ Template.statusApp.events({
 Template.loginScreen.events({
     'submit #login-form': function (e, t) {
         e.preventDefault();
-        var username = t.find('#login-username').value; //trim '@xyz.com'
+        var username = t.find('#login-username').value;
         var password = t.find('#login-password').value;
 //        alert("Username: " + username + "\nPassword: " + password);
 
@@ -258,6 +258,8 @@ Template.loginScreen.events({
         Meteor.loginWithPassword(username, password, function (err) {
             if (err) {
                 // alert user login has failed
+//                alert(err);
+                Router.go('loginScreen');
             } else {
                 //user has been logged in
 //          var curr = this.userId;
@@ -283,7 +285,10 @@ Template.registerScreen.events({
         Accounts.createUser({username: username, password: password}, function (err) {
 //            alert("Success1");
             if (err) {
-//                alert("Success!");
+                alert(this);
+                e.preventDefault();
+                alert(err);
+                Router.go('registerScreen');
             } else {
 
             }

@@ -6,38 +6,34 @@
 <template name="loginScreen">
     <div class="wrapper">
         <form class="form-signin" id="login-form" action="action">
-            <h2 class="form-signin-heading">Please login</h2>
-            <input type="text" id="login-username" class="form-control" name="username" placeholder="Username" required="" autofocus />
-            <input type="password" id="login-password" class="form-control" name="password" placeholder="Password" required=""/>
+            <div align="center"><img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
+
+                <h2 class="form-signin-heading">Please login</h2>
+            </div>
+            <input type="text" id="login-username" class="form-control" name="username" placeholder="Username"
+                   required="" autofocus/>
+            <input type="password" id="login-password" class="form-control" name="password" placeholder="Password"
+                   required=""/>
             <!--  <label class="checkbox">
                <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
              </label> -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login</button>
-            <!-- <button class="btn btn-lg btn-primary btn-block" id="registerNewUser-button" value="Register">Create Account</button> -->
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login
+            </button>
             <a href="{{ pathFor 'registerScreen' }}">Create Account</a>
         </form>
     </div>
 </template>
 
 <template name="registerScreen">
-    <!-- <form id="register-form" action="action">
-          <div>
-          <input type="text" id="account-username" />
-           <input type="email" id="account-email" /> -->
-    <!-- <input type="password" id="account-password" />
-    <input type="submit" id="create-account" value="Create an Account" />
-  </div>
-</form> -->
     <div class="wrapper">
         <form class="form-signin" id="register-form" action="action">
             <h2 class="form-signin-heading">Account Info</h2>
-            <input type="text" id="account-username" class="form-control" name="username" placeholder="Username" required="" autofocus />
-            <input type="password" id="account-password" class="form-control" name="password" placeholder="Password" required=""/>
-            <!--  <label class="checkbox">
-               <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
-             </label> -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit" id="register-button" value="Create">Create</button>
-            <!-- <button class="btn btn-lg btn-primary btn-block" id="registerNewUser-button" value="Register">Create Account</button> -->
+            <input type="text" id="account-username" class="form-control" name="username" placeholder="Username"
+                   required="" autofocus/>
+            <input type="password" id="account-password" class="form-control" name="password" placeholder="Password"
+                   required=""/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="register-button" value="Create">Create
+            </button>
         </form>
     </div>
 </template>
@@ -50,9 +46,9 @@
     <div id="main-pane">
         {{> yield}}
     </div>
-    
+
     <div id="side-pane">
-        <img src="/images/NewLogoIcon_Transparant.png" width="184px" height="146px">
+        <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
         {{> homePage}}
     </div>
 </template>
@@ -74,12 +70,14 @@
 
 <template name="homePage"> 
     <h3><a href="{{ pathFor 'cfInfo' }}">Menu</a></h3>
+
     <div class="huh">
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Application Management</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Application
+                            Management</a>
                     </h4>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse">
@@ -116,20 +114,20 @@
             <!-- If you want to exclude the Service Broker Management Section, just comment out everything between this line and ..... -->
 
             <!--<div class="panel panel-default">-->
-                <!--<div class="panel-heading">-->
-                    <!--<h4 class="panel-title">-->
-                        <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>-->
-                    <!--</h4>-->
-                <!--</div>-->
-                <!--<div id="collapseThree" class="panel-collapse collapse">-->
-                    <!--<div class="panel-body">-->
-                        <!--<ul>-->
-                            <!--<li><a href="{{ pathFor 'option1SBM' }}">Status</a></li>-->
-                            <!--<li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>-->
-                            <!--<li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
-                <!--</div>-->
+            <!--<div class="panel-heading">-->
+            <!--<h4 class="panel-title">-->
+            <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Service Broker Management</a>-->
+            <!--</h4>-->
+            <!--</div>-->
+            <!--<div id="collapseThree" class="panel-collapse collapse">-->
+            <!--<div class="panel-body">-->
+            <!--<ul>-->
+            <!--<li><a href="{{ pathFor 'option1SBM' }}">Status</a></li>-->
+            <!--<li><a href="{{ pathFor 'option2SBM' }}">Option 2</a></li>-->
+            <!--<li><a href="{{ pathFor 'option3SBM' }}">Option 3</a></li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <!--</div>-->
             <!--</div>-->
 
             <!-- HERE -->
@@ -181,8 +179,8 @@
 
 <template name="statusApp">
     <!--<div align="right">-->
-        <!--<button id="launchBtn" name="Launch">Launch</button>-->
-        <!--<button id="deleteBtn" name="Delete">Delete</button>-->
+    <!--<button id="launchBtn" name="Launch">Launch</button>-->
+    <!--<button id="deleteBtn" name="Delete">Delete</button>-->
     <!--</div>-->
     <!--<button id="launchBtn_1" name="Launch">Launch</button>-->
     <div id="reactiveTableSpace">
@@ -230,32 +228,38 @@
             <th>Plans</th>
         </tr>
         </thead>
-    {{#each services}}
+        {{#each services}}
         <tr>
             <td>{{name}}</td>
             <td>{{description}}</td>
             <td>{{service_plan_url}}</td>
             <td>
                 <!-- Modal -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <button type="button" class="close" data-dismiss="modal"><span
+                                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                 <h4 class="modal-title" id="myModalLabel">{{name}}</h4>
                             </div>
 
                             <div class="modal-body">
-                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title" id="planTitle"></h4>
+                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title"
+                                                                                 id="planTitle"></h4>
+
                                 <form id="serviceName">
-                                    <br />
-                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" class="form-control"> <br />
+                                    <br/>
+                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service"
+                                           class="form-control"> <br/>
                                     <label id="urlLabel">URL: </label><span id="urlSpan"></span>
                                     <label id="createdLabel">Created Date: </label><span id="createdSpan"></span>
                                     <label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>
                                     <label id="descriptionLabel">Description: </label><span id="descriptionSpan"></span>
                                     <label id="serviceURLLabel">Service URL: </label><span id="serviceURLSpan"></span>
-                                    <label id="serviceInstanceURLLabel">Service Instance URL: </label><span id="serviceInstanceURLSpan"></span>
+                                    <label id="serviceInstanceURLLabel">Service Instance URL: </label><span
+                                        id="serviceInstanceURLSpan"></span>
                                 </form>
 
 
@@ -337,9 +341,9 @@
 <template name="terminalPage">
     <button id="terminalBtn">View Terminal Output</button>
     <!--<div>-->
-        <!--<p id="terminalOutput">-->
+    <!--<p id="terminalOutput">-->
 
-        <!--</p>-->
+    <!--</p>-->
     <!--</div>-->
 
     {{output}}
