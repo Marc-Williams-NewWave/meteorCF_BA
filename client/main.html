@@ -4,13 +4,6 @@
 
 
 <template name="loginScreen">
-    <!-- <form id="login-form" action="action">
-      <div>
-        <input type="email" id="login-email" />
-        <input type="password" id="login-password" />
-        <input type="submit" id="login-button" value="Sign in" />
-     </div>
-   </form>  -->
     <div class="wrapper">
         <form class="form-signin" id="login-form" action="action">
             <h2 class="form-signin-heading">Please login</h2>
@@ -57,8 +50,9 @@
     <div id="main-pane">
         {{> yield}}
     </div>
-
+    
     <div id="side-pane">
+        <img src="/images/NewLogoIcon_Transparant.png" width="184px" height="146px">
         {{> homePage}}
     </div>
 </template>
