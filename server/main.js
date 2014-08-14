@@ -3,33 +3,86 @@ var exec = Meteor.require('child_process').exec;
 
 var sh = Meteor.require('execSync');
 
-Meteor.publish('apps', function() {
+Meteor.publish('apps', function () {
     return Apps.find({});
 });
 
-Meteor.publish('services_1', function() {
+Meteor.publish('services_1', function () {
     return Services.find({});
 });
 
-Meteor.publish('plans_1', function() {
+Meteor.publish('plans_1', function () {
     return Plans.find({});
 });
 
-Meteor.publish('userList', function() {
+Meteor.publish('userList', function () {
     return Meteor.users.find({});
 });
 
 
 Meteor.startup(function () {
     var allUsers = Meteor.users.find({}).fetch();
-    for(i = 0; i < allUsers.length; i++){
-        console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t"+ allUsers[i].password + "\n");
+    for (i = 0; i < allUsers.length; i++) {
+        console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t" + allUsers[i].password + "\n");
     }
     console.log("Checking in on the server side - MW\n\n");
-
+//    Meteor.call('blah');
 //    sendAppCommand();
 
 //    console.log(Services.find());
+
+    Meteor.call('sendCommand', 'cf curl /v2/services', function (err, result) {
+        if (result) {
+            console.log(result);
+
+            var jsonResponse_Services = JSON.parse(result);
+            var serviceCount = jsonResponse_Services.resources.length;
+
+            for (i = 0; i < serviceCount; i++) {
+                var serviceGUID = jsonResponse_Services.resources[i].metadata.guid; // get service guid
+                var serviceURL = jsonResponse_Services.resources[i].metadata.url; // get service url
+                var serviceCreatedAt = jsonResponse_Services.resources[i].metadata.created_at; // get service created date
+                var serviceUpdatedAt = jsonResponse_Services.resources[i].metadata.updated_at; // get service updated date
+                var serviceName = jsonResponse_Services.resources[i].entity.label; // get service name (label)
+                var serviceDescription = jsonResponse_Services.resources[i].entity.description; // get service description
+                var serviceExtraMetaData = jsonResponse_Services.resources[i].entity.extra; // get service extra metadata
+                var serviceBrokerGUID = jsonResponse_Services.resources[i].entity.service_broker_guid; // get service broker guid
+                var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
+
+
+                if (Services.findOne({guid: serviceGUID}) == undefined) {
+                    Services.insert({guid: serviceGUID, url: serviceURL, created_at: serviceCreatedAt, updated_at: serviceUpdatedAt, name: serviceName, description: serviceDescription, extra: serviceExtraMetaData, service_broker_guid: serviceBrokerGUID, service_plan_url: servicePlansURL});
+                    var getPlansCommand = 'cf curl ' + servicePlansURL;
+                    Meteor.call('sendCommand', getPlansCommand, function (err, planResults) {
+                        if (planResults) {
+                            var jsonResponse_Plans = JSON.parse(planResults);
+                            var planCount = jsonResponse_Plans.resources.length;
+
+                            for (z = 0; z < planCount; z++) {
+                                var planGUID = jsonResponse_Plans.resources[z].metadata.guid; // get plan guid
+                                var planURL = jsonResponse_Plans.resources[z].metadata.url; // get plan url
+                                var planCreatedDate = jsonResponse_Plans.resources[z].metadata.created_at; // get plan creation date
+                                var planUpdatedDate = jsonResponse_Plans.resources[z].metadata.updated_at; // get plan updated date
+
+                                var planName = jsonResponse_Plans.resources[z].entity.name; // get plan name
+                                var planDescription = jsonResponse_Plans.resources[z].entity.description; // get plan description
+                                var planExtraMetaData = jsonResponse_Plans.resources[z].entity.extra; // get plan extar metadata
+                                var planServiceGUID = jsonResponse_Plans.resources[z].entity.service_guid; // get plan's service_guid
+                                var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
+                                var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
+
+                                if (Plans.findOne({guid: planGUID}) == undefined) {
+                                    Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, extra: planExtraMetaData, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+
+        }
+    });
 
 //    var result = sh.exec('touch ~/Desktop/fileFromMeteor.doc');
 //    console.log("return code " + result.code);
@@ -39,27 +92,27 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-    removeApps : function() {
+    removeApps: function () {
         console.log("clearing Apps");
         return Apps.remove({});
     },
-    removeServices : function() {
+    removeServices: function () {
         console.log("clearing Services");
         return Services.remove({});
     },
 
-    blah : function(){
-      console.log('killing some time');
+    blah: function () {
+        console.log('killing some time');
     },
-    sendAppCommand : function(command){
+    sendAppCommand: function (command) {
         console.log("received command -> " + command);
 //        Future = Npm.require('fibers/future');
 
 //        var myFuture = new Future();
 
         var result = sh.exec(command);
-        console.log("return code " + result.code);
-        console.log("stdout + stderr " + result.stdout);
+//        console.log("return code " + result.code);
+//        console.log("stdout + stderr " + result.stdout);
 //        myFuture.return(result.stdout);
         var jsonResponse_Apps = result.stdout///
         var appCount = jsonResponse_Apps.resources.length;
@@ -77,7 +130,7 @@ Meteor.methods({
             var appState = jsonResponse_Apps.resources[i].entity.state;
             var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
 
-            if(Apps.findOne({guid: appGUID}) == undefined){
+            if (Apps.findOne({guid: appGUID}) == undefined) {
                 Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
                     production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
                     state: appState, package_state: appPackagestate});
@@ -87,27 +140,27 @@ Meteor.methods({
 
 //        return myFuture.wait();
     },
-    sendCommand : function(command){
-        console.log("received command -> " + command);
+    sendCommand: function (command) {
+//        console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
 
         var myFuture = new Future();
 
         var result = sh.exec(command);
-        console.log("return code " + result.code);
-        console.log("stdout + stderr " + result.stdout);
+//        console.log("return code " + result.code);
+//        console.log("stdout + stderr " + result.stdout);
         myFuture.return(result.stdout);
         return myFuture.wait();
     },
-    sendCommand2 : function(command){
-        console.log("received command -> " + command);
+    sendCommand2: function (command) {
+//        console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
 
         var myFuture2 = new Future();
 
         var result = sh.exec(command);
-        console.log("return code " + result.code);
-        console.log("stdout + stderr " + result.stdout);
+//        console.log("return code " + result.code);
+//        console.log("stdout + stderr " + result.stdout);
         myFuture2.return(result.stdout);
         return myFuture2.wait();
     }

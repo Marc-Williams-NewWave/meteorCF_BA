@@ -17,8 +17,7 @@
             <!--  <label class="checkbox">
                <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
              </label> -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login
-            </button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login</button>
             <a href="{{ pathFor 'registerScreen' }}">Create Account</a>
         </form>
     </div>
@@ -50,6 +49,7 @@
     <div id="side-pane">
         <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
         {{> homePage}}
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="logout-button" value="Logout">Logout</button>
     </div>
 </template>
 
@@ -246,20 +246,18 @@
                             </div>
 
                             <div class="modal-body">
-                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title"
-                                                                                 id="planTitle"></h4>
+                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title" id="planTitle"></h4>
 
                                 <form id="serviceName">
                                     <br/>
-                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service"
-                                           class="form-control"> <br/>
+                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" class="form-control"> <br/>
                                     <label id="urlLabel">URL: </label><span id="urlSpan"></span>
                                     <label id="createdLabel">Created Date: </label><span id="createdSpan"></span>
                                     <label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>
                                     <label id="descriptionLabel">Description: </label><span id="descriptionSpan"></span>
                                     <label id="serviceURLLabel">Service URL: </label><span id="serviceURLSpan"></span>
-                                    <label id="serviceInstanceURLLabel">Service Instance URL: </label><span
-                                        id="serviceInstanceURLSpan"></span>
+                                    <label id="serviceInstanceURLLabel">Service Instance URL: </label><span id="serviceInstanceURLSpan"></span>
+                                    <label id="extraMetaData">Extra Metadata: </label><span id="extraMetaDataSpan"></span>
                                 </form>
 
 

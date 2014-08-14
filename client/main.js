@@ -196,7 +196,9 @@ Template.serviceStatus.events({
 //        Route.go('modal');
     },
     'click #launchService' : function(){
-        alert("You launched with name " + $('#serviceNameInput').val());
+//        alert("You launched with name " + $('#serviceNameInput').val());
+        var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
+        alert(cfCreateServiceCommand);
     }
 //    },
 //    'click #populateCollections': function(){
@@ -223,6 +225,7 @@ var getCurrentPlanHelper = function (planGUID) {
     $('#descriptionSpan').html(" " + currPlan.description + " <br />");
     $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
     $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
+    $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
 
 
 //    return currPlan;
@@ -246,6 +249,18 @@ Template.statusApp.events({
 //    }
 //});
 
+Template.layout.events({
+   'click #logout-button': function(){
+       Meteor.logout(function(err, result){
+           if(err){
+               alert(err);
+           } else{
+//               alert("Logging Out");
+               Router.go('loginScreen');
+           }
+       });
+   }
+});
 Template.loginScreen.events({
     'submit #login-form': function (e, t) {
         e.preventDefault();
