@@ -16,6 +16,7 @@ Required packages:
   - bootstrap-3
   - bootboxjs
   - blaze-layout
+  - Kadira
 
 - Npm (aquire via npm install <package_name>):
   - execSync
