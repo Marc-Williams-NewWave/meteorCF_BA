@@ -1,6 +1,7 @@
 Meteor.subscribe("apps");
 Meteor.subscribe("services_1");
 Meteor.subscribe("plans_1");
+Meteor.subscribe("provisioned_services");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
@@ -155,7 +156,7 @@ Template.serviceStatus.helpers({
     },
 
     serviceJoinPlan: function () {
-//        alert(this.guid + " from service Join");
+//        alert(this.name  + " guid -> " + this.guid + " from service Join");
 
         var neededPlans = Plans.find({service_guid: this.guid});
 //    alert(Plans.find({service_guid : this.guid}));
@@ -175,24 +176,60 @@ Template.serviceStatus.helpers({
 
 Template.serviceStatus.events({
     'click .viewPlan': function () {
-//        alert(this.name + " .viewPlan event");
-//        var currentObj = this;
-//        alert(currentObj._id);
 
-//        var testVar = Template.serviceStatus.serviceJoinPlan();
-
-//        alert(JSON.stringify(testVar));
+//    $('#planOptions_' + this.id).css("background-color", "red");
+//        alert(this._id);
+//        alert(this.guid);
 
 
-//        console.log("length of testVar = " + testVar);
+//        $('#planID_'+this.id)
 
 
-//        console.log("length of testVar = " + testVar[1]);
+//        alert( $('#planOptions_' + this._id +  ' option:selected' ).text() );
+
+//        $('.viewPlan').click();
+//        var currentServiceName = this.name;
+
+//        alert($(this).html());
+//        $(this).closest("td").css("background-color", "red" );
+
+
+//            var buttonCell = $('#viewPlanCell')[0];
+//        var leftCell = buttonCell.prev;
+//        alert(  $(leftCell).html()  );
+
+//         console.log(buttonText);
+
+//        alert(currentServiceName);
+//        var currName = "planOptions_" + this.name;
+
+//        var select = $('#planOptions_'+this.name);
+//        alert();
+
+//        alert( $("#planOptions_" + this.name +  " option:selected" ).text() );
+
+//        console.log($( "#" + currName + " option:selected" ).text() );
+
+
+//        $('#planTitle').text($( "#" + currName + " option:selected" ).text() );
+//        console.log($('#' + currName).data());
+
+
+//        console.log(currPlan2.data);
+//        alert("name : " + this.name + "\ndescription: " + this.description + "\nguid: " + this.guid);
+
+
 
         getCurrentPlanHelper(this.guid);
 
 //        $('#myModalLabel').text(currentObj.name);
+
+
         $('#myModal').modal();
+
+
+
+
 //        Route.go('modal');
     },
     'click #launchService' : function(){
@@ -209,12 +246,8 @@ Template.serviceStatus.events({
 
 
 var getCurrentPlanHelper = function (planGUID) {
-//    alert(planGUID + " from helper");
     var currPlan = Plans.findOne({guid: planGUID});
     var parentPlan = Services.findOne({guid: currPlan.service_guid});
-
-//    var jsonResponse_Services = serviceCuler('cf curl /v2/services');
-//    var jsonResponse_Plans = planCuler('cf curl ' + parentPlan.service_plans_url);
 
 
     $('#planTitle').text(currPlan.name);
@@ -226,9 +259,6 @@ var getCurrentPlanHelper = function (planGUID) {
     $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
     $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
     $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
-
-
-//    return currPlan;
 }
 
 //Template.jqGridTemplate.service = function(){
@@ -237,17 +267,12 @@ var getCurrentPlanHelper = function (planGUID) {
 //}
 
 Template.statusApp.events({
-    'click #launchBtn_1': function () {
+    'click #launchNewApp': function () {
+        $('#appCreationModal').modal();
 //       alert("populating apps...");
 //       populateApps();
     }
 });
-
-//Template.jqGridTemplate.events({
-//    'click #deleteService' : function(){
-//        Meteor.call('removeServices');
-//    }
-//});
 
 Template.layout.events({
    'click #logout-button': function(){

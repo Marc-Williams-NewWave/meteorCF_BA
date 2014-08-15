@@ -49,7 +49,9 @@
     <div id="side-pane">
         <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
         {{> homePage}}
-        <button class="btn btn-lg btn-primary btn-block" type="submit" id="logout-button" value="Logout">Logout</button>
+        <div align="center">
+        <button class="btn btn-default" type="submit" id="logout-button" value="Logout" style="background-color: #428BCA; color: #FFFFFF">Logout</button>
+        </div>
     </div>
 </template>
 
@@ -178,14 +180,36 @@
 </template>
 
 <template name="statusApp">
-    <!--<div align="right">-->
-    <!--<button id="launchBtn" name="Launch">Launch</button>-->
-    <!--<button id="deleteBtn" name="Delete">Delete</button>-->
-    <!--</div>-->
-    <!--<button id="launchBtn_1" name="Launch">Launch</button>-->
-    <div id="reactiveTableSpace">
+    <button id="launchNewApp" name="Launch" class="btn btn-default">Launch New App</button>
+    <div id="reactiveTableSpace" style="padding-bottom: 20px">
         {{> reactiveTable collection=apps settings=settings}}
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="appCreationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="appInfo">
+                        <br/>
+                        App Name: <input id="appName" type="text" value="Enter the Name of the Application" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the Name of Application':this.value;" class="form-control"> <br/>
+                        Git Repo: <input id="appGitRepo" type="text" value="Enter the URL of the Application's GitHub Repository" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the URL of the Application\'s GitHub Repository':this.value;" class="form-control"> <br/>
+                        <!--<input id="appName" type="text" value="Enter the Name of Application" class="form-control"> <br/>-->
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="launchAppBtn">Launch</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
 </template>
 
 <template name="createService">
@@ -219,7 +243,7 @@
 </template>
 
 <template name="serviceStatus">
-    <table class="table table-striped table-bordered table-hover" style="width: 70%">
+    <table class="table table-striped table-bordered table-hover" style="width: 100%">
         <thead>
         <tr>
             <th>Service Name</th>
@@ -273,17 +297,21 @@
                 </div>
                 <!-- Modal -->
 
-                <select>
+                <select id="planOptions_{{name}}">
                     <option value="default" selected="selected">Select Plan</option>
                     <!--{{#each plans}}-->
                     <!--<option value={{name}}>{{name}}</option>-->
                     <!--{{/each}}-->
 
                     {{#each serviceJoinPlan}}
-                    <option value="" class="viewPlan">{{name}}</option>
+                    <option class="viewPlan" id="plan_{{service_guid}}">{{name}}</option>
                     {{/each}}
                 </select>
 
+            <!--</td>-->
+             <!--<td id="viewPlanCell_{{name}}">-->
+                <!--<button id="viewPlanBtn" class="btn btn-default">View Plan_{{name}}</button>-->
+            <!--</td>-->
             </td>
         </tr>
         {{/each}}

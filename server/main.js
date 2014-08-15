@@ -26,10 +26,14 @@ Meteor.startup(function () {
         console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t" + allUsers[i].password + "\n");
     }
     console.log("Checking in on the server side - MW\n\n");
-//    Meteor.call('blah');
-//    sendAppCommand();
-
-//    console.log(Services.find());
+     Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){
+         if(output){
+             console.log(output);
+         }
+         if(err){
+             console.log(err);
+         }
+     });
 
     Meteor.call('sendCommand', 'cf curl /v2/services', function (err, result) {
         if (result) {
@@ -54,7 +58,8 @@ Meteor.startup(function () {
                     Services.insert({guid: serviceGUID, url: serviceURL, created_at: serviceCreatedAt, updated_at: serviceUpdatedAt, name: serviceName, description: serviceDescription, extra: serviceExtraMetaData, service_broker_guid: serviceBrokerGUID, service_plan_url: servicePlansURL});
                     var getPlansCommand = 'cf curl ' + servicePlansURL;
                     Meteor.call('sendCommand', getPlansCommand, function (err, planResults) {
-                        if (planResults) {
+                        if (planResults ) {
+                            console.log(planResults);
                             var jsonResponse_Plans = JSON.parse(planResults);
                             var planCount = jsonResponse_Plans.resources.length;
 
@@ -79,16 +84,73 @@ Meteor.startup(function () {
                     });
                 }
             }
-
-
         }
     });
 
-//    var result = sh.exec('touch ~/Desktop/fileFromMeteor.doc');
-//    console.log("return code " + result.code);
-//    console.log("stdout + stderr " + result.stdout);
-//    var json = JSON.stringify(eval("(" + result.stdout + ")"));
-//    console.log(json);
+     Meteor.call('sendCommand', 'cf curl /v2/apps', function (err, result) {
+        if (result) {
+            console.log(result);
+
+            var jsonResponse_Apps = JSON.parse(result);
+            var appCount = jsonResponse_Apps.resources.length;
+
+            for (i = 0; i < appCount; i++) {
+                var appGUID = jsonResponse_Apps.resources[i].metadata.guid;
+                var appURL = jsonResponse_Apps.resources[i].metadata.url;
+                var appCreatedDate = jsonResponse_Apps.resources[i].metadata.created_at;
+                var appUpdatedDate = jsonResponse_Apps.resources[i].metadata.updated_at;
+                var appName = jsonResponse_Apps.resources[i].entity.name;
+                var appProductionStatus = jsonResponse_Apps.resources[i].entity.production;
+                var appMemory = jsonResponse_Apps.resources[i].entity.memory;
+                var appInstanceCount = jsonResponse_Apps.resources[i].entity.instances;
+                var appDiskQuota = jsonResponse_Apps.resources[i].entity.disk_quota;
+                var appState = jsonResponse_Apps.resources[i].entity.state;
+                var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
+
+                if (Apps.findOne({guid: appGUID}) == undefined) {
+                    Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
+                        production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
+                        state: appState, package_state: appPackagestate});
+                }
+            }
+        }
+    });
+
+
+//    Meteor.call('sendCommand', 'cf curl /v2/service_instances', function(err, output){
+//       if(output){
+//           var jsonResponse_Provisions = JSON.parse(output);
+//           var provisionCount = jsonResponse_Provisions.resources.length;
+//
+//           for(i = 0; i < provisionCount; i++){
+//               var provisionGUID = jsonResponse_Provisions.resources[i].metadata.guid;
+//               var provisionUrl = jsonResponse_Provisions.resources[i].metadata.url;
+//               var provisionCreatedAt = jsonResponse_Provisions.resources[i].metadata.created_at;
+//
+//               if(jsonResponse_Provisions.resources[i].metadata.updated_at == null){
+//                   var provisionUpdatedAt = null;
+//               } else {
+//                   var provisionUpdatedAt = jsonResponse_Provisions.resources[i].metadata.updated_at;
+//               }
+//
+//
+//
+//               var provisionName = jsonResponse_Provisions.resources[i].entity.name;
+//               var provisionCredentials = jsonResponse_Provisions.resources[i].entity.credentials;
+//               var provisionServicePlanGUID = jsonResponse_Provisions.resources[i].entity.service_plan_guid;
+//               var provisionSpaceGUID = jsonResponse_Provisions.resources[i].entity.space_guid;
+//               var provisionType = jsonResponse_Provisions.resources[i].entity.type;
+//               var provisionSpaceURL = jsonResponse_Provisions.resources[i].entity.space_url;
+//               var provisionServicePlanURL = jsonResponse_Provisions.resources[i].entity.service_plan_url;
+//               var provisionServiceBindingsURL = jsonResponse_Provisions.resources[i].entity.service_bindings_url;
+//
+//           }
+//       }
+//    });
+
+
+
+
 });
 
 Meteor.methods({
@@ -103,42 +165,6 @@ Meteor.methods({
 
     blah: function () {
         console.log('killing some time');
-    },
-    sendAppCommand: function (command) {
-        console.log("received command -> " + command);
-//        Future = Npm.require('fibers/future');
-
-//        var myFuture = new Future();
-
-        var result = sh.exec(command);
-//        console.log("return code " + result.code);
-//        console.log("stdout + stderr " + result.stdout);
-//        myFuture.return(result.stdout);
-        var jsonResponse_Apps = result.stdout///
-        var appCount = jsonResponse_Apps.resources.length;
-
-        for (i = 0; i < appCount; i++) {
-            var appGUID = jsonResponse_Apps.resources[i].metadata.guid;
-            var appURL = jsonResponse_Apps.resources[i].metadata.url;
-            var appCreatedDate = jsonResponse_Apps.resources[i].metadata.created_at;
-            var appUpdatedDate = jsonResponse_Apps.resources[i].metadata.updated_at;
-            var appName = jsonResponse_Apps.resources[i].entity.name;
-            var appProductionStatus = jsonResponse_Apps.resources[i].entity.production;
-            var appMemory = jsonResponse_Apps.resources[i].entity.memory;
-            var appInstanceCount = jsonResponse_Apps.resources[i].entity.instances;
-            var appDiskQuota = jsonResponse_Apps.resources[i].entity.disk_quota;
-            var appState = jsonResponse_Apps.resources[i].entity.state;
-            var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
-
-            if (Apps.findOne({guid: appGUID}) == undefined) {
-                Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
-                    production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
-                    state: appState, package_state: appPackagestate});
-            }
-        }
-
-
-//        return myFuture.wait();
     },
     sendCommand: function (command) {
 //        console.log("received command -> " + command);
