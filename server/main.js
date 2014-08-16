@@ -117,36 +117,39 @@ Meteor.startup(function () {
     });
 
 
-//    Meteor.call('sendCommand', 'cf curl /v2/service_instances', function(err, output){
-//       if(output){
-//           var jsonResponse_Provisions = JSON.parse(output);
-//           var provisionCount = jsonResponse_Provisions.resources.length;
-//
-//           for(i = 0; i < provisionCount; i++){
-//               var provisionGUID = jsonResponse_Provisions.resources[i].metadata.guid;
-//               var provisionUrl = jsonResponse_Provisions.resources[i].metadata.url;
-//               var provisionCreatedAt = jsonResponse_Provisions.resources[i].metadata.created_at;
-//
-//               if(jsonResponse_Provisions.resources[i].metadata.updated_at == null){
-//                   var provisionUpdatedAt = null;
-//               } else {
-//                   var provisionUpdatedAt = jsonResponse_Provisions.resources[i].metadata.updated_at;
-//               }
-//
-//
-//
-//               var provisionName = jsonResponse_Provisions.resources[i].entity.name;
-//               var provisionCredentials = jsonResponse_Provisions.resources[i].entity.credentials;
-//               var provisionServicePlanGUID = jsonResponse_Provisions.resources[i].entity.service_plan_guid;
-//               var provisionSpaceGUID = jsonResponse_Provisions.resources[i].entity.space_guid;
-//               var provisionType = jsonResponse_Provisions.resources[i].entity.type;
-//               var provisionSpaceURL = jsonResponse_Provisions.resources[i].entity.space_url;
-//               var provisionServicePlanURL = jsonResponse_Provisions.resources[i].entity.service_plan_url;
-//               var provisionServiceBindingsURL = jsonResponse_Provisions.resources[i].entity.service_bindings_url;
-//
-//           }
-//       }
-//    });
+    Meteor.call('sendCommand', 'cf curl /v2/service_instances', function(err, output){
+       if(output){
+           var jsonResponse_Provisions = JSON.parse(output);
+           var provisionCount = jsonResponse_Provisions.resources.length;
+
+           for(i = 0; i < provisionCount; i++){
+               var provisionGUID = jsonResponse_Provisions.resources[i].metadata.guid;
+               var provisionURL = jsonResponse_Provisions.resources[i].metadata.url;
+               var provisionCreatedAt = jsonResponse_Provisions.resources[i].metadata.created_at;
+
+               if(jsonResponse_Provisions.resources[i].metadata.updated_at == null){
+                   var provisionUpdatedAt = null;
+               } else {
+                   var provisionUpdatedAt = jsonResponse_Provisions.resources[i].metadata.updated_at;
+               }
+
+               var provisionName = jsonResponse_Provisions.resources[i].entity.name;
+               var provisionCredentials = jsonResponse_Provisions.resources[i].entity.credentials;
+               var provisionServicePlanGUID = jsonResponse_Provisions.resources[i].entity.service_plan_guid;
+               var provisionSpaceGUID = jsonResponse_Provisions.resources[i].entity.space_guid;
+               var provisionType = jsonResponse_Provisions.resources[i].entity.type;
+               var provisionSpaceURL = jsonResponse_Provisions.resources[i].entity.space_url;
+               var provisionServicePlanURL = jsonResponse_Provisions.resources[i].entity.service_plan_url;
+               var provisionServiceBindingsURL = jsonResponse_Provisions.resources[i].entity.service_bindings_url;
+
+               if(Provisioned_Services.findOne({guid: provisionGUID}) == undefined){
+                   Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
+                   service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, type: provisionType, space_url: provisionSpaceURL,
+                   service_plan_url: provisionServicePlanURL, service_bindings_url: provisionServiceBindingsURL});
+               }
+           }
+       }
+    });
 
 
 

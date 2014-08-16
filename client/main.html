@@ -107,6 +107,7 @@
                             <!--<li><a href="{{ pathFor 'bindService' }}">Bind</a></li>-->
                             <!--<li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>-->
                             <li><a href="{{ pathFor 'serviceStatus' }}">Status</a></li>
+                            <li><a href="{{ pathFor 'provisionedServiceStatus' }}">Provisioned Services</a></li>
                         </ul>
                     </div>
                 </div>
@@ -154,27 +155,6 @@
         </div>
     </div>
 </template>
-
-<!--<template name="placeHolder">-->
-<!--</template>-->
-
-<!--<template name="launchApp">-->
-<!--<div align="center" style="">-->
-<!--<div align="right">-->
-<!--<button id="launchBtn1" name="Launch">Launch</button>-->
-<!--<button id="deleteBtn1" name="Delete">Delete</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</template>-->
-
-
-<!-- <template name="jqGridTemplate">
-  HI
-  <div>
-  <table id="grid"></table>
-  <div id="pager"></div>
-  </div>
-</template> -->
 
 <template name="deleteApp">
 </template>
@@ -318,6 +298,26 @@
     </table>
 
     <!--<button id="populateCollections">Populate Collections</button>-->
+</template>
+
+<template name="provisionedServiceStatus">
+    <table class="table table-striped table-bordered table-hover" style="width: 70%">
+        <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Description</th>
+            <th>Plan URL</th>
+            <th>Plans</th>
+        </tr>
+        </thead>
+        {{#each provisionedServices}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>{{service_plan_url}}</td>
+        </tr>
+        {{/each}}
+    </table>
 </template>
 
 <template name="option2SBM">
