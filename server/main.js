@@ -23,7 +23,7 @@ Meteor.publish('userList', function () {
 Meteor.startup(function () {
     var allUsers = Meteor.users.find({}).fetch();
     for (i = 0; i < allUsers.length; i++) {
-        console.log(allUsers[i].username + " ||\t" + allUsers[i]._id + "||\t" + allUsers[i].password + "\n");
+        console.log(allUsers[i].username);
     }
     console.log("Checking in on the server side - MW\n\n");
      Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){

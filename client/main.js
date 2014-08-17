@@ -186,7 +186,21 @@ var getCurrentPlanHelper = function (planGUID) {
     $('#descriptionSpan').html(" " + currPlan.description + " <br />");
     $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
     $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
-    $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
+
+    var extraMetadata = JSON.parse(currPlan.extra);
+//    alert(extraMetadata.name);
+//    $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
+    $('#extraMetaDataIDSpan').html(" " + extraMetadata.id + " <br />");
+    $('#extraMetaDataNameSpan').html(" " + extraMetadata.name + " <br />");
+    $('#extraMetaDataDescriptionSpan').html(" " + extraMetadata.description + " <br />");
+    $('#extraMetaDataBulletsSpan').html(" " + extraMetadata.bullets + " <br />");
+    $('#extraMetaDataProfileNameSpan').html(" " + extraMetadata.profilename + " <br />");
+    $('#extraMetaDataNodeNameSpan').html(" " + extraMetadata.nodename + " <br />");
+    $('#extraMetaDataHostnameSpan').html(" " + extraMetadata.hostname + " <br />");
+    $('#extraMetaDataMngdNodeNameSpan').html(" " + extraMetadata.mngdnodename + " <br />");
+    $('#extraMetaDataCellNameSpan').html(" " + extraMetadata.cellname + " <br />");
+    $('#extraMetaDataAppNodeNameSpan').html(" " + extraMetadata.appnodename + " <br />");
+    $('#extraMetaDataAdminConsoleSpan').html(" " + extraMetadata.adminconsole + " <br />");
 }
 
 //Template.jqGridTemplate.service = function(){
