@@ -170,13 +170,13 @@ Template.serviceStatus.events({
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
         alert(cfCreateServiceCommand);
         Meteor.call('sendCommand', cfCreateServiceCommand);
-    }
-//    },
-//    'click #populateCollections': function(){
+    },
+    'click #clearServices': function(){
 //        populateServices();
 //        alert("Done!");
-//    }
-})
+        Meteor.call('removeServices');
+    }
+});
 
 
 var getCurrentPlanHelper = function (planGUID) {

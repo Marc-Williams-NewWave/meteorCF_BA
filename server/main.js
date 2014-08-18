@@ -165,11 +165,11 @@ Meteor.startup(function () {
 Meteor.methods({
     removeApps: function () {
         console.log("clearing Apps");
-        return Apps.remove({});
+        return Prod_Apps.remove({});
     },
     removeServices: function () {
         console.log("clearing Services");
-        return Services.remove({});
+        return Prod_Services.remove({});
     },
 
     blah: function () {
