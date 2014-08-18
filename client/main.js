@@ -1,7 +1,7 @@
-Meteor.subscribe("apps");
-Meteor.subscribe("services_1");
-Meteor.subscribe("plans_1");
-Meteor.subscribe("provisioned_services");
+Meteor.subscribe("prod_apps");
+Meteor.subscribe("prod_services");
+Meteor.subscribe("prod_plans");
+Meteor.subscribe("prod_provisioned_services");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
@@ -41,15 +41,15 @@ Template.cfInfo.currentUser = function () {
 }
 
 Template.statusApp.apps = function () {
-    return Apps.find();
+    return Prod_Apps.find();
 }
 
 Template.serviceStatus.services = function () {
-    return Services.find();
+    return Prod_Services.find();
 }
 
 Template.provisionedServiceStatus.provisionedServices = function(){
-    return Provisioned_Services.find();
+    return Prod_Provisioned_Services.find();
 }
 
 Template.statusApp.helpers({
@@ -67,9 +67,14 @@ Template.statusApp.helpers({
 
 
 Template.serviceStatus.plans = function () {
-    return Plans.find();
+    return Prod_Plans.find();
 }
 
+Template.statusApp.helpers({
+    provisionedServices: function(){
+        return Prod_Provisioned_Services.find();
+    }
+});
 Template.serviceStatus.helpers({
     settings: function () {
         return {
@@ -86,7 +91,7 @@ Template.serviceStatus.helpers({
     serviceJoinPlan: function () {
 //        alert(this.name  + " guid -> " + this.guid + " from service Join");
 
-        var neededPlans = Plans.find({service_guid: this.guid});
+        var neededPlans = Prod_Plans.find({service_guid: this.guid});
 //    alert(Plans.find({service_guid : this.guid}));
 //        alert(neededPlans.length);
 
@@ -164,6 +169,7 @@ Template.serviceStatus.events({
 //        alert("You launched with name " + $('#serviceNameInput').val());
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
         alert(cfCreateServiceCommand);
+        Meteor.call('sendCommand', cfCreateServiceCommand);
     }
 //    },
 //    'click #populateCollections': function(){
@@ -174,8 +180,8 @@ Template.serviceStatus.events({
 
 
 var getCurrentPlanHelper = function (planGUID) {
-    var currPlan = Plans.findOne({guid: planGUID});
-    var parentPlan = Services.findOne({guid: currPlan.service_guid});
+    var currPlan = Prod_Plans.findOne({guid: planGUID});
+    var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
 
 
     $('#planTitle').text(currPlan.name);
@@ -213,6 +219,16 @@ Template.statusApp.events({
         $('#appCreationModal').modal();
 //       alert("populating apps...");
 //       populateApps();
+    },
+    'click #launchAppBtn': function(){
+//        alert("creating app with name " + $('#appName').val() + "\nand git repo " + $('#appGitRepo').val());
+
+//        alert($('#provisionedServiceOption').selected.text());
+//        alert($('#provisionedServicesDropDown').find(":selected").text());
+        Meteor.call('sendCommand', 'python /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/script/jenkins/parse.py');
+    },
+    'click #provisionedServiceOption': function(){
+//        this.dashboard_url
     }
 });
 
@@ -304,8 +320,8 @@ var populateApps = function () {
         var appState = jsonResponse_Apps.resources[i].entity.state;
         var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
 
-        if (Apps.findOne({guid: appGUID}) == undefined) {
-            Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
+        if (Prod_Apps.findOne({guid: appGUID}) == undefined) {
+            Prod_Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
                 production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
                 state: appState, package_state: appPackagestate});
         }
@@ -323,8 +339,8 @@ var populateServices = function () {
         var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
 
 
-        if (Services.findOne({guid: serviceGUID}) == undefined) {
-            Services.insert({guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL});
+        if (Prod_Services.findOne({guid: serviceGUID}) == undefined) {
+            Prod_Services.insert({guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL});
 //            populatePlans(servicePlansURL);
         }
     }
@@ -332,8 +348,8 @@ var populateServices = function () {
 }
 
 var populatePlans = function () {
-    var serviceCount = Services.find().count();
-    var serviceArry = Services.find({}).fetch();
+    var serviceCount = Prod_Services.find().count();
+    var serviceArry = Prod_Services.find({}).fetch();
 
 //    var jsonResponse_Plans = planCurler('cf curl ' + servicePlanURL);
 //    var planCount = jsonResponse_Plans.resources.length;
@@ -355,8 +371,8 @@ var populatePlans = function () {
             var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
             var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
 
-            if (Plans.findOne({guid: planGUID}) == undefined) {
-                Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
+            if (Prod_Plans.findOne({guid: planGUID}) == undefined) {
+                Prod_Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
             }
         }
 

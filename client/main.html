@@ -180,6 +180,13 @@
                         Git Repo: <input id="appGitRepo" type="text" value="Enter the URL of the Application's GitHub Repository" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the URL of the Application\'s GitHub Repository':this.value;" class="form-control"> <br/>
                         <!--<input id="appName" type="text" value="Enter the Name of Application" class="form-control"> <br/>-->
                     </form>
+                    <select id="provisionedServicesDropDown">
+                        <option value="default" selected="selected">Select Plan</option>
+                        {{#each provisionedServices}}
+                        <option class="viewPlan" id="provisionedServiceOption">{{name}}</option>
+                        {{/each}}
+                    </select>
+                    <p id="displayDashboardURL"></p>
                 </div>
 
                 <div class="modal-footer">
@@ -313,20 +320,21 @@
 </template>
 
 <template name="provisionedServiceStatus">
-    <table class="table table-striped table-bordered table-hover" style="width: 70%">
+    <table class="table table-striped table-bordered table-hover" style="width: 100%;">
         <thead>
         <tr>
             <th>Service Name</th>
-            <th>Description</th>
+            <th>Type</th>
             <th>Plan URL</th>
-            <th>Plans</th>
+            <th>Service Bindings URL</th>
         </tr>
         </thead>
         {{#each provisionedServices}}
         <tr>
             <td>{{name}}</td>
-            <td>{{description}}</td>
+            <td>{{type}}</td>
             <td>{{service_plan_url}}</td>
+            <td>{{service_bindings_url}}</td>
         </tr>
         {{/each}}
     </table>

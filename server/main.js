@@ -3,16 +3,20 @@ var exec = Meteor.require('child_process').exec;
 
 var sh = Meteor.require('execSync');
 
-Meteor.publish('apps', function () {
-    return Apps.find({});
+Meteor.publish('prod_apps', function () {
+    return Prod_Apps.find({});
 });
 
-Meteor.publish('services_1', function () {
-    return Services.find({});
+Meteor.publish('prod_services', function () {
+    return Prod_Services.find({});
 });
 
-Meteor.publish('plans_1', function () {
-    return Plans.find({});
+Meteor.publish('prod_plans', function () {
+    return Prod_Plans.find({});
+});
+
+Meteor.publish('prod_provisioned_services', function () {
+    return Prod_Provisioned_Services.find({});
 });
 
 Meteor.publish('userList', function () {
@@ -54,8 +58,9 @@ Meteor.startup(function () {
                 var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
 
 
-                if (Services.findOne({guid: serviceGUID}) == undefined) {
-                    Services.insert({guid: serviceGUID, url: serviceURL, created_at: serviceCreatedAt, updated_at: serviceUpdatedAt, name: serviceName, description: serviceDescription, extra: serviceExtraMetaData, service_broker_guid: serviceBrokerGUID, service_plan_url: servicePlansURL});
+                if (Prod_Services.findOne({guid: serviceGUID}) == undefined) {
+                    Prod_Services.insert({guid: serviceGUID, url: serviceURL, created_at: serviceCreatedAt, updated_at: serviceUpdatedAt, name: serviceName, description: serviceDescription, extra: serviceExtraMetaData, service_broker_guid: serviceBrokerGUID, service_plan_url: servicePlansURL});
+
                     var getPlansCommand = 'cf curl ' + servicePlansURL;
                     Meteor.call('sendCommand', getPlansCommand, function (err, planResults) {
                         if (planResults ) {
@@ -76,8 +81,8 @@ Meteor.startup(function () {
                                 var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
                                 var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
 
-                                if (Plans.findOne({guid: planGUID}) == undefined) {
-                                    Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, extra: planExtraMetaData, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
+                                if (Prod_Plans.findOne({guid: planGUID}) == undefined) {
+                                    Prod_Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, extra: planExtraMetaData, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
                                 }
                             }
                         }
@@ -107,8 +112,8 @@ Meteor.startup(function () {
                 var appState = jsonResponse_Apps.resources[i].entity.state;
                 var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
 
-                if (Apps.findOne({guid: appGUID}) == undefined) {
-                    Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
+                if (Prod_Apps.findOne({guid: appGUID}) == undefined) {
+                    Prod_Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
                         production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
                         state: appState, package_state: appPackagestate});
                 }
@@ -138,13 +143,14 @@ Meteor.startup(function () {
                var provisionServicePlanGUID = jsonResponse_Provisions.resources[i].entity.service_plan_guid;
                var provisionSpaceGUID = jsonResponse_Provisions.resources[i].entity.space_guid;
                var provisionType = jsonResponse_Provisions.resources[i].entity.type;
+               var provisionDashboardURL = jsonResponse_Provisions.resources[i].entity.dashboard_url;
                var provisionSpaceURL = jsonResponse_Provisions.resources[i].entity.space_url;
                var provisionServicePlanURL = jsonResponse_Provisions.resources[i].entity.service_plan_url;
                var provisionServiceBindingsURL = jsonResponse_Provisions.resources[i].entity.service_bindings_url;
 
-               if(Provisioned_Services.findOne({guid: provisionGUID}) == undefined){
-                   Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
-                   service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, type: provisionType, space_url: provisionSpaceURL,
+               if(Prod_Provisioned_Services.findOne({guid: provisionGUID}) == undefined){
+                   Prod_Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
+                   service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, dashboard_url: provisionDashboardURL, type: provisionType, space_url: provisionSpaceURL,
                    service_plan_url: provisionServicePlanURL, service_bindings_url: provisionServiceBindingsURL});
                }
            }
@@ -176,8 +182,10 @@ Meteor.methods({
         var myFuture = new Future();
 
         var result = sh.exec(command);
-//        console.log("return code " + result.code);
-//        console.log("stdout + stderr " + result.stdout);
+
+        console.log("return code " + result.code);
+        console.log("stdout + stderr " + result.stdout);
+
         myFuture.return(result.stdout);
         return myFuture.wait();
     },
@@ -192,5 +200,22 @@ Meteor.methods({
 //        console.log("stdout + stderr " + result.stdout);
         myFuture2.return(result.stdout);
         return myFuture2.wait();
+    },
+    syncCollections: function(){
+//        var allUsers = Meteor.users.find({}).fetch();
+        var retrieved_services = Retrieved_Services.find({}).fetch();
+        var prod_services = Prod_Services.find({}).fetch();
+
+        for(i = 0; i < retrieved_services.length; i++){
+            if(Prod_Services.findOne({guid: retrieved_services[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_services collection, so it will be inserted into prod
+                Prod_Services.insert(  Retrieved_Services.findOne({guid: retrieved_services[i].guid}) );
+            }
+        }
+
+        for(i = 0; i < prod_services.length; i++){
+            if(Retrieved_Services.findOne({guid: prod_services[i].guid}) == undefined){ // a service in production cannot be found in the services pulled from cf, meaning it should be removed from prod
+                Prod_Services.remove({guid: prod_services[i]});
+            }
+        }
     }
 });
