@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.cloudbees.plugins.deployer.DeployNowJobProperty plugin="cloudbees-deployer-plugin@5.0">
+      <oneClickDeploy>false</oneClickDeploy>
+      <hosts>
+        <com.cloudbees.plugins.deployer.impl.run.RunHostImpl>
+          <targets class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
+            <c class="list"/>
+            <list reference="../c"/>
+          </targets>
+          <user></user>
+          <account></account>
+        </com.cloudbees.plugins.deployer.impl.run.RunHostImpl>
+      </hosts>
+    </com.cloudbees.plugins.deployer.DeployNowJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+	<url>REPLACE</url>
+        <credentialsId>20c15ba0-458a-445b-9847-d873243a26be</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/profiles</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -ex
+
+bash $WORKSPACE/gradlew clean build
+cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev
+cf push --no-start
+cf restart `cat manifest.yml | grep -i name | awk &apos;{ print $3 }&apos;`</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

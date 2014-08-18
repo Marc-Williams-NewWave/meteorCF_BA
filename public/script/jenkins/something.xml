@@ -1,0 +1,70 @@
+<project>
+  <actions />
+  <description />
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.cloudbees.plugins.deployer.DeployNowJobProperty plugin="cloudbees-deployer-plugin@5.0">
+      <oneClickDeploy>false</oneClickDeploy>
+      <hosts>
+        <com.cloudbees.plugins.deployer.impl.run.RunHostImpl>
+          <targets class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
+            <c class="list" />
+            <list reference="../c" />
+          </targets>
+          <user />
+          <account />
+        </com.cloudbees.plugins.deployer.impl.run.RunHostImpl>
+      </hosts>
+    </com.cloudbees.plugins.deployer.DeployNowJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>demo-git</url>
+        <credentialsId>20c15ba0-458a-445b-9847-d873243a26be</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/profiles</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list" />
+    <extensions />
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers />
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>bash jenkins_deploy.sh</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <org.jenkinsci.plugins.websphere__deployer.WebSphereDeployerPlugin plugin="websphere-deployer@1.2">
+      <ipAddress>192.168.0.126</ipAddress>
+      <connectorType>SOAP</connectorType>
+      <port>8878</port>
+      <username />
+      <password />
+      <clientKeyFile />
+      <clientTrustFile />
+      <node>demo-node</node>
+      <cell>demo-cell</cell>
+      <server>demo-server</server>
+      <artifacts>$WORKSPACE/build/libs/demo.war</artifacts>
+      <clientKeyPassword />
+      <clientTrustPassword />
+      <earLevel>6</earLevel>
+      <autoStart>true</autoStart>
+      <precompile>true</precompile>
+      <reloading>true</reloading>
+    </org.jenkinsci.plugins.websphere__deployer.WebSphereDeployerPlugin>
+  </publishers>
+  <buildWrappers />
+</project>
