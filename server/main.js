@@ -72,15 +72,14 @@ Meteor.methods({
         return myFuture.wait();
     },
     pythonParse: function () {
-//        console.log(process.env.PWD);
         Future = Npm.require('fibers/future');
         var myFuture2 = new Future();
-//        console.log(process.env.PWD);
         var parseScript  = process.env.PWD + '/public/jenkins/parse.py';
         var result = sh.exec('python ' + parseScript);
 
         console.log("return code " + result.code);
         console.log("stdout + stderr " + result.stdout);
+
         myFuture2.return(result.stdout);
         return myFuture2.wait();
     },
@@ -229,6 +228,13 @@ Meteor.methods({
                 }
             }
             console.log("-------------------------------------------------------------------------------------------------------- ");
+        });
+    },
+    getTargetInfo: function(){
+        Meteor.call('sendCommand', 'cf t', function(err, output){
+            if(output){
+                console.log(output);
+            }
         });
     }
 

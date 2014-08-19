@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4823ed7-745a-485b-a68f-a997ed9d2757" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/demo-job.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/deployApp.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/helloworld.war" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/jenkins-cli.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/manifest.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/parse.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/push_app.pp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/something.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/was-broker-job.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/script/jenkins/was-broker-job.xml.bak" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/main.html" afterPath="$PROJECT_DIR$/client/main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/main.js" afterPath="$PROJECT_DIR$/client/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/main.js" afterPath="$PROJECT_DIR$/server/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ba_demo_NEW.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,8 +28,8 @@
       <file leaf-file-name="main.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.42" vertical-offset="2514" max-vertical-offset="6060">
-              <caret line="179" column="28" selection-start-line="179" selection-start-column="25" selection-end-line="179" selection-end-column="28" />
+            <state vertical-scroll-proportion="-2.82" vertical-offset="2514" max-vertical-offset="6060">
+              <caret line="177" column="31" selection-start-line="177" selection-start-column="31" selection-end-line="177" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -61,7 +48,7 @@
       <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3223" max-vertical-offset="6645">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2008" max-vertical-offset="6645">
               <caret line="230" column="21" selection-start-line="230" selection-start-column="21" selection-end-line="230" selection-end-column="32" />
               <folding />
             </state>
@@ -81,8 +68,8 @@
       <file leaf-file-name="main.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6127886" vertical-offset="825" max-vertical-offset="3615">
-              <caret line="78" column="47" selection-start-line="78" selection-start-column="47" selection-end-line="78" selection-end-column="47" />
+            <state vertical-scroll-proportion="5.8348136" vertical-offset="240" max-vertical-offset="3705">
+              <caret line="235" column="36" selection-start-line="235" selection-start-column="36" selection-end-line="235" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -641,8 +628,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.42" vertical-offset="2514" max-vertical-offset="6060">
-          <caret line="179" column="28" selection-start-line="179" selection-start-column="25" selection-end-line="179" selection-end-column="28" />
+        <state vertical-scroll-proportion="-2.82" vertical-offset="2514" max-vertical-offset="6060">
+          <caret line="177" column="31" selection-start-line="177" selection-start-column="31" selection-end-line="177" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -657,8 +644,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6127886" vertical-offset="825" max-vertical-offset="3615">
-          <caret line="78" column="47" selection-start-line="78" selection-start-column="47" selection-end-line="78" selection-end-column="47" />
+        <state vertical-scroll-proportion="5.8348136" vertical-offset="240" max-vertical-offset="3705">
+          <caret line="235" column="36" selection-start-line="235" selection-start-column="36" selection-end-line="235" selection-end-column="36" />
           <folding />
         </state>
       </provider>
