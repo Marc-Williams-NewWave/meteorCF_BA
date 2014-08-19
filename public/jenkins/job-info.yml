@@ -1,0 +1,10 @@
+---
+variables:
+  job_file: 'job-template.xml'
+  git_url: 'https://github.com/brandon-adams/helloworld-demo.git'
+  node_name: 'eMoYx3-mngd-AppNode'
+  cell_name: 'eMoYx3-dmgr-Cell'
+  server_name: 'server1'
+  #war_file = 'was-service-broker-0.1.0.war'
+  war_file: 'helloworld.war'
+  output_file: 'demo-job.xml'

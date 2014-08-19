@@ -47,7 +47,9 @@
     </div>
 
     <div id="side-pane">
-        <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
+        <div align="center">
+            <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
+        </div>
         {{> homePage}}
         <div align="center">
         <button class="btn btn-default" type="submit" id="logout-button" value="Logout" style="background-color: #428BCA; color: #FFFFFF">Logout</button>
@@ -181,7 +183,7 @@
                         <!--<input id="appName" type="text" value="Enter the Name of Application" class="form-control"> <br/>-->
                     </form>
                     <select id="provisionedServicesDropDown">
-                        <option value="default" selected="selected">Select Plan</option>
+                        <option value="default" selected="selected">Select Provisions</option>
                         {{#each provisionedServices}}
                         <option class="viewPlan" id="provisionedServiceOption">{{name}}</option>
                         {{/each}}
@@ -316,7 +318,7 @@
         {{/each}}
     </table>
 
-    <button id="clearServices">Remove Services from Production</button>
+    <!--<button id="clearServices">Remove Services from Production</button>-->
 </template>
 
 <template name="provisionedServiceStatus">

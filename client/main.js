@@ -168,8 +168,10 @@ Template.serviceStatus.events({
     'click #launchService' : function(){
 //        alert("You launched with name " + $('#serviceNameInput').val());
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
-        alert(cfCreateServiceCommand);
+//        alert(cfCreateServiceCommand);
         Meteor.call('sendCommand', cfCreateServiceCommand);
+        Meteor.call('sendCommand', 'cf curl /v2/service_instances');
+
     },
     'click #clearServices': function(){
 //        populateServices();
@@ -225,7 +227,10 @@ Template.statusApp.events({
 
 //        alert($('#provisionedServiceOption').selected.text());
 //        alert($('#provisionedServicesDropDown').find(":selected").text());
-        Meteor.call('sendCommand', 'python /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/script/jenkins/parse.py');
+
+        Meteor.call('pythonParse');
+//        var base = path.resolve('.');
+//        alert(base);
     },
     'click #provisionedServiceOption': function(){
 //        this.dashboard_url
