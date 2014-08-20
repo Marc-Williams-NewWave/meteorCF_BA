@@ -5,10 +5,10 @@
 
 <template name="loginScreen">
     <div class="wrapper">
-        <form class="form-signin" id="login-form" action="action">
+        <form class="form-signin" id="login-form" action="action" style="width: 100%">
             <div align="center"><img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
 
-                <h2 class="form-signin-heading">Please login</h2>
+                <h2 class="form-signin-heading">Welcome to NewWave's Environment Templating Portal (Alpha)</h2>
             </div>
             <input type="text" id="login-username" class="form-control" name="username" placeholder="Username"
                    required="" autofocus/>
@@ -67,7 +67,7 @@
 <template name="tag_filter">
     <div align="center">
         <div class="label" style="color:black;font-size:24px">
-            Demo Space
+            NewWave Environment Templating Portal (Alpha)
         </div>
     </div>
 </template>
@@ -348,6 +348,7 @@
         {{/each}}
     </table>
     <button id="clearProvisions">Remove Provisions from Production</button>
+    <button id="syncProvisions">Sync Prod Provisions</button>
 </template>
 
 <template name="option2SBM">

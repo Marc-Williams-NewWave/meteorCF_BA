@@ -82,7 +82,8 @@ Meteor.methods({
         var prov = Prod_Provisioned_Services.findOne({guid:guid});
         Meteor.call('sendCommand', 'cf delete-service ' + prov.name + ' -f', function(err, result){
             if(result){
-                Retrieved_Provisioned_Services.remove({guid:guid});
+//                Retrieved_Provisioned_Services.remove({guid:guid});
+                console.log(result);
                 Meteor.call('syncProvisionsCollections');
             }
             if(err){

@@ -63,6 +63,9 @@ Template.provisionedServiceStatus.events({
         if(confirm('Are you sure you want to delete this service?')) {
             Meteor.call('removeProvision', this.guid);
         }
+    },
+    'click #syncProvisions': function(){
+        Meteor.call('syncProvisionsCollections');
     }
 });
 
