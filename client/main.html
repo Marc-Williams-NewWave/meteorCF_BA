@@ -265,16 +265,16 @@
 
                                 <form id="serviceName">
                                     <br/>
-                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" class="form-control"> <br/>
-                                    <label id="urlLabel">URL: </label><span id="urlSpan"></span>
-                                    <label id="createdLabel">Created Date: </label><span id="createdSpan"></span>
-                                    <label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>
+                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the Name of Your Service':this.value;" class="form-control"> <br/>
+                                    <!--<label id="urlLabel">URL: </label><span id="urlSpan"></span>-->
+                                    <!--<label id="createdLabel">Created Date: </label><span id="createdSpan"></span>-->
+                                    <!--<label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>-->
                                     <label id="descriptionLabel">Description: </label><span id="descriptionSpan"></span>
                                     <!--<label id="serviceURLLabel">Service URL: </label><span id="serviceURLSpan"></span>-->
                                     <!--<label id="serviceInstanceURLLabel">Service Instance URL: </label><span id="serviceInstanceURLSpan"></span>-->
                                     <!--<label id="extraMetaData">Extra Metadata: </label><span id="extraMetaDataSpan"></span>-->
                                     <h4>MetaData:</h4>
-                                    <label id="extraMetaDataID">ID: </label><span id="extraMetaDataIDSpan"></span>
+                                    <!--<label id="extraMetaDataID">ID: </label><span id="extraMetaDataIDSpan"></span>-->
                                     <label id="extraMetaDataName">Metadata Name: </label><span id="extraMetaDataNameSpan"></span>
                                     <label id="extraMetaDataBullets">Bullets: </label><span id="extraMetaDataBulletsSpan"></span>
                                     <label id="extraMetaDataProfileName">Profile Name: </label><span id="extraMetaDataProfileNameSpan"></span>

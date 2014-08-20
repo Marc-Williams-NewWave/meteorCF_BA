@@ -81,6 +81,7 @@ Meteor.methods({
         Meteor.call('sendCommand', 'cf delete-service ' + prov.name + ' -f', function(err, result){
             if(result){
                 Retrieved_Provisioned_Services.remove({guid:guid});
+                Meteor.call('syncProvisionsCollections');
             }
             if(err){
                 console.log("ERROR -> " + err);
@@ -149,6 +150,7 @@ Meteor.methods({
         var prod_provisions = Prod_Provisioned_Services.find({}).fetch();
 
         for(i = 0; i < retrieved_provisions.length; i++){
+            console.log(Retrieved_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}));
             if(Prod_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_provisions collection, so it will be inserted into prod
                 Prod_Provisioned_Services.insert(  Retrieved_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) );
             }
@@ -358,7 +360,7 @@ Meteor.methods({
     populateRetrieved_Provisions: function(){
         Meteor.call('sendCommand', 'cf curl /v2/service_instances', function(err, output){
             if(output){
-                console.log("-------------------------------------------------------------------------------------------------------- ");
+                console.log("---------------------CALLING populateRetrieved_Provisions----------------------------------------------------------------------------------- ");
                 var jsonResponse_Provisions = JSON.parse(output);
                 var provisionCount = jsonResponse_Provisions.resources.length;
 
@@ -387,10 +389,12 @@ Meteor.methods({
                         Retrieved_Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
                             service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, dashboard_url: provisionDashboardURL, type: provisionType, space_url: provisionSpaceURL,
                             service_plan_url: provisionServicePlanURL, service_bindings_url: provisionServiceBindingsURL});
+
+                        console.log(Retrieved_Provisioned_Services.findOne({guid: provisionGUID}));
                     }
                 }
             }
-            console.log("-------------------------------------------------------------------------------------------------------- ");
+            console.log("---------------------LEAVING populateRetrieved_Provisions----------------------------------------------------------------------------------- ");
         });
     },
     getTargetInfo: function(){
