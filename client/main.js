@@ -91,6 +91,11 @@ Template.serviceStatus.plans = function () {
     return Prod_Plans.find();
 }
 
+Template.serviceStatus.rendered = function(){
+    Meteor.call('syncServicesCollections');
+    Meteor.call('syncPlansCollections');
+}
+
 Template.statusApp.helpers({
     provisionedServices: function(){
         return Prod_Provisioned_Services.find();

@@ -57,6 +57,8 @@ Meteor.startup(function () {
 
     Meteor.call('syncAppsCollections');
     Meteor.call('syncProvisionsCollections');
+    Meteor.call('syncServicesCollections');
+    Meteor.call('syncPlansCollections');
 });
 
 Meteor.methods({
@@ -141,7 +143,53 @@ Meteor.methods({
             }
         }
 
-        console.log("\t\tDONE SYNCING COLLECTIONS");
+        console.log("\t\tDONE SYNCING APPS");
+    },
+    syncServicesCollections: function(){
+        console.log("\t\t--------------- SYNCING SERVICES ---------------");
+        Meteor.call('populateRetrieved_Services');
+        var retrieved_apps = Retrieved_Services.find({}).fetch();
+        var prod_apps = Prod_Services.find({}).fetch();
+
+        for(i = 0; i < retrieved_apps.length; i++){
+            if(Prod_Services.findOne({guid: retrieved_apps[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
+                var currentApp = Retrieved_Services.findOne({guid: retrieved_apps[i].guid});
+                Prod_Services.insert(  Retrieved_Services.findOne({guid: retrieved_apps[i].guid}) );
+            }
+        }
+
+        for(i = 0; i < prod_apps.length; i++){
+//            console.log("current prod app is -> " + prod_apps[i].name + " with guid -> " + prod_apps[i].guid);
+//            console.log(Retrieved_Services.findOne({guid: prod_apps[i].guid}));
+            if(Retrieved_Services.findOne({guid: prod_apps[i].guid}) == undefined){ // a service in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
+                Prod_Services.remove({guid: prod_apps[i].guid});
+            }
+        }
+
+        console.log("\t\tDONE SYNCING SERVICES");
+    },
+    syncPlansCollections: function(){
+        console.log("\t\t--------------- SYNCING PLANS ---------------");
+        Meteor.call('populateRetrieved_Plans');
+        var retrieved_apps = Retrieved_Plans.find({}).fetch();
+        var prod_apps = Prod_Plans.find({}).fetch();
+
+        for(i = 0; i < retrieved_apps.length; i++){
+            if(Prod_Plans.findOne({guid: retrieved_apps[i].guid}) == undefined){ //a plan has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
+                var currentApp = Retrieved_Plans.findOne({guid: retrieved_apps[i].guid});
+                Prod_Plans.insert(  Retrieved_Plans.findOne({guid: retrieved_apps[i].guid}) );
+            }
+        }
+
+        for(i = 0; i < prod_apps.length; i++){
+//            console.log("current prod app is -> " + prod_apps[i].name + " with guid -> " + prod_apps[i].guid);
+//            console.log(Retrieved_Plans.findOne({guid: prod_apps[i].guid}));
+            if(Retrieved_Plans.findOne({guid: prod_apps[i].guid}) == undefined){ // a plan in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
+                Prod_Plans.remove({guid: prod_apps[i].guid});
+            }
+        }
+
+        console.log("\t\tDONE SYNCING PLANS");
     },
     syncProvisionsCollections: function(){
         console.log("\t\tSYNCING PROVISIONS");
@@ -290,6 +338,39 @@ Meteor.methods({
                 console.log("-------------------------------------------------------------------------------------------------------- ");
             }
         });
+    },
+    populateRetrieved_Plans: function(){
+        Retrieved_Plans.remove({});
+
+        var retrievedServicesArray = Retrieved_Services.find({}).fetch();
+
+        for(i = 0; i < retrievedServicesArray.length; i++) {
+            Meteor.call('sendCommand', 'cf curl ' + retrievedServicesArray[i].service_plans_url, function (err, planResults) {
+                if (planResults) {
+                    console.log("-------------------------------------------------------------------------------------------------------- ");
+                    console.log(planResults);
+                    var jsonResponse_Plans = JSON.parse(planResults);
+                    for (z = 0; z < jsonResponse_Plans.resources.length; z++) {
+                        var planGUID = jsonResponse_Plans.resources[z].metadata.guid; // get plan guid
+                        var planURL = jsonResponse_Plans.resources[z].metadata.url; // get plan url
+                        var planCreatedDate = jsonResponse_Plans.resources[z].metadata.created_at; // get plan creation date
+                        var planUpdatedDate = jsonResponse_Plans.resources[z].metadata.updated_at; // get plan updated date
+
+                        var planName = jsonResponse_Plans.resources[z].entity.name; // get plan name
+                        var planDescription = jsonResponse_Plans.resources[z].entity.description; // get plan description
+                        var planExtraMetaData = jsonResponse_Plans.resources[z].entity.extra; // get plan extar metadata
+                        var planServiceGUID = jsonResponse_Plans.resources[z].entity.service_guid; // get plan's service_guid
+                        var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
+                        var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
+
+//                        if (Retrieved_Plans.findOne({guid: planGUID}) == undefined) {
+                            Retrieved_Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, extra: planExtraMetaData, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
+//                        }
+                    }
+                }
+                console.log("-------------------------------------------------------------------------------------------------------- ");
+            });
+        }
     },
     populateProd_Plans: function(){
         var prodServicesArray = Prod_Services.find({}).fetch();
