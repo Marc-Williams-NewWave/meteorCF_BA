@@ -199,6 +199,8 @@
         </div>
     </div>
     <!-- Modal -->
+    <button id="clearApps">Remove Apps from Production</button>
+    <button id="syncApps">Sync Prod Apps</button>
 </template>
 
 <template name="createService">
@@ -318,7 +320,8 @@
         {{/each}}
     </table>
 
-    <!--<button id="clearServices">Remove Services from Production</button>-->
+    <button id="clearServices">Remove Services from Production</button>
+    <button id="clearPlans">Remove Plans from Production</button>
 </template>
 
 <template name="provisionedServiceStatus">
@@ -329,6 +332,7 @@
             <th>Type</th>
             <th>Plan URL</th>
             <th>Service Bindings URL</th>
+            <th></th>
         </tr>
         </thead>
         {{#each provisionedServices}}
@@ -337,9 +341,13 @@
             <td>{{type}}</td>
             <td>{{service_plan_url}}</td>
             <td>{{service_bindings_url}}</td>
+            <td>
+                <button id="delete_{_id}" class="deleteUser" data-id="{{_id}}">Delete</button>
+            </td>
         </tr>
         {{/each}}
     </table>
+    <button id="clearProvisions">Remove Provisions from Production</button>
 </template>
 
 <template name="option2SBM">

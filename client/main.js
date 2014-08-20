@@ -52,6 +52,18 @@ Template.provisionedServiceStatus.provisionedServices = function(){
     return Prod_Provisioned_Services.find();
 }
 
+Template.provisionedServiceStatus.events({
+    'click #clearProvisions': function(){
+//        populateServices();
+//        alert("Done!");
+        Meteor.call('removeProvisions');
+    },
+    'click .deleteUser': function(){
+//        alert(this.guid);
+        Meteor.call('removeProvision', this.guid);
+    }
+});
+
 Template.statusApp.helpers({
     settings: function () {
         return {
@@ -65,6 +77,9 @@ Template.statusApp.helpers({
         };
     }})
 
+Template.statusApp.rendered = function () {
+    Meteor.call('syncAppsCollections');
+}
 
 Template.serviceStatus.plans = function () {
     return Prod_Plans.find();
@@ -177,6 +192,9 @@ Template.serviceStatus.events({
 //        populateServices();
 //        alert("Done!");
         Meteor.call('removeServices');
+    },
+    'click #clearPlans': function(){
+        Meteor.call('removePlans');
     }
 });
 
@@ -228,12 +246,20 @@ Template.statusApp.events({
 //        alert($('#provisionedServiceOption').selected.text());
 //        alert($('#provisionedServicesDropDown').find(":selected").text());
 
-        Meteor.call('pythonParse');
+        Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val());
 //        var base = path.resolve('.');
 //        alert(base);
     },
     'click #provisionedServiceOption': function(){
 //        this.dashboard_url
+    },
+    'click #clearApps': function(){
+//        populateServices();
+//        alert("Done!");
+        Meteor.call('removeApps');
+    },
+    'click #syncApps': function(){
+        Meteor.call('syncAppsCollections');
     }
 });
 
