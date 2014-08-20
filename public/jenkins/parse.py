@@ -43,7 +43,7 @@ def main():
 
 def template(details):
     #job_file = details["variables"]["job_file"]
-    job_file = "%s/no-webs.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    job_file = "no-webs.xml"
     #git_url = details["variables"]["git_url"]
     git_url = str(sys.argv[2])
     #node_name = details["variables"]["node_name"]
@@ -52,7 +52,7 @@ def template(details):
     #war_file = 'was-service-broker-0.1.0.war'
     #war_file = details["variables"]["war_file"]
     #output_file = details["variables"]["output_file"]
-    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    output_file = "demo-job.xml"
     with open(job_file, 'rt') as f:
         doc = ElementTree.parse(f)
 
@@ -96,18 +96,18 @@ def run_command(command):
 def send_job(details):
 
     #output_file = details["variables"]["output_file"]
-    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    output_file = "demo-job.xml"
     #job_name = details["variables"]["job_name"]
     # job_name = str(sys.argv[0])
-    job_name = "test_App"
+    job_name = str(sys.argv[1])
 
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
+    command = "java -jar jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
     run_command(command)
     print "Waiting..."
     time.sleep(10)
     
     print "Building..."
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
+    command = "java -jar jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
     run_command(command)
     print "Done build?"
     time.sleep(10)
