@@ -39,7 +39,7 @@ Meteor.startup(function () {
     console.log("Checking in on the server side - MW\n\n");
      Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){
          if(output){
-             console.log(output);
+             console.log("+++++++ " + output + " +++++++ ");
          }
          if(err){
              console.log(err);
