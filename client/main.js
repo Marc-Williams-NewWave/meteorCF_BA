@@ -58,11 +58,17 @@ Template.provisionedServiceStatus.events({
 //        alert("Done!");
         Meteor.call('removeProvisions');
     },
-    'click .deleteUser': function(){
+    'click .deleteProvision': function(){
 //        alert(this.guid);
-        Meteor.call('removeProvision', this.guid);
+        if(confirm('Are you sure you want to delete this service?')) {
+            Meteor.call('removeProvision', this.guid);
+        }
     }
 });
+
+Template.provisionedServiceStatus.rendered = function(){
+    Meteor.call('syncProvisionsCollections');
+}
 
 Template.statusApp.helpers({
     settings: function () {
@@ -185,7 +191,9 @@ Template.serviceStatus.events({
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
 //        alert(cfCreateServiceCommand);
         Meteor.call('sendCommand', cfCreateServiceCommand);
-        Meteor.call('sendCommand', 'cf curl /v2/service_instances');
+//        Meteor.call('sendCommand', 'cf curl /v2/service_instances');
+        Meteor.call('populateRetrieved_Provisions');
+        $('#myModal').modal('toggle');
 
     },
     'click #clearServices': function(){

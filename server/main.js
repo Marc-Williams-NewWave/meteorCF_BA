@@ -45,16 +45,18 @@ Meteor.startup(function () {
              console.log(err);
          }
      });
-    Meteor.call('populateProd_Apps');
-    Meteor.call('populateRetrieved_Apps');
+//    Meteor.call('populateProd_Apps');
+//    Meteor.call('populateRetrieved_Apps');
 
     Meteor.call('populateProd_Services');
 
+    Meteor.call('populateProd_Plans');
+
+//    Meteor.call('populateRetrieved_Apps');
+//    Meteor.call('populateProd_Provisions');
 
     Meteor.call('syncAppsCollections');
-
-    Meteor.call('populateProd_Plans');
-    Meteor.call('populateProd_Provisions');
+    Meteor.call('syncProvisionsCollections');
 });
 
 Meteor.methods({
@@ -76,8 +78,15 @@ Meteor.methods({
     },
     removeProvision: function(guid){
         var prov = Prod_Provisioned_Services.findOne({guid:guid});
-        Meteor.call('sendCommand', 'cf delete-service ' + prov.name + ' -f');
-        Prod_Provisioned_Services.remove({guid:guid});
+        Meteor.call('sendCommand', 'cf delete-service ' + prov.name + ' -f', function(err, result){
+            if(result){
+                Retrieved_Provisioned_Services.remove({guid:guid});
+            }
+            if(err){
+                console.log("ERROR -> " + err);
+            }
+        });
+
     },
 
     blah: function () {
@@ -111,8 +120,8 @@ Meteor.methods({
         return myFuture2.wait();
     },
     syncAppsCollections: function(){
-        console.log("\t\tSYNCING COLLECTIONS");
-        Meteor.call('populateRetrieved_Services');
+        console.log("\t\tSYNCING APPS");
+        Meteor.call('populateRetrieved_Apps');
         var retrieved_apps = Retrieved_Apps.find({}).fetch();
         var prod_apps = Prod_Apps.find({}).fetch();
 
@@ -131,6 +140,29 @@ Meteor.methods({
         }
 
         console.log("\t\tDONE SYNCING COLLECTIONS");
+    },
+    syncProvisionsCollections: function(){
+        console.log("\t\tSYNCING PROVISIONS");
+        Meteor.call('populateRetrieved_Provisions');
+
+        var retrieved_provisions = Retrieved_Provisioned_Services.find({}).fetch();
+        var prod_provisions = Prod_Provisioned_Services.find({}).fetch();
+
+        for(i = 0; i < retrieved_provisions.length; i++){
+            if(Prod_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_provisions collection, so it will be inserted into prod
+                Prod_Provisioned_Services.insert(  Retrieved_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) );
+            }
+        }
+
+        for(i = 0; i < prod_provisions.length; i++){
+//            console.log("current prod app is -> " + prod_provisions[i].name + " with guid -> " + prod_provisions[i].guid);
+//            console.log(Retrieved_Provisioned_Services.findOne({guid: prod_provisions[i].guid}));
+            if(Retrieved_Provisioned_Services.findOne({guid: prod_provisions[i].guid}) == undefined){ // a service in production cannot be found in the provisions pulled from cf, meaning it should be removed from prod
+                Prod_Provisioned_Services.remove({guid: prod_provisions[i].guid});
+            }
+        }
+
+        console.log("\t\tDONE SYNCING PROVISIONS");
     },
     populateProd_Apps: function(){
         Meteor.call('sendCommand', 'cf curl /v2/apps', function (err, result) {
@@ -315,6 +347,44 @@ Meteor.methods({
 
                     if(Prod_Provisioned_Services.findOne({guid: provisionGUID}) == undefined){
                         Prod_Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
+                            service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, dashboard_url: provisionDashboardURL, type: provisionType, space_url: provisionSpaceURL,
+                            service_plan_url: provisionServicePlanURL, service_bindings_url: provisionServiceBindingsURL});
+                    }
+                }
+            }
+            console.log("-------------------------------------------------------------------------------------------------------- ");
+        });
+    },
+    populateRetrieved_Provisions: function(){
+        Meteor.call('sendCommand', 'cf curl /v2/service_instances', function(err, output){
+            if(output){
+                console.log("-------------------------------------------------------------------------------------------------------- ");
+                var jsonResponse_Provisions = JSON.parse(output);
+                var provisionCount = jsonResponse_Provisions.resources.length;
+
+                for(i = 0; i < provisionCount; i++){
+                    var provisionGUID = jsonResponse_Provisions.resources[i].metadata.guid;
+                    var provisionURL = jsonResponse_Provisions.resources[i].metadata.url;
+                    var provisionCreatedAt = jsonResponse_Provisions.resources[i].metadata.created_at;
+
+                    if(jsonResponse_Provisions.resources[i].metadata.updated_at == null){
+                        var provisionUpdatedAt = null;
+                    } else {
+                        var provisionUpdatedAt = jsonResponse_Provisions.resources[i].metadata.updated_at;
+                    }
+
+                    var provisionName = jsonResponse_Provisions.resources[i].entity.name;
+                    var provisionCredentials = jsonResponse_Provisions.resources[i].entity.credentials;
+                    var provisionServicePlanGUID = jsonResponse_Provisions.resources[i].entity.service_plan_guid;
+                    var provisionSpaceGUID = jsonResponse_Provisions.resources[i].entity.space_guid;
+                    var provisionType = jsonResponse_Provisions.resources[i].entity.type;
+                    var provisionDashboardURL = jsonResponse_Provisions.resources[i].entity.dashboard_url;
+                    var provisionSpaceURL = jsonResponse_Provisions.resources[i].entity.space_url;
+                    var provisionServicePlanURL = jsonResponse_Provisions.resources[i].entity.service_plan_url;
+                    var provisionServiceBindingsURL = jsonResponse_Provisions.resources[i].entity.service_bindings_url;
+
+                    if(Retrieved_Provisioned_Services.findOne({guid: provisionGUID}) == undefined){
+                        Retrieved_Provisioned_Services.insert({guid: provisionGUID, url: provisionURL, created_at: provisionCreatedAt, updated_at: provisionUpdatedAt, name: provisionName, credentials: provisionCredentials,
                             service_plan_guid: provisionServicePlanGUID, space_guid: provisionSpaceGUID, dashboard_url: provisionDashboardURL, type: provisionType, space_url: provisionSpaceURL,
                             service_plan_url: provisionServicePlanURL, service_bindings_url: provisionServiceBindingsURL});
                     }
