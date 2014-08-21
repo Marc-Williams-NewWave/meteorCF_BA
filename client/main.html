@@ -17,7 +17,8 @@
             <!--  <label class="checkbox">
                <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
              </label> -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-button" value="Login">Login
+            </button>
             <a href="{{ pathFor 'registerScreen' }}">Create Account</a>
         </form>
     </div>
@@ -52,7 +53,9 @@
         </div>
         {{> homePage}}
         <div align="center">
-        <button class="btn btn-default" type="submit" id="logout-button" value="Logout" style="background-color: #428BCA; color: #FFFFFF">Logout</button>
+            <button class="btn btn-default" type="submit" id="logout-button" value="Logout"
+                    style="background-color: #428BCA; color: #FFFFFF">Logout
+            </button>
         </div>
     </div>
 </template>
@@ -168,18 +171,28 @@
     </div>
 
     <!-- Modal -->
+
+    <!--{{#if no_execution}}-->
     <div class="modal fade" id="appCreationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-narrow">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="appInfo">
                         <br/>
-                        App Name: <input id="appName" type="text" value="Enter the Name of the Application" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the Name of Application':this.value;" class="form-control"> <br/>
-                        Git Repo: <input id="appGitRepo" type="text" value="Enter the URL of the Application's GitHub Repository" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the URL of the Application\'s GitHub Repository':this.value;" class="form-control"> <br/>
+                        App Name: <input id="appName" type="text" value="Enter the Name of the Application"
+                                         onclick="this.value='';" onfocus="this.select()"
+                                         onblur="this.value=!this.value?'Enter the Name of Application':this.value;"
+                                         class="form-control"> <br/>
+                        Git Repo: <input id="appGitRepo" type="text"
+                                         value="Enter the URL of the Application's GitHub Repository"
+                                         onclick="this.value='';" onfocus="this.select()"
+                                         onblur="this.value=!this.value?'Enter the URL of the Application\'s GitHub Repository':this.value;"
+                                         class="form-control"> <br/>
                         <!--<input id="appName" type="text" value="Enter the Name of Application" class="form-control"> <br/>-->
                     </form>
                     <select id="provisionedServicesDropDown">
@@ -188,6 +201,7 @@
                         <option class="viewPlan" id="provisionedServiceOption">{{name}}</option>
                         {{/each}}
                     </select>
+
                     <p id="displayDashboardURL"></p>
                 </div>
 
@@ -198,9 +212,30 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    <button id="clearApps">Remove Apps from Production</button>
-    <button id="syncApps">Sync Prod Apps</button>
+    <!--{{else}}-->
+
+
+    <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog" tabindex="-1"
+         class="modal fade in" id="loadingModal">
+        <div class="modal-dialog modal-dialog-signin modal-dialog-narrow">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div align="center">
+                    <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="transparent" style="display: none; z-index:999">
+
+</div>
+
+
+        <!-- Modal -->
+        <button id="clearApps">Remove Apps from Production</button>
+        <button id="syncApps">Sync Prod Apps</button>
 </template>
 
 <template name="createService">
@@ -261,11 +296,15 @@
                             </div>
 
                             <div class="modal-body">
-                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title" id="planTitle"></h4>
+                                <label id="planNameLabel">Plan Name: </label><h4 class="modal-title"
+                                                                                 id="planTitle"></h4>
 
                                 <form id="serviceName">
                                     <br/>
-                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service" onclick="this.value='';" onfocus="this.select()" onblur="this.value=!this.value?'Enter the Name of Your Service':this.value;" class="form-control"> <br/>
+                                    <input id="serviceNameInput" type="text" value="Enter the Name of Your Service"
+                                           onclick="this.value='';" onfocus="this.select()"
+                                           onblur="this.value=!this.value?'Enter the Name of Your Service':this.value;"
+                                           class="form-control"> <br/>
                                     <!--<label id="urlLabel">URL: </label><span id="urlSpan"></span>-->
                                     <!--<label id="createdLabel">Created Date: </label><span id="createdSpan"></span>-->
                                     <!--<label id="updatedLabel">Updated Date: </label><span id="updatedSpan"></span>-->
@@ -275,15 +314,24 @@
                                     <!--<label id="extraMetaData">Extra Metadata: </label><span id="extraMetaDataSpan"></span>-->
                                     <h4>MetaData:</h4>
                                     <!--<label id="extraMetaDataID">ID: </label><span id="extraMetaDataIDSpan"></span>-->
-                                    <label id="extraMetaDataName">Metadata Name: </label><span id="extraMetaDataNameSpan"></span>
-                                    <label id="extraMetaDataBullets">Bullets: </label><span id="extraMetaDataBulletsSpan"></span>
-                                    <label id="extraMetaDataProfileName">Profile Name: </label><span id="extraMetaDataProfileNameSpan"></span>
-                                    <label id="extraMetaDataNodeName">Node Name: </label><span id="extraMetaDataNodeNameSpan"></span>
-                                    <label id="extraMetaDataHostName">Host Name: </label><span id="extraMetaDataHostNameSpan"></span>
-                                    <label id="extraMetaDataMngdNodeName">Managed Node Name: </label><span id="extraMetaDataMngdNodeNameSpan"></span>
-                                    <label id="extraMetaDataCellName">Cell Name: </label><span id="extraMetaDataCellNameSpan"></span>
-                                    <label id="extraMetaDataAppNodeName">App Node Name: </label><span id="extraMetaDataAppNodeNameSpan"></span>
-                                    <label id="extraMetaDataAdminConsole">Admin Console: </label><span id="extraMetaDataAdminConsoleSpan"></span>
+                                    <label id="extraMetaDataName">Metadata Name: </label><span
+                                        id="extraMetaDataNameSpan"></span>
+                                    <label id="extraMetaDataBullets">Bullets: </label><span
+                                        id="extraMetaDataBulletsSpan"></span>
+                                    <label id="extraMetaDataProfileName">Profile Name: </label><span
+                                        id="extraMetaDataProfileNameSpan"></span>
+                                    <label id="extraMetaDataNodeName">Node Name: </label><span
+                                        id="extraMetaDataNodeNameSpan"></span>
+                                    <label id="extraMetaDataHostName">Host Name: </label><span
+                                        id="extraMetaDataHostNameSpan"></span>
+                                    <label id="extraMetaDataMngdNodeName">Managed Node Name: </label><span
+                                        id="extraMetaDataMngdNodeNameSpan"></span>
+                                    <label id="extraMetaDataCellName">Cell Name: </label><span
+                                        id="extraMetaDataCellNameSpan"></span>
+                                    <label id="extraMetaDataAppNodeName">App Node Name: </label><span
+                                        id="extraMetaDataAppNodeNameSpan"></span>
+                                    <label id="extraMetaDataAdminConsole">Admin Console: </label><span
+                                        id="extraMetaDataAdminConsoleSpan"></span>
 
                                 </form>
 
@@ -298,6 +346,21 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog" tabindex="-1"
+                     class="modal fade in" id="loadingServiceModal">
+                    <div class="modal-dialog modal-dialog-signin modal-dialog-narrow">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div align="center">
+                                    <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Modal -->
 
                 <select id="planOptions_{{name}}">
@@ -311,10 +374,10 @@
                     {{/each}}
                 </select>
 
-            <!--</td>-->
-             <!--<td id="viewPlanCell_{{name}}">-->
+                <!--</td>-->
+                <!--<td id="viewPlanCell_{{name}}">-->
                 <!--<button id="viewPlanBtn" class="btn btn-default">View Plan_{{name}}</button>-->
-            <!--</td>-->
+                <!--</td>-->
             </td>
         </tr>
         {{/each}}

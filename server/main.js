@@ -40,6 +40,14 @@ Meteor.startup(function () {
      Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){
          if(output){
              console.log("+++++++ " + output + " +++++++ ");
+             var apiGrab = output.substring( output.indexOf("API endpoint:"), output.indexOf("(API"));
+             var apiEndpoint = "API endpoint:";
+             var api = apiGrab.substring(apiEndpoint.length, apiGrab.length);
+
+             console.log("apiGrab substring -> " + apiGrab);
+             console.log("now it's -> " + api);
+
+             console.log(Meteor.user());
          }
          if(err){
              console.log(err);
@@ -96,6 +104,25 @@ Meteor.methods({
     blah: function () {
         console.log('killing some time');
     },
+    createService: function (command) {
+        console.log("received command -> " + command);
+        Future = Npm.require('fibers/future');
+
+        var myFuture = new Future();
+
+        var result = sh.exec(command);
+
+        console.log("return code " + result.code);
+        console.log("stdout + stderr " + result.stdout);
+
+//        myFuture.return(result.stdout);
+        if(result.code == 0){
+            myFuture.return(true);
+        }else{
+            myFuture.return(false);
+        }
+        return myFuture.wait();
+    },
     sendCommand: function (command) {
         console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
@@ -108,6 +135,7 @@ Meteor.methods({
         console.log("stdout + stderr " + result.stdout);
 
         myFuture.return(result.stdout);
+
         return myFuture.wait();
     },
     pythonParse: function (name, gitURL) {
@@ -120,7 +148,14 @@ Meteor.methods({
         console.log("return code " + result.code);
         console.log("stdout + stderr " + result.stdout);
 
-        myFuture2.return(result.stdout);
+        if(result.code == 0){
+            myFuture2.return(true);
+        } else{
+            myFuture2.return(false);
+        }
+//        myFuture2.return(true);
+
+//        myFuture2.return(result.stdout);
         return myFuture2.wait();
     },
     syncAppsCollections: function(){

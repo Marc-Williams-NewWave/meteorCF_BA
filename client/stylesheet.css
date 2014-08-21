@@ -83,6 +83,15 @@ h3 {
     background: #ddd;
 }
 
+#transparent {
+    position:absolute;
+    left:0;
+    top:0;
+    background: rgba(255,255,255,.5);
+    width:100%;
+    height:100%;
+}
+
 .tag {
     cursor: pointer;
     float: left;

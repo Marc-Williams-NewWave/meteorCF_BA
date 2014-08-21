@@ -36,6 +36,8 @@ Router.map(function () {
     this.route('provisionedServiceStatus');
 });
 
+//Session.setDefault('execution', false);
+
 Template.cfInfo.currentUser = function () {
     return Meteor.user();
 }
@@ -48,28 +50,28 @@ Template.serviceStatus.services = function () {
     return Prod_Services.find();
 }
 
-Template.provisionedServiceStatus.provisionedServices = function(){
+Template.provisionedServiceStatus.provisionedServices = function () {
     return Prod_Provisioned_Services.find();
 }
 
 Template.provisionedServiceStatus.events({
-    'click #clearProvisions': function(){
+    'click #clearProvisions': function () {
 //        populateServices();
 //        alert("Done!");
         Meteor.call('removeProvisions');
     },
-    'click .deleteProvision': function(){
+    'click .deleteProvision': function () {
 //        alert(this.guid);
-        if(confirm('Are you sure you want to delete this service?')) {
+        if (confirm('Are you sure you want to delete this service?')) {
             Meteor.call('removeProvision', this.guid);
         }
     },
-    'click #syncProvisions': function(){
+    'click #syncProvisions': function () {
         Meteor.call('syncProvisionsCollections');
     }
 });
 
-Template.provisionedServiceStatus.rendered = function(){
+Template.provisionedServiceStatus.rendered = function () {
     Meteor.call('syncProvisionsCollections');
 }
 
@@ -86,7 +88,7 @@ Template.statusApp.helpers({
         };
     }})
 
-Template.statusApp.rendered = function () {
+Template.statusApp.rendered = function () {x
     Meteor.call('syncAppsCollections');
 }
 
@@ -94,13 +96,13 @@ Template.serviceStatus.plans = function () {
     return Prod_Plans.find();
 }
 
-Template.serviceStatus.rendered = function(){
+Template.serviceStatus.rendered = function () {
     Meteor.call('syncServicesCollections');
     Meteor.call('syncPlansCollections');
 }
 
 Template.statusApp.helpers({
-    provisionedServices: function(){
+    provisionedServices: function () {
         return Prod_Provisioned_Services.find();
     }
 });
@@ -139,77 +141,38 @@ Template.serviceStatus.helpers({
 Template.serviceStatus.events({
     'click .viewPlan': function () {
 
-//    $('#planOptions_' + this.id).css("background-color", "red");
-//        alert(this._id);
-//        alert(this.guid);
-
-
-//        $('#planID_'+this.id)
-
-
-//        alert( $('#planOptions_' + this._id +  ' option:selected' ).text() );
-
-//        $('.viewPlan').click();
-//        var currentServiceName = this.name;
-
-//        alert($(this).html());
-//        $(this).closest("td").css("background-color", "red" );
-
-
-//            var buttonCell = $('#viewPlanCell')[0];
-//        var leftCell = buttonCell.prev;
-//        alert(  $(leftCell).html()  );
-
-//         console.log(buttonText);
-
-//        alert(currentServiceName);
-//        var currName = "planOptions_" + this.name;
-
-//        var select = $('#planOptions_'+this.name);
-//        alert();
-
-//        alert( $("#planOptions_" + this.name +  " option:selected" ).text() );
-
-//        console.log($( "#" + currName + " option:selected" ).text() );
-
-
-//        $('#planTitle').text($( "#" + currName + " option:selected" ).text() );
-//        console.log($('#' + currName).data());
-
-
-//        console.log(currPlan2.data);
-//        alert("name : " + this.name + "\ndescription: " + this.description + "\nguid: " + this.guid);
-
-
-
         getCurrentPlanHelper(this.guid);
 
 //        $('#myModalLabel').text(currentObj.name);
 
-
         $('#myModal').modal();
-
-
-
 
 //        Route.go('modal');
     },
-    'click #launchService' : function(){
+    'click #launchService': function () {
 //        alert("You launched with name " + $('#serviceNameInput').val());
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
 //        alert(cfCreateServiceCommand);
-        Meteor.call('sendCommand', cfCreateServiceCommand);
+        $('#loadingServiceModal').modal();
+        Meteor.call('createService', cfCreateServiceCommand, function(err, result){
+            if(result == true){
+                alert("Success!")
+                $('#loadingServiceModal').modal('toggle');
+                $('#myModal').modal('toggle');
+            }
+        });
+
 //        Meteor.call('sendCommand', 'cf curl /v2/service_instances');
         Meteor.call('populateRetrieved_Provisions');
-        $('#myModal').modal('toggle');
+//        $('#myModal').modal('toggle');
 
     },
-    'click #clearServices': function(){
+    'click #clearServices': function () {
 //        populateServices();
 //        alert("Done!");
         Meteor.call('removeServices');
     },
-    'click #clearPlans': function(){
+    'click #clearPlans': function () {
         Meteor.call('removePlans');
     }
 });
@@ -223,7 +186,7 @@ var getCurrentPlanHelper = function (planGUID) {
     $('#planTitle').text(currPlan.name);
     $('#myModalLabel').text(parentPlan.name);
     $('#urlSpan').html(" " + currPlan.url + " <br />");
-    $('#createdSpan').html(" " + currPlan.created_at  + " <br />");
+    $('#createdSpan').html(" " + currPlan.created_at + " <br />");
     $('#updatedSpan').html(" " + currPlan.updated_at + " <br />");
     $('#descriptionSpan').html(" " + currPlan.description + " <br />");
     $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
@@ -256,40 +219,52 @@ Template.statusApp.events({
 //       alert("populating apps...");
 //       populateApps();
     },
-    'click #launchAppBtn': function(){
+    'click #launchAppBtn': function () {
 //        alert("creating app with name " + $('#appName').val() + "\nand git repo " + $('#appGitRepo').val());
 
 //        alert($('#provisionedServiceOption').selected.text());
 //        alert($('#provisionedServicesDropDown').find(":selected").text());
 
-        Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val());
+//        $('#transparent').show();
+        $('#loadingModal').modal();
+        Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val(), function (err, result){
+            if(result == true){
+//                alert("complete!");
+                $('#loadingModal').modal('toggle');
+                alert("Success!");
+                $('#appCreationModal').modal('toggle');
+//                $('#transparent').hide();
+            }
+        });
+
+
 //        var base = path.resolve('.');
 //        alert(base);
     },
-    'click #provisionedServiceOption': function(){
+    'click #provisionedServiceOption': function () {
 //        this.dashboard_url
     },
-    'click #clearApps': function(){
+    'click #clearApps': function () {
 //        populateServices();
 //        alert("Done!");
         Meteor.call('removeApps');
     },
-    'click #syncApps': function(){
+    'click #syncApps': function () {
         Meteor.call('syncAppsCollections');
     }
 });
 
 Template.layout.events({
-   'click #logout-button': function(){
-       Meteor.logout(function(err, result){
-           if(err){
-               alert(err);
-           } else{
+    'click #logout-button': function () {
+        Meteor.logout(function (err, result) {
+            if (err) {
+                alert(err);
+            } else {
 //               alert("Logging Out");
-               Router.go('loginScreen');
-           }
-       });
-   }
+                Router.go('loginScreen');
+            }
+        });
+    }
 });
 Template.loginScreen.events({
     'submit #login-form': function (e, t) {
@@ -445,36 +420,36 @@ var populatePlans = function () {
 }
 
 
-var appCurler = function (curlCommand) {
-//    alert("inside appCurler");
-    Meteor.call('sendCommand', curlCommand, function (err, result) {
-        if (result) {
-            Session.set('curlOutput_App', result);
-        }
-    });
-
-    alert("DONE! in app");
-    return JSON.parse(Session.get('curlOutput_App'));
-}
-
-var serviceCurler = function (curlCommand) {
-    Meteor.call('sendCommand', curlCommand, function (err, result) {
-        if (result) {
-            Session.set('curlOutput_Services', result);
-        }
-    });
-
-    alert("DONE! in service");
-    return JSON.parse(Session.get('curlOutput_Services'));
-}
-
-var planCurler = function (curlCommand) {
-    Meteor.call('sendCommand2', curlCommand, function (err, result) {
-        if (result) {
-            Session.set('curlOutput_Plans', result);
-        }
-    });
-
-    alert("DONE! in plan");
-    return JSON.parse(Session.get('curlOutput_Plans'));
-}
+//var appCurler = function (curlCommand) {
+////    alert("inside appCurler");
+//    Meteor.call('sendCommand', curlCommand, function (err, result) {
+//        if (result) {
+//            Session.set('curlOutput_App', result);
+//        }
+//    });
+//
+//    alert("DONE! in app");
+//    return JSON.parse(Session.get('curlOutput_App'));
+//}
+//
+//var serviceCurler = function (curlCommand) {
+//    Meteor.call('sendCommand', curlCommand, function (err, result) {
+//        if (result) {
+//            Session.set('curlOutput_Services', result);
+//        }
+//    });
+//
+//    alert("DONE! in service");
+//    return JSON.parse(Session.get('curlOutput_Services'));
+//}
+//
+//var planCurler = function (curlCommand) {
+//    Meteor.call('sendCommand2', curlCommand, function (err, result) {
+//        if (result) {
+//            Session.set('curlOutput_Plans', result);
+//        }
+//    });
+//
+//    alert("DONE! in plan");
+//    return JSON.parse(Session.get('curlOutput_Plans'));
+//}
