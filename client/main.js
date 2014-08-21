@@ -58,12 +58,19 @@ Template.provisionedServiceStatus.events({
     'click #clearProvisions': function () {
 //        populateServices();
 //        alert("Done!");
+//        alert("Done!");
         Meteor.call('removeProvisions');
     },
     'click .deleteProvision': function () {
 //        alert(this.guid);
         if (confirm('Are you sure you want to delete this service?')) {
-            Meteor.call('removeProvision', this.guid);
+            $('#deleteProvModal').modal();
+            Meteor.call('removeProvision', this.guid, function(err, result){
+                if(result == true){ //may have to change to true or false 
+                    alert("Success!")
+                    $('#deleteProvModal').modal('toggle');
+                }
+            });
         }
     },
     'click #syncProvisions': function () {
@@ -154,7 +161,7 @@ Template.serviceStatus.events({
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
 //        alert(cfCreateServiceCommand);
         $('#loadingServiceModal').modal();
-        Meteor.call('createService', cfCreateServiceCommand, function(err, result){
+        Meteor.call('sendCommandBoolean', cfCreateServiceCommand, function(err, result){
             if(result == true){
                 alert("Success!")
                 $('#loadingServiceModal').modal('toggle');
@@ -230,8 +237,8 @@ Template.statusApp.events({
         Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val(), function (err, result){
             if(result == true){
 //                alert("complete!");
-                $('#loadingModal').modal('toggle');
                 alert("Success!");
+                $('#loadingModal').modal('toggle');
                 $('#appCreationModal').modal('toggle');
 //                $('#transparent').hide();
             }

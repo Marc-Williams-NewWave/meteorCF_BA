@@ -410,6 +410,20 @@
         </tr>
         {{/each}}
     </table>
+
+    <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog" tabindex="-1"
+         class="modal fade in" id="deleteProvModal">
+        <div class="modal-dialog modal-dialog-signin modal-dialog-narrow">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div align="center">
+                        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button id="clearProvisions">Remove Provisions from Production</button>
     <button id="syncProvisions">Sync Prod Provisions</button>
 </template>

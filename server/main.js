@@ -88,11 +88,12 @@ Meteor.methods({
     },
     removeProvision: function(guid){
         var prov = Prod_Provisioned_Services.findOne({guid:guid});
-        Meteor.call('sendCommand', 'cf delete-service ' + prov.name + ' -f', function(err, result){
+        Meteor.call('sendCommandBoolean', 'cf delete-service ' + prov.name + ' -f', function(err, result){
             if(result){
 //                Retrieved_Provisioned_Services.remove({guid:guid});
                 console.log(result);
                 Meteor.call('syncProvisionsCollections');
+                return result;
             }
             if(err){
                 console.log("ERROR -> " + err);
@@ -104,7 +105,7 @@ Meteor.methods({
     blah: function () {
         console.log('killing some time');
     },
-    createService: function (command) {
+    sendCommandBoolean: function (command) {
         console.log("received command -> " + command);
         Future = Npm.require('fibers/future');
 
