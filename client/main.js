@@ -6,10 +6,6 @@ Meteor.subscribe("userList");
 
 Meteor.startup(function () {
 
-//    populateServices();
-//    populateApps();
-//    populatePlans()
-
 });
 Router.configure({
     layoutTemplate: 'layout'
@@ -36,8 +32,6 @@ Router.map(function () {
     this.route('provisionedServiceStatus');
 });
 
-//Session.setDefault('execution', false);
-
 Template.cfInfo.currentUser = function () {
     return Meteor.user();
 }
@@ -50,36 +44,26 @@ Template.serviceStatus.services = function () {
     return Prod_Services.find();
 }
 
+Template.serviceStatus.plans = function () {
+    return Prod_Plans.find();
+}
+
 Template.provisionedServiceStatus.provisionedServices = function () {
     return Prod_Provisioned_Services.find();
 }
 
-Template.provisionedServiceStatus.events({
-    'click #clearProvisions': function () {
-//        populateServices();
-//        alert("Done!");
-//        alert("Done!");
-        Meteor.call('removeProvisions');
-    },
-    'click .deleteProvision': function () {
-//        alert(this.guid);
-        if (confirm('Are you sure you want to delete this service?')) {
-            $('#deleteProvModal').modal();
-            Meteor.call('removeProvision', this.guid, function(err, result){
-                if(result == true){ //may have to change to true or false 
-                    alert("Success!")
-                    $('#deleteProvModal').modal('toggle');
-                }
-            });
-        }
-    },
-    'click #syncProvisions': function () {
-        Meteor.call('syncProvisionsCollections');
-    }
-});
 
 Template.provisionedServiceStatus.rendered = function () {
     Meteor.call('syncProvisionsCollections');
+}
+
+Template.statusApp.rendered = function () {
+    Meteor.call('syncAppsCollections');
+}
+
+Template.serviceStatus.rendered = function () {
+    Meteor.call('syncServicesCollections');
+    Meteor.call('syncPlansCollections');
 }
 
 Template.statusApp.helpers({
@@ -93,26 +77,17 @@ Template.statusApp.helpers({
                 {key: 'production', label: 'Production Status'}
             ]
         };
-    }})
-
-Template.statusApp.rendered = function () {x
-    Meteor.call('syncAppsCollections');
-}
-
-Template.serviceStatus.plans = function () {
-    return Prod_Plans.find();
-}
-
-Template.serviceStatus.rendered = function () {
-    Meteor.call('syncServicesCollections');
-    Meteor.call('syncPlansCollections');
-}
-
-Template.statusApp.helpers({
+    },
     provisionedServices: function () {
         return Prod_Provisioned_Services.find();
-    }
-});
+    }});
+
+//Template.statusApp.helpers({
+//    provisionedServices: function () {
+//        return Prod_Provisioned_Services.find();
+//    }
+//});
+
 Template.serviceStatus.helpers({
     settings: function () {
         return {
@@ -125,139 +100,9 @@ Template.serviceStatus.helpers({
             ]
         };
     },
-
     serviceJoinPlan: function () {
-//        alert(this.name  + " guid -> " + this.guid + " from service Join");
-
         var neededPlans = Prod_Plans.find({service_guid: this.guid});
-//    alert(Plans.find({service_guid : this.guid}));
-//        alert(neededPlans.length);
-
         return neededPlans;
-    },
-
-    currentPlan: function (planGUID) {
-//        var currPlan = Plans.find({guid : planGUID})
-//        alert(this + " from currentPlan");
-
-//        return neededPlans;
-    }
-
-});
-
-Template.serviceStatus.events({
-    'click .viewPlan': function () {
-
-        getCurrentPlanHelper(this.guid);
-
-//        $('#myModalLabel').text(currentObj.name);
-
-        $('#myModal').modal();
-
-//        Route.go('modal');
-    },
-    'click #launchService': function () {
-//        alert("You launched with name " + $('#serviceNameInput').val());
-        var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
-//        alert(cfCreateServiceCommand);
-        $('#loadingServiceModal').modal();
-        Meteor.call('sendCommandBoolean', cfCreateServiceCommand, function(err, result){
-            if(result == true){
-                alert("Success!")
-                $('#loadingServiceModal').modal('toggle');
-                $('#myModal').modal('toggle');
-            }
-        });
-
-//        Meteor.call('sendCommand', 'cf curl /v2/service_instances');
-        Meteor.call('populateRetrieved_Provisions');
-//        $('#myModal').modal('toggle');
-
-    },
-    'click #clearServices': function () {
-//        populateServices();
-//        alert("Done!");
-        Meteor.call('removeServices');
-    },
-    'click #clearPlans': function () {
-        Meteor.call('removePlans');
-    }
-});
-
-
-var getCurrentPlanHelper = function (planGUID) {
-    var currPlan = Prod_Plans.findOne({guid: planGUID});
-    var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
-
-
-    $('#planTitle').text(currPlan.name);
-    $('#myModalLabel').text(parentPlan.name);
-    $('#urlSpan').html(" " + currPlan.url + " <br />");
-    $('#createdSpan').html(" " + currPlan.created_at + " <br />");
-    $('#updatedSpan').html(" " + currPlan.updated_at + " <br />");
-    $('#descriptionSpan').html(" " + currPlan.description + " <br />");
-    $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
-    $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
-
-    var extraMetadata = JSON.parse(currPlan.extra);
-//    alert(extraMetadata.name);
-//    $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
-    $('#extraMetaDataIDSpan').html(" " + extraMetadata.id + " <br />");
-    $('#extraMetaDataNameSpan').html(" " + extraMetadata.name + " <br />");
-    $('#extraMetaDataDescriptionSpan').html(" " + extraMetadata.description + " <br />");
-    $('#extraMetaDataBulletsSpan').html(" " + extraMetadata.bullets + " <br />");
-    $('#extraMetaDataProfileNameSpan').html(" " + extraMetadata.profilename + " <br />");
-    $('#extraMetaDataNodeNameSpan').html(" " + extraMetadata.nodename + " <br />");
-    $('#extraMetaDataHostnameSpan').html(" " + extraMetadata.hostname + " <br />");
-    $('#extraMetaDataMngdNodeNameSpan').html(" " + extraMetadata.mngdnodename + " <br />");
-    $('#extraMetaDataCellNameSpan').html(" " + extraMetadata.cellname + " <br />");
-    $('#extraMetaDataAppNodeNameSpan').html(" " + extraMetadata.appnodename + " <br />");
-    $('#extraMetaDataAdminConsoleSpan').html(" " + extraMetadata.adminconsole + " <br />");
-}
-
-//Template.jqGridTemplate.service = function(){
-//
-//    return Services.find();
-//}
-
-Template.statusApp.events({
-    'click #launchNewApp': function () {
-        $('#appCreationModal').modal();
-//       alert("populating apps...");
-//       populateApps();
-    },
-    'click #launchAppBtn': function () {
-//        alert("creating app with name " + $('#appName').val() + "\nand git repo " + $('#appGitRepo').val());
-
-//        alert($('#provisionedServiceOption').selected.text());
-//        alert($('#provisionedServicesDropDown').find(":selected").text());
-
-//        $('#transparent').show();
-        $('#loadingModal').modal();
-        Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val(), function (err, result){
-            if(result == true){
-//                alert("complete!");
-                alert("Success!");
-                $('#loadingModal').modal('toggle');
-                $('#appCreationModal').modal('toggle');
-//                $('#transparent').hide();
-            }
-        });
-
-
-//        var base = path.resolve('.');
-//        alert(base);
-    },
-    'click #provisionedServiceOption': function () {
-//        this.dashboard_url
-    },
-    'click #clearApps': function () {
-//        populateServices();
-//        alert("Done!");
-        Meteor.call('removeApps');
-    },
-    'click #syncApps': function () {
-        Meteor.call('syncAppsCollections');
     }
 });
 
@@ -267,7 +112,6 @@ Template.layout.events({
             if (err) {
                 alert(err);
             } else {
-//               alert("Logging Out");
                 Router.go('loginScreen');
             }
         });
@@ -278,7 +122,6 @@ Template.loginScreen.events({
         e.preventDefault();
         var username = t.find('#login-username').value;
         var password = t.find('#login-password').value;
-//        alert("Username: " + username + "\nPassword: " + password);
 
         //validate fields
         //Upon success
@@ -289,9 +132,6 @@ Template.loginScreen.events({
                 Router.go('loginScreen');
             } else {
                 //user has been logged in
-//          var curr = this.userId;
-//          alert(this.userId);
-//          alert(curr);
             }
         });
 
@@ -325,6 +165,82 @@ Template.registerScreen.events({
     }
 });
 
+Template.statusApp.events({
+    'click #launchNewApp': function () {
+        $('#appCreationModal').modal();
+    },
+    'click #launchAppBtn': function () {
+//        alert($('#provisionedServiceOption').selected.text());
+//        alert($('#provisionedServicesDropDown').find(":selected").text());
+
+//        $('#transparent').show();
+        $('#loadingModal').modal();
+        Meteor.call('pythonParse', $('#appName').val(), $('#appGitRepo').val(), function (err, result){
+            if(result == true){
+//                alert("complete!");
+                alert("Success!");
+                $('#loadingModal').modal('toggle');
+                $('#appCreationModal').modal('toggle');
+//                $('#transparent').hide();
+            }
+        });
+    },
+    'click #provisionedServiceOption': function () {
+//        this.dashboard_url
+    },
+    'click #clearApps': function () {
+        Meteor.call('removeApps');
+    },
+    'click #syncApps': function () {
+        Meteor.call('syncAppsCollections');
+    }
+});
+
+Template.serviceStatus.events({
+    'click .viewPlan': function () {
+        getCurrentPlanHelper(this.guid);
+        $('#myModal').modal();
+    },
+    'click #launchService': function () {
+        var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
+
+        $('#loadingServiceModal').modal();
+        Meteor.call('sendCommandBoolean', cfCreateServiceCommand, function(err, result){
+            if(result == true){
+                alert("Success!")
+                $('#loadingServiceModal').modal('toggle');
+                $('#myModal').modal('toggle');
+            }
+        });
+        Meteor.call('populateRetrieved_Provisions');
+    },
+    'click #clearServices': function () {
+        Meteor.call('removeServices');
+    },
+    'click #clearPlans': function () {
+        Meteor.call('removePlans');
+    }
+});
+
+Template.provisionedServiceStatus.events({
+    'click #clearProvisions': function () {
+        Meteor.call('removeProvisions');
+    },
+    'click .deleteProvision': function () {
+        if (confirm('Are you sure you want to delete this service?')) {
+            $('#deleteProvModal').modal();
+            Meteor.call('removeProvision', this.guid, function(err, result){
+                if(result == true){ //may have to change to true or false
+                    alert("Success!")
+                    $('#deleteProvModal').modal('toggle');
+                }
+            });
+        }
+    },
+    'click #syncProvisions': function () {
+        Meteor.call('syncProvisionsCollections');
+    }
+});
 
 $('#example').dataTable({
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>", "sPaginationType": "bootstrap", "oLanguage": {
@@ -332,131 +248,36 @@ $('#example').dataTable({
     }
 });
 
-var populateApps = function () {
-    var jsonResponse_Apps = appCurler('cf curl /v2/apps');
-    var appCount = jsonResponse_Apps.resources.length;
-
-    for (i = 0; i < appCount; i++) {
-        var appGUID = jsonResponse_Apps.resources[i].metadata.guid;
-        var appURL = jsonResponse_Apps.resources[i].metadata.url;
-        var appCreatedDate = jsonResponse_Apps.resources[i].metadata.created_at;
-        var appUpdatedDate = jsonResponse_Apps.resources[i].metadata.updated_at;
-        var appName = jsonResponse_Apps.resources[i].entity.name;
-        var appProductionStatus = jsonResponse_Apps.resources[i].entity.production;
-        var appMemory = jsonResponse_Apps.resources[i].entity.memory;
-        var appInstanceCount = jsonResponse_Apps.resources[i].entity.instances;
-        var appDiskQuota = jsonResponse_Apps.resources[i].entity.disk_quota;
-        var appState = jsonResponse_Apps.resources[i].entity.state;
-        var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
-
-        if (Prod_Apps.findOne({guid: appGUID}) == undefined) {
-            Prod_Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
-                production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
-                state: appState, package_state: appPackagestate});
-        }
-    }
-}
-
-var populateServices = function () {
-    var jsonResponse_Services = serviceCurler('cf curl /v2/services');
-    var serviceCount = jsonResponse_Services.resources.length;
-
-    for (i = 0; i < serviceCount; i++) {
-        var serviceGUID = jsonResponse_Services.resources[i].metadata.guid; // get service guid
-        var serviceName = jsonResponse_Services.resources[i].entity.label; // get service name (label)
-        var serviceDescription = jsonResponse_Services.resources[i].entity.description; // get service description
-        var servicePlansURL = jsonResponse_Services.resources[i].entity.service_plans_url; //get service_plans_url
+var getCurrentPlanHelper = function (planGUID) {
+    var currPlan = Prod_Plans.findOne({guid: planGUID});
+    var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
 
 
-        if (Prod_Services.findOne({guid: serviceGUID}) == undefined) {
-            Prod_Services.insert({guid: serviceGUID, name: serviceName, description: serviceDescription, service_plan_url: servicePlansURL});
-//            populatePlans(servicePlansURL);
-        }
-    }
+    $('#planTitle').text(currPlan.name);
+    $('#myModalLabel').text(parentPlan.name);
+    $('#urlSpan').html(" " + currPlan.url + " <br />");
+    $('#createdSpan').html(" " + currPlan.created_at + " <br />");
+    $('#updatedSpan').html(" " + currPlan.updated_at + " <br />");
+    $('#descriptionSpan').html(" " + currPlan.description + " <br />");
+    $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
+    $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
 
-}
-
-var populatePlans = function () {
-    var serviceCount = Prod_Services.find().count();
-    var serviceArry = Prod_Services.find({}).fetch();
-
-//    var jsonResponse_Plans = planCurler('cf curl ' + servicePlanURL);
-//    var planCount = jsonResponse_Plans.resources.length;
-
-    for (x = 0; x < serviceCount; x++) {
-        var currentServicePlanURL = serviceArry[x].service_plan_url;
-        var jsonResponse_Plans = planCurler('cf curl ' + currentServicePlanURL);
-        var planCount = jsonResponse_Plans.resources.length;
-
-        for (z = 0; z < planCount; z++) {
-            var planGUID = jsonResponse_Plans.resources[z].metadata.guid; // get plan guid
-            var planURL = jsonResponse_Plans.resources[z].metadata.url; // get plan url
-            var planCreatedDate = jsonResponse_Plans.resources[z].metadata.created_at; // get plan creation date
-            var planUpdatedDate = jsonResponse_Plans.resources[z].metadata.updated_at; // get plan updated date
-
-            var planName = jsonResponse_Plans.resources[z].entity.name; // get plan name
-            var planDescription = jsonResponse_Plans.resources[z].entity.description; // get plan description
-            var planServiceGUID = jsonResponse_Plans.resources[z].entity.service_guid; // get plan's service_guid
-            var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
-            var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
-
-            if (Prod_Plans.findOne({guid: planGUID}) == undefined) {
-                Prod_Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
-            }
-        }
-
-    }
-
-
-//    for(z = 0; z < planCount; z++) {
-//        var planGUID = jsonResponse_Plans.resources[z].metadata.guid; // get plan guid
-//        var planURL = jsonResponse_Plans.resources[z].metadata.url; // get plan url
-//        var planCreatedDate = jsonResponse_Plans.resources[z].metadata.created_at; // get plan creation date
-//        var planUpdatedDate = jsonResponse_Plans.resources[z].metadata.updated_at; // get plan updated date
-//
-//        var planName = jsonResponse_Plans.resources[z].entity.name; // get plan name
-//        var planDescription = jsonResponse_Plans.resources[z].entity.description; // get plan description
-//        var planServiceGUID = jsonResponse_Plans.resources[z].entity.service_guid; // get plan's service_guid
-//        var planServiceURL = jsonResponse_Plans.resources[z].entity.service_url; // get plan's service_url
-//        var planServiceInstancesURL = jsonResponse_Plans.resources[z].entity.service_instances_url; // get plan's service_instances_url
-//
-//        if (Plans.findOne({guid: planGUID}) == undefined) {
-//            Plans.insert({guid: planGUID, url: planURL, created_at: planCreatedDate, updated_at: planUpdatedDate, name: planName, description: planDescription, service_guid: planServiceGUID, service_url: planServiceURL, service_instances_url: planServiceInstancesURL});
-//        }
-//    }
+    var extraMetadata = JSON.parse(currPlan.extra);
+//    alert(extraMetadata.name);
+//    $('#extraMetaDataSpan').html(" " + currPlan.extra + " <br />");
+    $('#extraMetaDataIDSpan').html(" " + extraMetadata.id + " <br />");
+    $('#extraMetaDataNameSpan').html(" " + extraMetadata.name + " <br />");
+    $('#extraMetaDataDescriptionSpan').html(" " + extraMetadata.description + " <br />");
+    $('#extraMetaDataBulletsSpan').html(" " + extraMetadata.bullets + " <br />");
+    $('#extraMetaDataProfileNameSpan').html(" " + extraMetadata.profilename + " <br />");
+    $('#extraMetaDataNodeNameSpan').html(" " + extraMetadata.nodename + " <br />");
+    $('#extraMetaDataHostnameSpan').html(" " + extraMetadata.hostname + " <br />");
+    $('#extraMetaDataMngdNodeNameSpan').html(" " + extraMetadata.mngdnodename + " <br />");
+    $('#extraMetaDataCellNameSpan').html(" " + extraMetadata.cellname + " <br />");
+    $('#extraMetaDataAppNodeNameSpan').html(" " + extraMetadata.appnodename + " <br />");
+    $('#extraMetaDataAdminConsoleSpan').html(" " + extraMetadata.adminconsole + " <br />");
 }
 
 
-//var appCurler = function (curlCommand) {
-////    alert("inside appCurler");
-//    Meteor.call('sendCommand', curlCommand, function (err, result) {
-//        if (result) {
-//            Session.set('curlOutput_App', result);
-//        }
-//    });
-//
-//    alert("DONE! in app");
-//    return JSON.parse(Session.get('curlOutput_App'));
-//}
-//
-//var serviceCurler = function (curlCommand) {
-//    Meteor.call('sendCommand', curlCommand, function (err, result) {
-//        if (result) {
-//            Session.set('curlOutput_Services', result);
-//        }
-//    });
-//
-//    alert("DONE! in service");
-//    return JSON.parse(Session.get('curlOutput_Services'));
-//}
-//
-//var planCurler = function (curlCommand) {
-//    Meteor.call('sendCommand2', curlCommand, function (err, result) {
-//        if (result) {
-//            Session.set('curlOutput_Plans', result);
-//        }
-//    });
-//
-//    alert("DONE! in plan");
-//    return JSON.parse(Session.get('curlOutput_Plans'));
-//}
+
+

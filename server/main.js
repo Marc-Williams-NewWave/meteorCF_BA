@@ -53,16 +53,9 @@ Meteor.startup(function () {
              console.log(err);
          }
      });
-//    Meteor.call('populateProd_Apps');
-//    Meteor.call('populateRetrieved_Apps');
 
-    Meteor.call('populateProd_Services');
-
-    Meteor.call('populateProd_Plans');
-
-//    Meteor.call('populateRetrieved_Apps');
-//    Meteor.call('populateProd_Provisions');
-
+//    Meteor.call('populateProd_Services');
+//    Meteor.call('populateProd_Plans');
     Meteor.call('syncAppsCollections');
     Meteor.call('syncProvisionsCollections');
     Meteor.call('syncServicesCollections');
@@ -100,10 +93,6 @@ Meteor.methods({
             }
         });
 
-    },
-
-    blah: function () {
-        console.log('killing some time');
     },
     sendCommandBoolean: function (command) {
         console.log("received command -> " + command);
@@ -519,6 +508,7 @@ Meteor.methods({
             console.log("---------------------LEAVING populateRetrieved_Provisions----------------------------------------------------------------------------------- ");
         });
     },
+
     getTargetInfo: function(){
         Meteor.call('sendCommand', 'cf t', function(err, output){
             if(output){
