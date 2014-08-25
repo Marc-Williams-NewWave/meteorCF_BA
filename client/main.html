@@ -143,6 +143,22 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Monitoring</a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li><a href="{{ pathFor 'appMonitor' }}">Applications</a></li>
+                            <li><a href="{{ pathFor 'serviceMonitor' }}">Services</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cloud Info</a>
                     </h4>
                 </div>
@@ -167,7 +183,7 @@
 <template name="statusApp">
     <button id="launchNewApp" name="Launch" class="btn btn-default">Launch New App</button>
     <div id="reactiveTableSpace" style="padding-bottom: 20px">
-        {{> reactiveTable collection=apps settings=settings}}
+        {{> reactiveTable id="specialTable" collection=apps settings=settings}}
     </div>
 
     <!-- Modal -->
@@ -221,21 +237,21 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div align="center">
-                    <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+                        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<div id="transparent" style="display: none; z-index:999">
+    <div id="transparent" style="display: none; z-index:999">
 
-</div>
+    </div>
 
 
-        <!-- Modal -->
-        <button id="clearApps">Remove Apps from Production</button>
-        <button id="syncApps">Sync Prod Apps</button>
+    <!-- Modal -->
+    <button id="clearApps">Remove Apps from Production</button>
+    <button id="syncApps">Sync Prod Apps</button>
 </template>
 
 <template name="createService">
@@ -348,7 +364,8 @@
                 </div>
 
 
-                <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog" tabindex="-1"
+                <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog"
+                     tabindex="-1"
                      class="modal fade in" id="loadingServiceModal">
                     <div class="modal-dialog modal-dialog-signin modal-dialog-narrow">
                         <div class="modal-content">
@@ -438,6 +455,15 @@
     <div>
         Here you can manage your service brokers.
     </div>
+</template>
+
+
+<template name="appMonitor">
+    <p>monitor your apps</p>
+</template>
+
+<template name="serviceMonitor">
+    <p>monitor your services</p>
 </template>
 
 <template name="cfInfo">

@@ -24,8 +24,8 @@ Router.map(function () {
     this.route('bindService');
     this.route('unbindService');
     this.route('serviceStatus');
-    this.route('option2SBM');
-    this.route('option3SBM');
+    this.route('appMonitor');
+    this.route('serviceMonitor');
     this.route('cfInfo', {path: '/cfInfo'});
     this.route('boshInfo');
     this.route('openstackInfo');
@@ -58,6 +58,7 @@ Template.provisionedServiceStatus.rendered = function () {
 }
 
 Template.statusApp.rendered = function () {
+//    appendRows();
     Meteor.call('syncAppsCollections');
 }
 
@@ -74,7 +75,8 @@ Template.statusApp.helpers({
             fields: [
                 { key: 'name', label: 'Application Name' },
                 { key: 'state', label: 'State'},
-                {key: 'production', label: 'Production Status'}
+                { key: 'production', label: 'Production Status'}
+//                { key: 'memory', label: 'Delete App'}
             ]
         };
     },
@@ -193,6 +195,15 @@ Template.statusApp.events({
     },
     'click #syncApps': function () {
         Meteor.call('syncAppsCollections');
+    },
+
+    'click .reactive-table tr': function (event) {
+            // set the blog post we'll display details and news for
+//            var post = this;
+//            Session.set('post', post);
+        alert(this.name);
+
+        $(this).attr("background-color", "red");
     }
 });
 
@@ -248,6 +259,31 @@ $('#example').dataTable({
     }
 });
 
+var appendRows = function(){
+    $('#specialTable > tbody > tr').each(
+        function(){
+            alert(this);
+            var deleteCell = this.insertCell(-1);
+//            var button = d
+// document.createElement("button");
+//            button.val("Delete");
+
+//            button.html("")
+//            deleteCell.appendChild(button);
+
+//            deleteCell.html();
+//            alert(button.val());
+
+//            deleteCell.html("<td><button>Delete</button></td>");
+        }
+    )
+}
+
+var helloWorld = function(){
+//    int()
+    alert(this.length);
+    alert("hello world");
+}
 var getCurrentPlanHelper = function (planGUID) {
     var currPlan = Prod_Plans.findOne({guid: planGUID});
     var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
