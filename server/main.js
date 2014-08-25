@@ -37,29 +37,31 @@ Meteor.startup(function () {
         console.log(allUsers[i].username);
     }
     console.log("Checking in on the server side - MW\n\n");
-     Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){
-         if(output){
-             console.log("+++++++ " + output + " +++++++ ");
-             var apiGrab = output.substring( output.indexOf("API endpoint:"), output.indexOf("(API"));
-             var apiEndpoint = "API endpoint:";
-             var api = apiGrab.substring(apiEndpoint.length, apiGrab.length);
-
-             console.log("apiGrab substring -> " + apiGrab);
-             console.log("now it's -> " + api);
-
-             console.log(Meteor.user());
-         }
-         if(err){
-             console.log(err);
-         }
-     });
+//     Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave -s dev', function(err, output){
+//         if(output){
+//             console.log("+++++++ " + output + " +++++++ ");
+//             var apiGrab = output.substring( output.indexOf("API endpoint:"), output.indexOf("(API"));
+//             var apiEndpoint = "API endpoint:";
+//             var api = apiGrab.substring(apiEndpoint.length, apiGrab.length);
+//
+//             console.log("apiGrab substring -> " + apiGrab);
+//             console.log("now it's -> " + api);
+//
+//             console.log(Meteor.user());
+//         }
+//         if(err){
+//             console.log(err);
+//         }
+//     });
 
 //    Meteor.call('populateProd_Services');
 //    Meteor.call('populateProd_Plans');
-    Meteor.call('syncAppsCollections');
-    Meteor.call('syncProvisionsCollections');
-    Meteor.call('syncServicesCollections');
-    Meteor.call('syncPlansCollections');
+
+
+//    Meteor.call('syncAppsCollections');
+//    Meteor.call('syncProvisionsCollections');
+//    Meteor.call('syncServicesCollections');
+//    Meteor.call('syncPlansCollections');
 });
 
 Meteor.methods({

@@ -460,6 +460,27 @@
 
 <template name="appMonitor">
     <p>monitor your apps</p>
+    <div class="input-group"> <span class="input-group-addon">Filter</span>
+        <input id="filter" type="text" class="form-control" placeholder="Type here...">
+    </div>
+    <table id="appTable" class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Application Name</th>
+            <th>State</th>
+            <th>Production Status</th>
+        </tr>
+        </thead>
+        <tbody class="searchable">
+        {{#each applications}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{state}}</td>
+            <td>{{production}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
 </template>
 
 <template name="serviceMonitor">

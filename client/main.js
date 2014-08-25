@@ -7,30 +7,6 @@ Meteor.subscribe("userList");
 Meteor.startup(function () {
 
 });
-Router.configure({
-    layoutTemplate: 'layout'
-});
-
-Router.map(function () {
-    this.route('loginScreen', {path: '/', template: 'loginScreen', layoutTemplate: 'layout2'});
-    this.route('registerScreen', {path: '/registerUser', layoutTemplate: 'layout2'});
-    // this.route('placeHolder' , {path: '/'});
-    this.route('launchApp');
-    this.route('deleteApp');
-    this.route('statusApp');
-    this.route('createService');
-    this.route('deleteService');
-    this.route('listService');
-    this.route('bindService');
-    this.route('unbindService');
-    this.route('serviceStatus');
-    this.route('appMonitor');
-    this.route('serviceMonitor');
-    this.route('cfInfo', {path: '/cfInfo'});
-    this.route('boshInfo');
-    this.route('openstackInfo');
-    this.route('provisionedServiceStatus');
-});
 
 Template.cfInfo.currentUser = function () {
     return Meteor.user();
@@ -52,20 +28,24 @@ Template.provisionedServiceStatus.provisionedServices = function () {
     return Prod_Provisioned_Services.find();
 }
 
+Template.appMonitor.applications = function(){
+    return Prod_Apps.find();
+}
+
 
 Template.provisionedServiceStatus.rendered = function () {
     Meteor.call('syncProvisionsCollections');
 }
 
-Template.statusApp.rendered = function () {
-//    appendRows();
-    Meteor.call('syncAppsCollections');
-}
-
-Template.serviceStatus.rendered = function () {
-    Meteor.call('syncServicesCollections');
-    Meteor.call('syncPlansCollections');
-}
+//Template.statusApp.rendered = function () {
+////    appendRows();
+//    Meteor.call('syncAppsCollections');
+//}
+//
+//Template.serviceStatus.rendered = function () {
+//    Meteor.call('syncServicesCollections');
+//    Meteor.call('syncPlansCollections');
+//}
 
 Template.statusApp.helpers({
     settings: function () {
@@ -253,6 +233,18 @@ Template.provisionedServiceStatus.events({
     }
 });
 
+Template.appMonitor.events({
+   'keyup #filter': function() {
+//alert("hi");
+       var rex = new RegExp($(this).val(), 'i');
+       $('.searchable tr').hide();
+       $('.searchable tr').filter(function () {
+           return rex.test($(this).text());
+       }).show();
+
+   }
+});
+
 $('#example').dataTable({
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>", "sPaginationType": "bootstrap", "oLanguage": {
         "sLengthMenu": "_MENU_ records per page"
@@ -277,6 +269,15 @@ var appendRows = function(){
 //            deleteCell.html("<td><button>Delete</button></td>");
         }
     )
+}
+
+var filter = function(selector, query){
+    query = $.trim(query);
+    query = query.replace(/ /gi, '|');
+
+    $(selector).each(function(){
+        ($(this).text().search(new RegExp(query, "i")) < 0) ? $(this).hide().removeClass('visible') : $(this).show().addClass('visible');
+    })
 }
 
 var helloWorld = function(){
