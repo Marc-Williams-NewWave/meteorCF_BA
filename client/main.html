@@ -6,9 +6,9 @@
 <template name="loginScreen">
     <div class="wrapper">
         <form class="form-signin" id="login-form" action="action" style="width: 100%">
-            <div align="center"><img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
+            <div align="center"><img src="/images/SPADE_flourish.png" width="200px" height="140px">
 
-                <h4 class="form-signin-heading">NewWave Environment Templating Portal (Alpha)</h4>
+                <!--<h4 class="form-signin-heading">NewWave Environment Templating Portal (Alpha)</h4>-->
             </div>
             <input type="text" id="login-username" class="form-control" name="username" placeholder="Username"
                    required="" autofocus/>
@@ -22,6 +22,20 @@
             <a href="{{ pathFor 'registerScreen' }}">Create Account</a>
         </form>
     </div>
+</template>
+
+<template name="welcomeScreen">
+
+
+    <div align="center" style="position: absolute; top: 20%; left: 20%">
+        <div class="panel panel-primary" >
+            <div class="panel-body">
+                Welcome to the NewWave Self-Service Portal Automated Deployment Environment.<br /><br /> Choose a menu item on the left to customize your environment.
+            </div>
+        </div>
+    </div>
+
+
 </template>
 
 <template name="registerScreen">
@@ -70,21 +84,21 @@
 <template name="tag_filter">
     <div align="center">
         <div class="label" style="color:black;font-size:24px">
-            NewWave Environment Templating Portal (Alpha)
+            Self-Service Portal Automating Deployment Environments (Alpha)
         </div>
     </div>
 </template>
 
 <template name="homePage"> 
-    <h3><a href="{{ pathFor 'cfInfo' }}">Menu</a></h3>
+    <h3><a href="{{ pathFor 'welcomeScreen' }}">Menu</a></h3>
 
     <div class="huh">
         <div class="panel-group" id="accordion">
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Application
-                            Management</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Install</a>
                     </h4>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse">
@@ -92,15 +106,17 @@
                         <ul>
                             <!--<li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>-->
                             <!--<li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>-->
-                            <li><a href="{{ pathFor 'statusApp' }}">Status</a></li>
+                            <!--<li><a href="{{ pathFor 'statusApp' }}">Status</a></li>-->
                         </ul>
                     </div>
                 </div>
             </div>
+
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Service Management</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Provisioning</a>
                     </h4>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse">
@@ -111,12 +127,31 @@
                             <!--<li><a href="{{ pathFor 'listService' }}">List</a></li>-->
                             <!--<li><a href="{{ pathFor 'bindService' }}">Bind</a></li>-->
                             <!--<li><a href="{{ pathFor 'unbindService' }}">Unbind</a></li>-->
-                            <li><a href="{{ pathFor 'serviceStatus' }}">Status</a></li>
-                            <li><a href="{{ pathFor 'provisionedServiceStatus' }}">Provisioned Services</a></li>
+                            <li><a href="{{ pathFor 'serviceStatus' }}">Marketplace</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Deployment</a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <!--<li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>-->
+                            <!--<li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>-->
+                            <li><a href="{{ pathFor 'statusApp' }}">Apps</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
 
 
             <!-- If you want to exclude the Service Broker Management Section, just comment out everything between this line and ..... -->
@@ -143,14 +178,15 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Monitoring</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Monitoring</a>
                     </h4>
                 </div>
-                <div id="collapseThree" class="panel-collapse collapse">
+                <div id="collapseFour" class="panel-collapse collapse">
                     <div class="panel-body">
                         <ul>
                             <li><a href="{{ pathFor 'appMonitor' }}">Applications</a></li>
-                            <li><a href="{{ pathFor 'serviceMonitor' }}">Services</a></li>
+                            <li><a href="{{ pathFor 'provisionedServiceStatus' }}">Provisions</a></li>
+                            <!--<li><a href="{{ pathFor 'provisionedServiceStatus' }}">Provisioned</a></li>-->
                         </ul>
                     </div>
                 </div>
@@ -159,20 +195,35 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cloud Info</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Configuration Management</a>
                     </h4>
                 </div>
-                <div id="collapseFour" class="panel-collapse collapse">
+                <div id="collapseFive" class="panel-collapse collapse">
                     <div class="panel-body">
                         <ul>
-                            <li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>
-                            <li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>
-                            <li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>
                             <!--<li><a href="{{ pathFor 'terminalPage' }}">Terminal Page</a></li>-->
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                    <!--<h4 class="panel-title">-->
+                        <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Cloud Info</a>-->
+                    <!--</h4>-->
+                <!--</div>-->
+                <!--<div id="collapseSix" class="panel-collapse collapse">-->
+                    <!--<div class="panel-body">-->
+                        <!--<ul>-->
+                            <!--<li><a href="{{ pathFor 'cfInfo' }}">CF Info</a></li>-->
+                            <!--<li><a href="{{ pathFor 'boshInfo' }}">Bosh Info</a></li>-->
+                            <!--<li><a href="{{ pathFor 'openstackInfo' }}">OpenStack Info</a></li>-->
+                            <!--&lt;!&ndash;<li><a href="{{ pathFor 'terminalPage' }}">Terminal Page</a></li>&ndash;&gt;-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 </template>
@@ -460,27 +511,72 @@
 
 <template name="appMonitor">
     <p>monitor your apps</p>
-    <div class="input-group"> <span class="input-group-addon">Filter</span>
-        <input id="filter" type="text" class="form-control" placeholder="Type here...">
-    </div>
+    <!--<div class="input-group"> <span class="input-group-addon">Filter</span>-->
+    <!--<input id="filter" type="text" class="form-control" placeholder="Type here...">-->
+    <!--</div>-->
+
+
     <table id="appTable" class="table table-striped table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>Application Name</th>
-            <th>State</th>
-            <th>Production Status</th>
-        </tr>
-        </thead>
-        <tbody class="searchable">
-        {{#each applications}}
-        <tr>
-            <td>{{name}}</td>
-            <td>{{state}}</td>
-            <td>{{production}}</td>
-        </tr>
-        {{/each}}
-        </tbody>
-    </table>
+    <thead>
+    <tr>
+    <th>Application Name</th>
+    <th>State</th>
+    <th>Production Status</th>
+    <!--<th class="fc-sort" data-fc-sort="name">-->
+    <!--Some text-->
+    <!--{{#if fcSort.name.desc}}desc{{/if}}-->
+    <!--{{#if fcSort.name.asc}}asc{{/if}}-->
+    <!--</th>-->
+    <th>Delete App</th>
+    </tr>
+    </thead>
+    <tbody class="searchable">
+    <!--{{#each applications}}-->
+    {{#each fcResults}}
+    <tr>
+    <td>{{name}}</td>
+    <td>{{state}}</td>
+    <td>{{production}}</td>
+    <td><button id="deleteAppBtn">Delete {{name}}</button></td>
+    </tr>
+    {{/each}}
+    </tbody>
+        </table>
+
+
+    <!--<table class="table table-striped table-bordered table-hover">-->
+        <!--<thead>-->
+        <!--<tr>-->
+            <!--<th class="fc-sort" data-fc-sort="name">-->
+                <!--Name-->
+                <!--{{#if fcSort.name.desc}}(desc){{/if}}-->
+                <!--{{#if fcSort.name.asc}}(asc){{/if}}-->
+            <!--</th>-->
+            <!--<th class="fc-sort" data-fc-sort="production">-->
+                <!--Prod-->
+                <!--{{#if fcSort.production.desc}}(desc){{/if}}-->
+                <!--{{#if fcSort.production.asc}}(asc){{/if}}-->
+            <!--</th>-->
+            <!--<th class="fc-sort" data-fc-sort="state">-->
+                <!--State-->
+                <!--{{#if fcSort.state.desc}}(desc){{/if}}-->
+                <!--{{#if fcSort.state.asc}}(asc){{/if}}-->
+            <!--</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody class="searchable">-->
+        <!--{{#each fcResults}}-->
+        <!--<tr>-->
+            <!--<td class="appNameRow">{{name}}</td>-->
+            <!--<td>{{production}}</td>-->
+            <!--<td>{{state}}</td>-->
+        <!--</tr>-->
+        <!--{{/each}}-->
+        <!--</tbody>-->
+    <!--</table>-->
+
+    <!--</table>-->
+
 </template>
 
 <template name="serviceMonitor">
@@ -497,7 +593,7 @@
             </div>
             <div class="panel-body">
                 <ul>
-                    <li>API Endpoint: *app address*</li>
+                    <!--<li>API Endpoint: *app address*</li>-->
                     <li>user: {{currentUser.username}}</li>
                     <li>org: *the current's user's role group*</li>
                     <li>space:</li>

@@ -10,6 +10,7 @@
     "bootboxjs": {},
     "just-i18n": {},
     "blaze-layout": {},
-    "kadira": {}
+    "kadira": {},
+    "filter-collections": {}
   }
 }

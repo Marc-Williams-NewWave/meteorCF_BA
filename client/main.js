@@ -37,6 +37,32 @@ Template.provisionedServiceStatus.rendered = function () {
     Meteor.call('syncProvisionsCollections');
 }
 
+
+AppFilter = new Meteor.FilterCollections(Prod_Apps, {
+   template: 'appMonitor',
+   sort    : {
+       order : ['desc', 'asc']
+//       defaults: ['name', 'asc']
+   },
+   filters : {
+       name: {
+           title: 'app name',
+           operator: ['$regex', 'i'],
+           condition: '$and',
+           searchable: 'required'
+       }
+   }
+
+//   pager   : {
+//       options : [1,2,3,4,5],
+//       itemsPerPage: 1,
+//       currentPage: 1,
+//       showPages: 5
+//   }
+});
+
+
+
 //Template.statusApp.rendered = function () {
 ////    appendRows();
 //    Meteor.call('syncAppsCollections');
@@ -87,6 +113,22 @@ Template.serviceStatus.helpers({
         return neededPlans;
     }
 });
+Template.appMonitor.events({
+//   'click .appNameRow' : function(){
+////       alert(this.name);
+//
+//       AppFilter.sort.set('name', 'desc', true);
+//       AppFilter.sort.set('name', null, true);
+////
+////       AppFilter.sort.run();
+//
+////       AppFilter.sort.clear();
+////       AppFilter.sort.clear(true);
+//
+//       alert(this.name);
+//
+//   }
+});
 
 Template.layout.events({
     'click #logout-button': function () {
@@ -117,7 +159,7 @@ Template.loginScreen.events({
             }
         });
 
-        Router.go('cfInfo');
+        Router.go('welcomeScreen');
         return false;
     }
 });

@@ -12,7 +12,8 @@
       "bootboxjs": {},
       "just-i18n": {},
       "blaze-layout": {},
-      "kadira": {}
+      "kadira": {},
+      "filter-collections": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -59,6 +60,11 @@
         "git": "https://github.com/meteorhacks/kadira.git",
         "tag": "v2.4.13",
         "commit": "1f3c1a427084af5a2eca2e299eb65bc01387df8a"
+      },
+      "filter-collections": {
+        "git": "https://github.com/julianmontagna/filter-collections.git",
+        "tag": "v0.1.4",
+        "commit": "87bc9cee7a23459e427d4613383be3f67f29245c"
       }
     }
   }
