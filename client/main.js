@@ -38,40 +38,16 @@ Template.provisionedServiceStatus.rendered = function () {
 }
 
 
-AppFilter = new Meteor.FilterCollections(Prod_Apps, {
-   template: 'appMonitor',
-   sort    : {
-       order : ['desc', 'asc']
-//       defaults: ['name', 'asc']
-   },
-   filters : {
-       name: {
-           title: 'app name',
-           operator: ['$regex', 'i'],
-           condition: '$and',
-           searchable: 'required'
-       }
-   }
 
-//   pager   : {
-//       options : [1,2,3,4,5],
-//       itemsPerPage: 1,
-//       currentPage: 1,
-//       showPages: 5
-//   }
-});
+Template.statusApp.rendered = function () {
+//    appendRows();
+    Meteor.call('syncAppsCollections');
+}
 
-
-
-//Template.statusApp.rendered = function () {
-////    appendRows();
-//    Meteor.call('syncAppsCollections');
-//}
-//
-//Template.serviceStatus.rendered = function () {
-//    Meteor.call('syncServicesCollections');
-//    Meteor.call('syncPlansCollections');
-//}
+Template.serviceStatus.rendered = function () {
+    Meteor.call('syncServicesCollections');
+    Meteor.call('syncPlansCollections');
+}
 
 Template.statusApp.helpers({
     settings: function () {
@@ -90,11 +66,11 @@ Template.statusApp.helpers({
         return Prod_Provisioned_Services.find();
     }});
 
-//Template.statusApp.helpers({
-//    provisionedServices: function () {
-//        return Prod_Provisioned_Services.find();
-//    }
-//});
+Template.statusApp.helpers({
+    provisionedServices: function () {
+        return Prod_Provisioned_Services.find();
+    }
+});
 
 Template.serviceStatus.helpers({
     settings: function () {
@@ -114,20 +90,7 @@ Template.serviceStatus.helpers({
     }
 });
 Template.appMonitor.events({
-//   'click .appNameRow' : function(){
-////       alert(this.name);
-//
-//       AppFilter.sort.set('name', 'desc', true);
-//       AppFilter.sort.set('name', null, true);
-////
-////       AppFilter.sort.run();
-//
-////       AppFilter.sort.clear();
-////       AppFilter.sort.clear(true);
-//
-//       alert(this.name);
-//
-//   }
+
 });
 
 Template.layout.events({

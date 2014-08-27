@@ -1,15 +1,15 @@
 var sys = Meteor.require('sys');
 var exec = Meteor.require('child_process').exec;
-
 var sh = Meteor.require('execSync');
+
 
 Meteor.publish('prod_apps', function () {
     return Prod_Apps.find({});
 });
 
-Meteor.FilterCollections.publish(Prod_Apps, {
-   name: 'testAppFilter'
-});
+//Meteor.FilterCollections.publish(Prod_Apps, {
+//   name: 'testAppFilter'
+//});
 
 
 
@@ -53,7 +53,7 @@ Meteor.startup(function () {
              console.log("apiGrab substring -> " + apiGrab);
              console.log("now it's -> " + api);
 
-             console.log(Meteor.user());
+//             console.log(Meteor.user());
          }
          if(err){
              console.log(err);
