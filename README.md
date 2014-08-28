@@ -1,7 +1,13 @@
 meteorCF_BA
 ===========
+Application now running on latest version of Meteor (0.9.1):
 
-Run application with: meteor --release 0.8.2
+Update instructions:
+  1. Run 'meteor update --patch'
+  2. Run 'meteor add iron:router'
+
+<!--Run application with: meteor --release 0.8.2-->
+
 
 Required packages:
 - Meteor (aquire via mrt add <package_name>):
