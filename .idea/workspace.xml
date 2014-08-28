@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d4823ed7-745a-485b-a68f-a997ed9d2757" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/smart.json" afterPath="$PROJECT_DIR$/smart.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/smart.lock" afterPath="$PROJECT_DIR$/smart.lock" />
-    </list>
+    <list default="true" id="d4823ed7-745a-485b-a68f-a997ed9d2757" name="Default" comment="" />
     <ignored path="ba_demo_NEW.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -92,8 +89,8 @@
       <file leaf-file-name="smart.json" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/smart.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.077586204" vertical-offset="0" max-vertical-offset="580">
-              <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.12931034" vertical-offset="0" max-vertical-offset="580">
+              <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -814,8 +811,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/smart.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.077586204" vertical-offset="0" max-vertical-offset="580">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.12931034" vertical-offset="0" max-vertical-offset="580">
+          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
           <folding />
         </state>
       </provider>
