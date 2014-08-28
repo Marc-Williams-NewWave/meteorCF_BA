@@ -3,9 +3,7 @@
   "dependencies": {
     "basePackages": {
       "bootstrap-3": {},
-      "iron-router": {
-        "version": "0.7.1"
-      },
+      "iron-router": {},
       "reactive-table": {},
       "datatables": {},
       "npm": {},
