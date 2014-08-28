@@ -18,3 +18,5 @@ accounts-base
 datatables
 npm
 bootboxjs
+iron:router
+

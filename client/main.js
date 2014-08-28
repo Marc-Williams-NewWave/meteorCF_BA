@@ -5,7 +5,7 @@ Meteor.subscribe("prod_provisioned_services");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
-
+    appendRows();
 });
 
 Template.cfInfo.currentUser = function () {
@@ -257,10 +257,14 @@ $('#example').dataTable({
 });
 
 var appendRows = function(){
-    $('#specialTable > tbody > tr').each(
-        function(){
-            alert(this);
-            var deleteCell = this.insertCell(-1);
+
+    $("#specialTable tr:first").append("<td><a href=''>Delete</a> Col "+(1)+"</td>");
+
+
+//    $('#specialTable > tbody > tr').each(
+//        function(){
+//            alert(this);
+//            var deleteCell = this.insertCell(-1);
 //            var button = d
 // document.createElement("button");
 //            button.val("Delete");
@@ -272,8 +276,8 @@ var appendRows = function(){
 //            alert(button.val());
 
 //            deleteCell.html("<td><button>Delete</button></td>");
-        }
-    )
+//        }
+//    )
 }
 
 var filter = function(selector, query){
