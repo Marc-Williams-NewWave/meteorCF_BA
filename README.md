@@ -14,13 +14,12 @@ Required packages:
   - reactive-table
   - npm
   - just-i18n
-  - iron-router (v0.7.1)
+  - iron-router (latest version)
     - iron-layout
     - iron-dynamic-template
     - iron-core
   - datatables
   - bootstrap-3
-  - bootboxjs
   - blaze-layout
   - Kadira
 
