@@ -183,22 +183,47 @@ Template.statusApp.events({
     },
     'click #startApp': function(){
         $('input[type=checkbox]').each(function () {
-            (this.checked ? alert("Starting app " + $(this).val()) : "");
+            if(this.checked) {
+                if (confirm('Are you sure you want to start this application?')) {
+                    alert("Starting app " + $(this).val());
+                }
+            }
         });
     },
     'click #stopApp': function(){
         $('input[type=checkbox]').each(function () {
-            (this.checked ? alert("Stopping app " + $(this).val()) : "");
+                if(this.checked) {
+                    if (confirm('Are you sure you want to stop this application?')) {
+                        alert("Stopping app " + $(this).val());
+                    }
+                }
         });
     },
     'click #restageApp': function(){
         $('input[type=checkbox]').each(function () {
-            (this.checked ? alert("Restaging app " + $(this).val()) : "");
+                if(this.checked) {
+                    if (confirm('Are you sure you want to restage this application?')) {
+                        alert("Restaging app " + $(this).val());
+                    }
+                }
+        });
+    },
+    'click #restartApp': function(){
+        $('input[type=checkbox]').each(function () {
+                if(this.checked) {
+                    if (confirm('Are you sure you want to restart this application?')) {
+                        alert("Restarting app " + $(this).val());
+                    }
+                }
         });
     },
     'click #deleteApp': function(){
         $('input[type=checkbox]').each(function () {
-            (this.checked ? alert("Deleting app " + $(this).val()) : "");
+                if(this.checked) {
+                    if (confirm('Are you sure you want to delete this application?')) {
+                        alert("Deleting app " + $(this).val());
+                    }
+                }
         });
     },
     'click #provisionedServiceOption': function () {
