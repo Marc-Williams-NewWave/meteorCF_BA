@@ -1,7 +1,9 @@
 {
   "packages": {
     "bootstrap-3": {},
-    "iron-router": {},
+    "iron-router": {
+      "version": "0.7.1"
+    },
     "reactive-table": {},
     "datatables": {},
     "npm": {},

@@ -2,6 +2,7 @@ Meteor.subscribe("prod_apps");
 Meteor.subscribe("prod_services");
 Meteor.subscribe("prod_plans");
 Meteor.subscribe("prod_provisioned_services");
+Meteor.subscribe("prod_buildpacks");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
@@ -57,8 +58,16 @@ Template.statusApp.helpers({
             fields: [
                 { key: 'name', label: 'Application Name' },
                 { key: 'state', label: 'State'},
-                { key: 'production', label: 'Production Status'}
-//                { key: 'memory', label: 'Delete App'}
+                { key: 'production', label: 'Production Status'},
+                { key: 'name',
+                    label: 'Delete App',
+                    fn: function (value) {
+                        var html;
+                        //    alert("Value -> " + value + "\nObject -> " + object);
+                        html = '<button class="appDetailButton" id="' + value +'">' + value +'</button>';
+                        return new Spacebars.SafeString(html);
+                    }
+                }
             ]
         };
     },
@@ -181,14 +190,11 @@ Template.statusApp.events({
     'click #syncApps': function () {
         Meteor.call('syncAppsCollections');
     },
+    'click .appDetailButton' : function(){
+//        alert(this.data);
 
-    'click .reactive-table tr': function (event) {
-            // set the blog post we'll display details and news for
-//            var post = this;
-//            Session.set('post', post);
-        alert(this.name);
-
-        $(this).attr("background-color", "red");
+        alert($(this).parent());
+        console.log($(this).parent().val());
     }
 });
 
@@ -289,10 +295,11 @@ var filter = function(selector, query){
     })
 }
 
-var helloWorld = function(){
-//    int()
-    alert(this.length);
-    alert("hello world");
+var appendDelete = function(value, object){
+    var html;
+//    alert("Value -> " + value + "\nObject -> " + object);
+    html = '<button style="color: orange; font-weight: bold">BUTTON</button>';
+    return new Spacebars.SafeString(html);
 }
 var getCurrentPlanHelper = function (planGUID) {
     var currPlan = Prod_Plans.findOne({guid: planGUID});

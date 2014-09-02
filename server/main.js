@@ -7,21 +7,9 @@ Meteor.publish('prod_apps', function () {
     return Prod_Apps.find({});
 });
 
-//Meteor.FilterCollections.publish(Prod_Apps, {
-//   name: 'testAppFilter'
-//});
-
-
-
-
 Meteor.publish('prod_services', function () {
     return Prod_Services.find({});
 });
-
-Meteor.publish('retrieved_services', function () {
-    return Retrieved_Services.find({});
-});
-
 
 Meteor.publish('prod_plans', function () {
     return Prod_Plans.find({});
@@ -31,9 +19,18 @@ Meteor.publish('prod_provisioned_services', function () {
     return Prod_Provisioned_Services.find({});
 });
 
+Meteor.publish('prod_buildpacks', function () {
+    return Prod_Provisioned_Services.find({});
+});
+
 Meteor.publish('userList', function () {
     return Meteor.users.find({});
 });
+
+
+//Meteor.publish('retrieved_services', function () {
+//    return Retrieved_Services.find({});
+//});
 
 
 Meteor.startup(function () {
@@ -43,31 +40,21 @@ Meteor.startup(function () {
         console.log(allUsers[i].username);
     }
     console.log("Checking in on the server side - MW\n\n");
-     Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave-demo -s dev', function(err, output){
-         if(output){
-             console.log("+++++++ " + output + " +++++++ ");
-             var apiGrab = output.substring( output.indexOf("API endpoint:"), output.indexOf("(API"));
-             var apiEndpoint = "API endpoint:";
-             var api = apiGrab.substring(apiEndpoint.length, apiGrab.length);
+//     Meteor.call('sendCommand', 'cf login -a http://api.192.168.4.14.xip.io -u admin -p password -o newwave-demo -s dev');
+//
 
-             console.log("apiGrab substring -> " + apiGrab);
-             console.log("now it's -> " + api);
 
-//             console.log(Meteor.user());
-         }
-         if(err){
-             console.log(err);
-         }
-     });
 
-    Meteor.call('populateProd_Services');
-    Meteor.call('populateProd_Plans');
+
+//    Meteor.call('populateProd_Services');
+//    Meteor.call('populateProd_Plans');
 
 
     Meteor.call('syncAppsCollections');
     Meteor.call('syncProvisionsCollections');
     Meteor.call('syncServicesCollections');
     Meteor.call('syncPlansCollections');
+    Meteor.call('syncBuildpacksCollections');
 });
 
 Meteor.methods({
@@ -210,7 +197,7 @@ Meteor.methods({
 
         for(i = 0; i < retrieved_apps.length; i++){
             if(Prod_Plans.findOne({guid: retrieved_apps[i].guid}) == undefined){ //a plan has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
-                var currentApp = Retrieved_Plans.findOne({guid: retrieved_apps[i].guid});
+//                var currentApp = Retrieved_Plans.findOne({guid: retrieved_apps[i].guid});
                 Prod_Plans.insert(  Retrieved_Plans.findOne({guid: retrieved_apps[i].guid}) );
             }
         }
@@ -248,6 +235,27 @@ Meteor.methods({
         }
 
         console.log("\t\tDONE SYNCING PROVISIONS");
+    },
+    syncBuildpacksCollections: function(){
+        console.log("\t\t--------------- SYNCING BUILDPACKS ---------------");
+        Meteor.call('populateRetrieved_Buildpacks');
+        var retrieved_buildpacks = Retrieved_Buildpacks.find({}).fetch();
+        var prod_buildpacks = Prod_Buildpacks.find({}).fetch();
+
+        for(i = 0; i < retrieved_buildpacks.length; i++){
+            if(Prod_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
+//                var currentApp = Retrieved_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid});
+                Prod_Buildpacks.insert(  Retrieved_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid}) );
+            }
+        }
+
+        for(i = 0; i < prod_buildpacks.length; i++){
+            if(Retrieved_Buildpacks.findOne({guid: prod_buildpacks[i].guid}) == undefined){ // an app in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
+                Prod_Buildpacks.remove({guid: prod_buildpacks[i].guid});
+            }
+        }
+
+        console.log("\t\tDONE SYNCING BUILDPACKS");
     },
     populateProd_Apps: function(){
         Meteor.call('sendCommand', 'cf curl /v2/apps', function (err, result) {
@@ -514,6 +522,33 @@ Meteor.methods({
                 }
             }
             console.log("---------------------LEAVING populateRetrieved_Provisions----------------------------------------------------------------------------------- ");
+        });
+    },
+    populateRetrieved_Buildpacks: function(){
+        Retrieved_Buildpacks.remove({});
+        Meteor.call('sendCommand', 'cf curl /v2/buildpacks', function (err, result) {
+            if (result) {
+                console.log("-------------------------------------------------------------------------------------------------------- ");
+                console.log(result);
+
+                var jsonResponse_Buildpacks = JSON.parse(result);
+                var buildpackCount = jsonResponse_Buildpacks.resources.length;
+
+                for (i = 0; i < buildpackCount; i++) {
+                    var buildpackGUID = jsonResponse_Buildpacks.resources[i].metadata.guid; // get buildpack guid
+                    var buildpackURL = jsonResponse_Buildpacks.resources[i].metadata.url; // get buildpack url
+                    var buildpackCreatedAt = jsonResponse_Buildpacks.resources[i].metadata.created_at; // get buildpack created date
+                    var buildpackUpdatedAt = jsonResponse_Buildpacks.resources[i].metadata.updated_at; // get buildpack updated date
+                    var buildpackName = jsonResponse_Buildpacks.resources[i].entity.name; // get buildpack name (label)
+                    var buildpackPosition = jsonResponse_Buildpacks.resources[i].entity.position; // get buildpack position
+                    var buildpackEnabled = jsonResponse_Buildpacks.resources[i].entity.enabled; // get buildpack enabled status
+                    var buildpackLocked = jsonResponse_Buildpacks.resources[i].entity.locked; // get buildpack locked status
+                    var buildpackFileName = jsonResponse_Buildpacks.resources[i].entity.filename; //get buildpack filename
+
+                    Retrieved_Buildpacks.insert({guid: buildpackGUID, url: buildpackURL, created_at: buildpackCreatedAt, updated_at: buildpackUpdatedAt, name: buildpackName, position: buildpackPosition, enabled: buildpackEnabled.toString(), locked: buildpackLocked.toString(), filename: buildpackFileName});
+                }
+                console.log("-------------------------------------------------------------------------------------------------------- ");
+            }
         });
     },
 
