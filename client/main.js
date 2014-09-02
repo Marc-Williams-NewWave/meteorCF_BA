@@ -56,18 +56,18 @@ Template.statusApp.helpers({
             rowsPerPage: 10,
             showFilter: true,
             fields: [
-                { key: 'name', label: 'Application Name' },
-                { key: 'state', label: 'State'},
-                { key: 'production', label: 'Production Status'},
                 { key: 'name',
-                    label: 'Delete App',
+                    label: '',
                     fn: function (value) {
                         var html;
-                        //    alert("Value -> " + value + "\nObject -> " + object);
-                        html = '<button class="appDetailButton" id="' + value +'">' + value +'</button>';
+//                        html = '<button class="appDetailButton" id="' + value +'">' + value +'</button>';
+                        html = '<input type="checkbox" value="'+value+'">';
                         return new Spacebars.SafeString(html);
                     }
-                }
+                },
+                { key: 'name', label: 'Application Name' },
+                { key: 'state', label: 'State'},
+                { key: 'production', label: 'Production Status'}
             ]
         };
     },
@@ -179,6 +179,26 @@ Template.statusApp.events({
                 $('#appCreationModal').modal('toggle');
 //                $('#transparent').hide();
             }
+        });
+    },
+    'click #startApp': function(){
+        $('input[type=checkbox]').each(function () {
+            (this.checked ? alert("Starting app " + $(this).val()) : "");
+        });
+    },
+    'click #stopApp': function(){
+        $('input[type=checkbox]').each(function () {
+            (this.checked ? alert("Stopping app " + $(this).val()) : "");
+        });
+    },
+    'click #restageApp': function(){
+        $('input[type=checkbox]').each(function () {
+            (this.checked ? alert("Restaging app " + $(this).val()) : "");
+        });
+    },
+    'click #deleteApp': function(){
+        $('input[type=checkbox]').each(function () {
+            (this.checked ? alert("Deleting app " + $(this).val()) : "");
         });
     },
     'click #provisionedServiceOption': function () {

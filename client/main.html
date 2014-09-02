@@ -208,7 +208,12 @@
 </template>
 
 <template name="statusApp">
-    <button id="launchNewApp" name="Launch" class="btn btn-default">Launch New App</button>
+    <!--<button id="launchNewApp" name="Launch" class="btn btn-default">Launch New App</button>-->
+    <button id="startApp" class="btn btn-default">Start</button>
+    <button id="stopApp" class="btn btn-default">Stop</button>
+    <button id="restageApp" class="btn btn-default">Restage</button>
+    <button id="deleteApp" class="btn btn-default">Delete</button>
+
     <div id="reactiveTableSpace" style="padding-bottom: 20px">
         {{> reactiveTable id="specialTable" collection=apps settings=settings}}
     </div>
@@ -274,11 +279,10 @@
     <div id="transparent" style="display: none; z-index:999">
 
     </div>
-
-
     <!-- Modal -->
-    <button id="clearApps">Remove Apps from Production</button>
-    <button id="syncApps">Sync Prod Apps</button>
+
+    <!--<button id="clearApps">Remove Apps from Production</button>-->
+    <!--<button id="syncApps">Sync Prod Apps</button>-->
 </template>
 
 <template name="createService">
