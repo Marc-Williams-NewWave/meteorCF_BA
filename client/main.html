@@ -63,7 +63,7 @@
 
     <div id="side-pane">
         <div align="center">
-            <img src="/images/NewLogoIcon_Transparant.png" width="130px" height="140px">
+            <img src="/images/NewLogoTransparantSmall.png" width="130px" height="140px">
         </div>
         {{> homePage}}
         <div align="center">
@@ -145,7 +145,7 @@
                         <ul>
                             <!--<li><a id="option1a" href="{{ pathFor 'launchApp' }}" class="bob">Launch</a></li>-->
                             <!--<li><a href="{{ pathFor 'deleteApp' }}">Delete</a></li>-->
-                            <li><a>Deploy</a></li>
+                            <li><a href="{{ pathFor 'appDeployment' }}">Deploy</a></li>
                         </ul>
                     </div>
                 </div>
@@ -593,6 +593,39 @@
 <template name="openstackInfo">
     <div>
         Here you can view the Openstack info.
+    </div>
+</template>
+
+<template name="appDeployment">
+    <div align="center">
+        <!-- NewWave Logo -->
+        <div class="panel panel-primary" style="width: 50%" align="left">
+            <div class="panel-heading">
+                <h3 panel-title>Deploy New App</h3>
+            </div>
+            <div class="panel-body">
+<form>
+    <label>Name:</label>
+    <input type="text" id="appNameLabel"><br />
+    <label>Instances:</label>
+    <input type="text" id="appInstanceLabel"><br />
+    <label>Memory (mb):</label>
+    <input type="text" id="appMemoryLabel"><br />
+    <label>Disk (mb):</label>
+    <input type="text" id="appDiskLabel"><br />
+    <label>Git URL:</label>
+    <input type="text" id="appGitUrlLabel"><br />
+    <label>Buildpack:</label>
+    <select>
+        <!-- buildpacks -->
+    </select><br />
+    <label>Attach:</label>
+    <select>
+        <!-- attachments -->
+    </select><br />
+</form>
+            </div>
+        </div>
     </div>
 </template>
 
