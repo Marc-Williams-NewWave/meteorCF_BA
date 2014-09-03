@@ -9,6 +9,11 @@ Meteor.startup(function () {
     appendRows();
 });
 
+
+Template.appDeployment.rendered = function(){
+    $('#startStatus').switchButton();
+}
+
 Template.cfInfo.currentUser = function () {
     return Meteor.user();
 }
@@ -241,6 +246,10 @@ Template.statusApp.events({
         alert($(this).parent());
         console.log($(this).parent().val());
     }
+});
+
+Template.appDeployment.helpers({
+
 });
 
 Template.serviceStatus.events({

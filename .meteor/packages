@@ -20,4 +20,6 @@ bootboxjs
 iron:router
 aslagle:reactive-table
 reactive-table
+mrt:jquery-ui
+mrt:jquery-ui-bootstrap
 
