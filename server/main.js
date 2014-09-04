@@ -20,7 +20,7 @@ Meteor.publish('prod_provisioned_services', function () {
 });
 
 Meteor.publish('prod_buildpacks', function () {
-    return Prod_Provisioned_Services.find({});
+    return Prod_Buildpacks.find({});
 });
 
 Meteor.publish('userList', function () {

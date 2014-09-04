@@ -6,12 +6,16 @@ Meteor.subscribe("prod_buildpacks");
 Meteor.subscribe("userList");
 
 Meteor.startup(function () {
-    appendRows();
+
 });
 
 
 Template.appDeployment.rendered = function(){
+    if(!this._rendered){
+        this._rendered = true;
     $('#startStatus').switchButton();
+    }
+
 }
 
 Template.cfInfo.currentUser = function () {
@@ -38,6 +42,13 @@ Template.appMonitor.applications = function(){
     return Prod_Apps.find();
 }
 
+Template.appDeployment.buildpacks = function () {
+    return Prod_Buildpacks.find();
+}
+
+Template.appDeployment.provisionedServices = function () {
+    return Prod_Provisioned_Services.find();
+}
 
 Template.provisionedServiceStatus.rendered = function () {
     Meteor.call('syncProvisionsCollections');
