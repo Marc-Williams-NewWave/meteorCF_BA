@@ -1,15 +1,8 @@
 {
   "packages": {
     "bootstrap-3": {},
-    "iron-router": {
-      "version": "0.7.1"
-    },
-    "reactive-table": {},
-    "datatables": {},
     "npm": {},
-    "bootboxjs": {},
     "just-i18n": {},
-    "blaze-layout": {},
-    "kadira": {}
+    "blaze-layout": {}
   }
 }

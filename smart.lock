@@ -3,16 +3,9 @@
   "dependencies": {
     "basePackages": {
       "bootstrap-3": {},
-      "iron-router": {
-        "version": "0.7.1"
-      },
-      "reactive-table": {},
-      "datatables": {},
       "npm": {},
-      "bootboxjs": {},
       "just-i18n": {},
-      "blaze-layout": {},
-      "kadira": {}
+      "blaze-layout": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -20,30 +13,10 @@
         "tag": "v3.2.0-1",
         "commit": "17a63902fc6cf1096c5289d963c66cf28b474727"
       },
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.7.1",
-        "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
-      },
-      "reactive-table": {
-        "git": "https://github.com/ecohealthalliance/reactive-table.git",
-        "tag": "v0.3.21",
-        "commit": "7068f1011b46b6312bd8c21c2d3b91d4e3cbcd59"
-      },
-      "datatables": {
-        "git": "https://github.com/TimHeckel/meteor-datatables.git",
-        "tag": "v0.1.3",
-        "commit": "86a9076d6c65df85b098fd214b0c0ca7a1b10269"
-      },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
-      },
-      "bootboxjs": {
-        "git": "https://github.com/TimHeckel/meteor-bootboxjs.git",
-        "tag": "v4.2.1-master.1",
-        "commit": "c125969c1f3aef30e2a2ff20252bd3b2e4014b2f"
       },
       "just-i18n": {
         "git": "https://github.com/subhog/meteor-just-i18n.git",
@@ -54,11 +27,6 @@
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "tag": "v0.2.5",
         "commit": "273e3ab7d005d91a1a59c71bd224533b4dae2fbd"
-      },
-      "kadira": {
-        "git": "https://github.com/meteorhacks/kadira.git",
-        "tag": "v2.5.2",
-        "commit": "d42da1ef425ef4f7ead4a851cd3bd652deca8dd2"
       }
     }
   }

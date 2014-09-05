@@ -10,16 +10,13 @@ spiderable
 jquery
 insecure
 bootstrap-3
-iron-router
 accounts-password
 accounts-ui
 accounts-base
-datatables
 npm
-bootboxjs
 iron:router
 aslagle:reactive-table
-reactive-table
 mrt:jquery-ui
 mrt:jquery-ui-bootstrap
+meteorhacks:kadira
 
