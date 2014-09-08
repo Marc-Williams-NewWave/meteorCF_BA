@@ -1,0 +1,10 @@
+name: <name>
+memory: <mem>
+instances: <inst>
+disk_quota: <disk>
+host: <hostname>
+path: <war_path>
+timeout: <timeout>
+command: <command>
+buildpack: <buildpack>
+

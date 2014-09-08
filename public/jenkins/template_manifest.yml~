@@ -1,0 +1,11 @@
+---
+applications:
+- name: <name>
+  memory: <mem>
+  instances: <inst>
+  host: <hostname>
+  path: <war_path>
+  timeout: <timeout>
+  command: <command>
+  buildpack: <buildpack>
+

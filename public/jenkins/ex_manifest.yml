@@ -1,0 +1,11 @@
+---
+applications:
+- buildpack: null
+  command: <command>
+  disk_quota: 512M
+  host: demo
+  instances: 1
+  memory: 512M
+  name: demo
+  path: $WORKSPACE/$WORKSPACE/build/libs/*.war
+  timeout: <timeout>
