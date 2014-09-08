@@ -23,8 +23,14 @@ def get_server_info():
     #print output
     retval = p.wait()
 
-def build_manifest(details):
+def run_command(command):
+    print command
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in p.stdout.readlines():
+        print line,
+    retval = p.wait()
 
+def build_manifest(details):
     template = "template_manifest.yml"
     output_file = "ex_manifest.yml"
     #template = details["template_file"]
@@ -57,7 +63,7 @@ def build_manifest(details):
     manifest["applications"][0]["instances"] = inst
     manifest["applications"][0]["disk_quota"] = disk
     manifest["applications"][0]["host"] = host
-    manifest["applications"][0]["path"] = "$WORKSPACE/" + path
+    manifest["applications"][0]["path"] = "/var/opt/jenkins/jobs/%s/workspace/%s" % (details["job_name"], path)
     #manifest["applications"][0]["timeout"] = timeout
     #manifest["applications"][0]["command"] = command
     if manifest["applications"][0]["buildpack"] != 'None':
@@ -65,6 +71,8 @@ def build_manifest(details):
 
     out_stream = open(output_file, "w")
     yaml.dump(manifest, out_stream, explicit_start=True, default_flow_style=False)
+    command = "cp %s /var/opt/jenkins/jobs/%s/workspace/manifest.yml" % (output_file, details["job_name"])
+    run_command(command)
     #print yaml.dump(manifest, explicit_start=True, default_flow_style=False)
 
 def json_template(details):
@@ -112,52 +120,38 @@ def json_template(details):
     
     doc.write(output_file)
 
-def run_command(command):
-    print command
-    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in p.stdout.readlines():
-        print line,
-    retval = p.wait()
-
 def create_job(details):
-
     #output_file = details["variables"]["output_file"]
     output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
     job_name = details["app_name"]
 
     command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
     run_command(command)
-    print "Waiting..."
-    time.sleep(10)
-    
-    print "Building..."
+
+def build_job(details):
+    job_name = details["app_name"]
     command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
     run_command(command)
-    print "Done build?"
-    time.sleep(10)
     
 def delete_job(details):
-
-    #job_name = details["variables"]["job_name"]
+    #job_name = details["job_name"]
     job_name = "test_App"
     print "Deleting..."
     command = "java -jar jenkins-cli.jar -s http://192.168.0.126:8090/ delete-job %s" % job_name
     run_command(command)
-    time.sleep(5)
 
-def main():
-
+def arguments():
     parser = argparse.ArgumentParser(description='Launch some apps to Jenkins and CF. Purely backend.')
     
     parser.add_argument('name', help='Name of application to launch in CF. Also used for Jenkins job.')
     parser.add_argument('git_url', help='Github URL for project')
-    parser.add_argument('--num_inst', nargs='?', type=int, default='1', help='Number of instances to launch in CF.')
-    parser.add_argument('--mem', nargs='?', default='512M', help='Amount of memory to use in CF. Defaults to 512M.')
-    parser.add_argument('--disk', nargs='?', default='512M', help='Amount of disk space to use in CF. Defaults to 512M.')
-    parser.add_argument('--buildpack', nargs='?', help='Override buildpack use in CF here.')
+    parser.add_argument("-n", "--num_inst", nargs='?', type=int, default='1', help='Number of instances to launch in CF.')
+    parser.add_argument("-m", "--mem", nargs='?', default='512M', help='Amount of memory to use in CF. Defaults to 512M.')
+    parser.add_argument("-d", "--disk", nargs='?', default='512M', help='Amount of disk space to use in CF. Defaults to 512M.')
+    parser.add_argument("-b", "--buildpack", nargs='?', help='Override buildpack use in CF here.')
     #parser.add_argument('--host', nargs='?', default='', help='Hostname for the application in CF.')
-    parser.add_argument('--path', nargs='?', default='$WORKSPACE/build/libs/*.war', help='Path to the WAR file.')
-    parser.add_argument('--start', action='store_true', help='Set to 1 to launch in CF.')
+    parser.add_argument("-p", "--path", nargs='?', default='$WORKSPACE/build/libs/*.war', help='Path to the WAR file.')
+    parser.add_argument("-s", "--start", action='store_true', help='Set true to launch in CF.')
     args = parser.parse_args()
 
     details = {}
@@ -169,6 +163,11 @@ def main():
     details["path"] = args.path
     details["buildpack"] = args.buildpack
     details["start"] = args.start
+
+    return details
+
+def main():
+    details = arguments()
     
     if args.start:
         print "launching"
@@ -176,9 +175,9 @@ def main():
     #in_stream = open(file_name, "r")
     #app_details = yaml.load(in_stream)
     #get_server_info()
+    json_template(details)
+    create_job(details)
     build_manifest(details)
-    #template(details)
-    #create_job(details)
-    #delete_job(details)
+    build_job(details)
 
 main()

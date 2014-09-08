@@ -169,21 +169,21 @@ Meteor.methods({
     syncServicesCollections: function(){
         console.log("\t\t--------------- SYNCING SERVICES ---------------");
         Meteor.call('populateRetrieved_Services');
-        var retrieved_apps = Retrieved_Services.find({}).fetch();
-        var prod_apps = Prod_Services.find({}).fetch();
+        var retrieved_services = Retrieved_Services.find({}).fetch();
+        var prod_services = Prod_Services.find({}).fetch();
 
-        for(i = 0; i < retrieved_apps.length; i++){
-            if(Prod_Services.findOne({guid: retrieved_apps[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
-                var currentApp = Retrieved_Services.findOne({guid: retrieved_apps[i].guid});
-                Prod_Services.insert(  Retrieved_Services.findOne({guid: retrieved_apps[i].guid}) );
+        for(i = 0; i < retrieved_services.length; i++){
+            if(Prod_Services.findOne({guid: retrieved_services[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_services collection, so it will be inserted into prod
+                var currentApp = Retrieved_Services.findOne({guid: retrieved_services[i].guid});
+                Prod_Services.insert(  Retrieved_Services.findOne({guid: retrieved_services[i].guid}) );
             }
         }
 
-        for(i = 0; i < prod_apps.length; i++){
-//            console.log("current prod app is -> " + prod_apps[i].name + " with guid -> " + prod_apps[i].guid);
-//            console.log(Retrieved_Services.findOne({guid: prod_apps[i].guid}));
-            if(Retrieved_Services.findOne({guid: prod_apps[i].guid}) == undefined){ // a service in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
-                Prod_Services.remove({guid: prod_apps[i].guid});
+        for(i = 0; i < prod_services.length; i++){
+//            console.log("current prod app is -> " + prod_services[i].name + " with guid -> " + prod_services[i].guid);
+//            console.log(Retrieved_Services.findOne({guid: prod_services[i].guid}));
+            if(Retrieved_Services.findOne({guid: prod_services[i].guid}) == undefined){ // a service in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
+                Prod_Services.remove({guid: prod_services[i].guid});
             }
         }
 
@@ -192,21 +192,18 @@ Meteor.methods({
     syncPlansCollections: function(){
         console.log("\t\t--------------- SYNCING PLANS ---------------");
         Meteor.call('populateRetrieved_Plans');
-        var retrieved_apps = Retrieved_Plans.find({}).fetch();
-        var prod_apps = Prod_Plans.find({}).fetch();
+        var retrieved_plans = Retrieved_Plans.find({}).fetch();
+        var prod_plans = Prod_Plans.find({}).fetch();
 
-        for(i = 0; i < retrieved_apps.length; i++){
-            if(Prod_Plans.findOne({guid: retrieved_apps[i].guid}) == undefined){ //a plan has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
-//                var currentApp = Retrieved_Plans.findOne({guid: retrieved_apps[i].guid});
-                Prod_Plans.insert(  Retrieved_Plans.findOne({guid: retrieved_apps[i].guid}) );
+        for(i = 0; i < retrieved_plans.length; i++){
+            if(Prod_Plans.findOne({guid: retrieved_plans[i].guid}) == undefined){ //a plan has been pulled from cf that is not in the prod_plans collection, so it will be inserted into prod
+                Prod_Plans.insert(  Retrieved_Plans.findOne({guid: retrieved_plans[i].guid}) );
             }
         }
 
-        for(i = 0; i < prod_apps.length; i++){
-//            console.log("current prod app is -> " + prod_apps[i].name + " with guid -> " + prod_apps[i].guid);
-//            console.log(Retrieved_Plans.findOne({guid: prod_apps[i].guid}));
-            if(Retrieved_Plans.findOne({guid: prod_apps[i].guid}) == undefined){ // a plan in production cannot be found in the plans pulled from cf, meaning it should be removed from prod
-                Prod_Plans.remove({guid: prod_apps[i].guid});
+        for(i = 0; i < prod_plans.length; i++){
+            if(Retrieved_Plans.findOne({guid: prod_plans[i].guid}) == undefined){ // a plan in production cannot be found in the plans pulled from cf, meaning it should be removed from prod
+                Prod_Plans.remove({guid: prod_plans[i].guid});
             }
         }
 
@@ -220,7 +217,6 @@ Meteor.methods({
         var prod_provisions = Prod_Provisioned_Services.find({}).fetch();
 
         for(i = 0; i < retrieved_provisions.length; i++){
-//            console.log(Retrieved_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}));
             if(Prod_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_provisions collection, so it will be inserted into prod
                 Prod_Provisioned_Services.insert(  Retrieved_Provisioned_Services.findOne({guid: retrieved_provisions[i].guid}) );
             }
@@ -243,14 +239,14 @@ Meteor.methods({
         var prod_buildpacks = Prod_Buildpacks.find({}).fetch();
 
         for(i = 0; i < retrieved_buildpacks.length; i++){
-            if(Prod_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_apps collection, so it will be inserted into prod
+            if(Prod_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid}) == undefined){ //a service has been pulled from cf that is not in the prod_buildpacks collection, so it will be inserted into prod
 //                var currentApp = Retrieved_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid});
                 Prod_Buildpacks.insert(  Retrieved_Buildpacks.findOne({guid: retrieved_buildpacks[i].guid}) );
             }
         }
 
         for(i = 0; i < prod_buildpacks.length; i++){
-            if(Retrieved_Buildpacks.findOne({guid: prod_buildpacks[i].guid}) == undefined){ // an app in production cannot be found in the apps pulled from cf, meaning it should be removed from prod
+            if(Retrieved_Buildpacks.findOne({guid: prod_buildpacks[i].guid}) == undefined){ // a buildpack in production cannot be found in the buildpacks pulled from cf, meaning it should be removed from prod
                 Prod_Buildpacks.remove({guid: prod_buildpacks[i].guid});
             }
         }
@@ -289,7 +285,7 @@ Meteor.methods({
             console.log("-------------------------------------------------------------------------------------------------------- ");
         });
     },
-    populateRetrieved_Apps: function(){
+    populateRetrieved_Apps: function () {
         Retrieved_Apps.remove({});
         Meteor.call('sendCommand', 'cf curl /v2/apps', function (err, result) {
             if (result) {
@@ -306,17 +302,23 @@ Meteor.methods({
                     var appUpdatedDate = jsonResponse_Apps.resources[i].metadata.updated_at;
                     var appName = jsonResponse_Apps.resources[i].entity.name;
                     var appProductionStatus = jsonResponse_Apps.resources[i].entity.production;
+                    var appSpaceGUID = jsonResponse_Apps.resources[i].entity.space_guid;
+                    var appStackGUID = jsonResponse_Apps.resources[i].entity.stack_guid;
                     var appMemory = jsonResponse_Apps.resources[i].entity.memory;
                     var appInstanceCount = jsonResponse_Apps.resources[i].entity.instances;
                     var appDiskQuota = jsonResponse_Apps.resources[i].entity.disk_quota;
                     var appState = jsonResponse_Apps.resources[i].entity.state;
+                    var appStagingTaskID = jsonResponse_Apps.resources[i].entity.staging_task_id;
                     var appPackagestate = jsonResponse_Apps.resources[i].entity.package_state;
+                    var appDockerImage = jsonResponse_Apps.resources[i].entity.docker_image;
+                    var appSpaceURL = jsonResponse_Apps.resources[i].entity.space_url;
+                    var appStackURL = jsonResponse_Apps.resources[i].entity.stack_url;
+                    var appServiceBindingsURL = jsonResponse_Apps.resources[i].entity.service_bindings_url;
 
-//                    if (Retrieved_Apps.findOne({guid: appGUID}) == undefined) {
-                        Retrieved_Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
-                            production: appProductionStatus.toString(), memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
-                            state: appState, package_state: appPackagestate});
-//                    }
+                    Retrieved_Apps.insert({guid: appGUID, url: appURL, created_at: appCreatedDate, updated_at: appUpdatedDate, name: appName,
+                        production: appProductionStatus.toString(), space_guid: appSpaceGUID, stack_guid: appStackGUID, memory: appMemory, instance_count: appInstanceCount, diskUsage: appDiskQuota,
+                        state: appState, staging_task_id: appStagingTaskID, package_state: appPackagestate, docker_image: appDockerImage, space_url: appSpaceURL,
+                        stack_url: appStackURL, service_bindings_url: appServiceBindingsURL});
                 }
             }
             console.log("-------------------------------------------------------------------------------------------------------- ");
