@@ -541,37 +541,42 @@
                 <h3 panel-title>Deploy New App</h3>
             </div>
             <div class="panel-body">
-                <form style="display: table">
+                <form style="display: table; margin-left: 10%">
 
-                    <label>Name:</label>
+                    <!--<fieldset>-->
+
+                    <label class="deployLabel">Name:</label>
                     <input type="text" id="appNameLabel"><br/>
-                    <label>Instances:</label>
+                    <label class="deployLabel">Instances:</label>
                     <input type="text" id="appInstanceLabel"><br/>
-                    <label>Memory (mb):</label>
+                    <label class="deployLabel">Memory (mb):</label>
                     <input type="text" id="appMemoryLabel"><br/>
-                    <label>Disk (mb):</label>
+                    <label class="deployLabel">Disk (mb):</label>
                     <input type="text" id="appDiskLabel"><br/>
-                    <label>Git URL:</label>
+                    <label class="deployLabel">Git URL:</label>
                     <input type="text" id="appGitUrlLabel"><br/>
 
-                    <label>Buildpack:</label>
+                    <label class="deployLabel">Buildpack:</label>
                     <select>
+                        <option value="default" selected="selected">Select a Buildpack</option>
                         <!-- buildpacks -->
                         {{#each buildpacks}}
                         <option class="buildpackInfo">{{name}}</option>
                         {{/each}}
                     </select><br/>
 
-                    <label>Attach:</label>
+                    <label class="deployLabel">Attach:</label>
                     <select>
+                        <option value="default" selected="selected">Select a Provision</option>
                         <!-- provisioned services-->
                         {{#each provisionedServices}}
                         <option class="provisionedServiceInfo">{{name}}</option>
                         {{/each}}
                     </select><br/>
-                    <label>Start:</label>
+                    <label class="deployLabel">Start:</label>
 
                     <div><input type="checkbox" id="startStatus"></div>
+                    <!--</fieldset>-->
 
                 </form>
             </div>

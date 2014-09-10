@@ -111,6 +111,7 @@ Template.serviceStatus.helpers({
     },
     serviceJoinPlan: function () {
         var neededPlans = Prod_Plans.find({service_guid: this.guid});
+        console.log(neededPlans);
         return neededPlans;
     }
 });
@@ -265,8 +266,39 @@ Template.appDeployment.helpers({
 
 Template.serviceStatus.events({
     'click .viewPlan': function () {
-        getCurrentPlanHelper(this.guid);
-        $('#myModal').modal();
+//        alert(this.name);
+
+//        getCurrentPlanHelper(this.guid);
+
+        var currPlan = Prod_Plans.findOne({guid: this.guid});
+        var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
+
+
+        $('#myModal').modal('show');
+
+
+        $('#planTitle').text(currPlan.name);
+        $('#myModalLabel').text(parentPlan.name);
+        $('#urlSpan').html(" " + currPlan.url + " <br />");
+        $('#createdSpan').html(" " + currPlan.created_at + " <br />");
+        $('#updatedSpan').html(" " + currPlan.updated_at + " <br />");
+        $('#descriptionSpan').html(" " + currPlan.description + " <br />");
+        $('#serviceURLSpan').html(" " + currPlan.service_url + " <br />");
+        $('#serviceInstanceURLSpan').html(" " + currPlan.service_instances_url + " <br />");
+
+        var extraMetadata = JSON.parse(currPlan.extra);
+        $('#extraMetaDataIDSpan').html(" " + extraMetadata.id + " <br />");
+        $('#extraMetaDataNameSpan').html(" " + extraMetadata.name + " <br />");
+        $('#extraMetaDataDescriptionSpan').html(" " + extraMetadata.description + " <br />");
+        $('#extraMetaDataBulletsSpan').html(" " + extraMetadata.bullets + " <br />");
+        $('#extraMetaDataProfileNameSpan').html(" " + extraMetadata.profilename + " <br />");
+        $('#extraMetaDataNodeNameSpan').html(" " + extraMetadata.nodename + " <br />");
+        $('#extraMetaDataHostnameSpan').html(" " + extraMetadata.hostname + " <br />");
+        $('#extraMetaDataMngdNodeNameSpan').html(" " + extraMetadata.mngdnodename + " <br />");
+        $('#extraMetaDataCellNameSpan').html(" " + extraMetadata.cellname + " <br />");
+        $('#extraMetaDataAppNodeNameSpan').html(" " + extraMetadata.appnodename + " <br />");
+        $('#extraMetaDataAdminConsoleSpan').html(" " + extraMetadata.adminconsole + " <br />");
+
     },
     'click #launchService': function () {
         var cfCreateServiceCommand = "cf create-service " + $('#myModalLabel').text() + " " + $('#planTitle').text() + " " + $('#serviceNameInput').val();
@@ -366,9 +398,15 @@ var appendDelete = function(value, object){
     html = '<button style="color: orange; font-weight: bold">BUTTON</button>';
     return new Spacebars.SafeString(html);
 }
+
 var getCurrentPlanHelper = function (planGUID) {
+//    alert("open open");
+
     var currPlan = Prod_Plans.findOne({guid: planGUID});
     var parentPlan = Prod_Services.findOne({guid: currPlan.service_guid});
+
+
+    $('#myModal').modal('show');
 
 
     $('#planTitle').text(currPlan.name);
@@ -394,6 +432,9 @@ var getCurrentPlanHelper = function (planGUID) {
     $('#extraMetaDataCellNameSpan').html(" " + extraMetadata.cellname + " <br />");
     $('#extraMetaDataAppNodeNameSpan').html(" " + extraMetadata.appnodename + " <br />");
     $('#extraMetaDataAdminConsoleSpan').html(" " + extraMetadata.adminconsole + " <br />");
+
+
+
 }
 
 
