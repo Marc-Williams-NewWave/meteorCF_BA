@@ -63,7 +63,7 @@ def build_manifest(details):
     manifest["applications"][0]["instances"] = inst
     manifest["applications"][0]["disk_quota"] = disk
     manifest["applications"][0]["host"] = host
-    manifest["applications"][0]["path"] = "$WORKSPACE/" + path
+    manifest["applications"][0]["path"] = "/var/opt/jenkins/jobs/%s/workspace/%s" % (details["job_name"], path)
     #manifest["applications"][0]["timeout"] = timeout
     #manifest["applications"][0]["command"] = command
     if manifest["applications"][0]["buildpack"] != 'None':
@@ -71,7 +71,7 @@ def build_manifest(details):
 
     out_stream = open(output_file, "w")
     yaml.dump(manifest, out_stream, explicit_start=True, default_flow_style=False)
-    command = "cp %s /var/opt/jenkins/jobs/%s/workspace/manifest.yml" % (output_file, details["job_name"])
+    command = "sudo cp %s /var/opt/jenkins/jobs/%s/workspace/manifest.yml" % (output_file, details["job_name"])
     run_command(command)
     #print yaml.dump(manifest, explicit_start=True, default_flow_style=False)
 
@@ -122,22 +122,22 @@ def json_template(details):
 
 def create_job(details):
     #output_file = details["variables"]["output_file"]
-    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    output_file = "%s/demo-job.xml" % "/home/opstack/meteorCF_BA/public/jenkins"
     job_name = details["app_name"]
 
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
+    command = "java -jar /home/opstack/meteorCF_BA/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
     run_command(command)
 
 def build_job(details):
     job_name = details["app_name"]
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
+    command = "java -jar /home/opstack/meteorCF_BA/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
     run_command(command)
     
 def delete_job(details):
     #job_name = details["job_name"]
     job_name = "test_App"
     print "Deleting..."
-    command = "java -jar jenkins-cli.jar -s http://192.168.0.126:8090/ delete-job %s" % job_name
+    command = "java -jar /home/opstack/meteorCF_BA/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ delete-job %s" % job_name
     run_command(command)
 
 def arguments():
@@ -156,6 +156,7 @@ def arguments():
 
     details = {}
     details["app_name"] = args.name
+    details["git_url"] = args.git_url
     details["memory"] = args.mem
     details["inst"] = args.num_inst
     details["disk"] = args.disk
@@ -168,16 +169,12 @@ def arguments():
 
 def main():
     details = arguments()
-    
-    if args.start:
-        print "launching"
-    print details
     #in_stream = open(file_name, "r")
     #app_details = yaml.load(in_stream)
     #get_server_info()
     json_template(details)
     create_job(details)
-    build_manifest(details)
+    #build_manifest(details)
     build_job(details)
 
 main()
