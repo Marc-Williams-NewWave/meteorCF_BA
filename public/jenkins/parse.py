@@ -77,7 +77,7 @@ def build_manifest(details):
 
 def json_template(details):
     #job_file = details["variables"]["job_file"]
-    job_file = "%s/no-webs.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    job_file = "%s/no-webs.xml" % "/Users/Marc/dev/code/meteorite/nwSPADE/public/jenkins"
     git_url = details["git_url"]
     #git_url = str(sys.argv[2])
     #node_name = details["variables"]["node_name"]
@@ -86,7 +86,7 @@ def json_template(details):
     #war_file = 'was-service-broker-0.1.0.war'
     #war_file = details["variables"]["war_file"]
     #output_file = details["variables"]["output_file"]
-    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/nwSPADE/public/jenkins"
     with open(job_file, 'rt') as f:
         doc = ElementTree.parse(f)
 
@@ -122,15 +122,15 @@ def json_template(details):
 
 def create_job(details):
     #output_file = details["variables"]["output_file"]
-    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins"
+    output_file = "%s/demo-job.xml" % "/Users/Marc/dev/code/meteorite/nwSPADE/public/jenkins"
     job_name = details["app_name"]
 
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
+    command = "java -jar /Users/Marc/dev/code/meteorite/nwSPADE/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ create-job %s < %s" % (job_name, output_file) 
     run_command(command)
 
 def build_job(details):
     job_name = details["app_name"]
-    command = "java -jar /Users/Marc/dev/code/meteorite/ba_demo_NEW/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
+    command = "java -jar /Users/Marc/dev/code/meteorite/nwSPADE/public/jenkins/jenkins-cli.jar -s http://192.168.0.126:8090/ build -v %s" % job_name
     run_command(command)
     
 def delete_job(details):
@@ -156,6 +156,7 @@ def arguments():
 
     details = {}
     details["app_name"] = args.name
+    details["git_url"] = args.git_url
     details["memory"] = args.mem
     details["inst"] = args.num_inst
     details["disk"] = args.disk
@@ -168,16 +169,12 @@ def arguments():
 
 def main():
     details = arguments()
-    
-    if args.start:
-        print "launching"
-    print details
     #in_stream = open(file_name, "r")
     #app_details = yaml.load(in_stream)
     #get_server_info()
     json_template(details)
     create_job(details)
-    build_manifest(details)
+    #build_manifest(details)
     build_job(details)
 
 main()
