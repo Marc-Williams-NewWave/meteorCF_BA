@@ -575,19 +575,31 @@
                     </select><br/>
                     <label class="deployLabel">Start:</label>
 
-                    <div><input type="checkbox" id="startStatus"></div>
+                    <div style="margin-left: 50%; margin-top: -8%"> <span><input type="checkbox" id="startStatus"></span></div>
                     <!--</fieldset>-->
 
                 </form>
             </div>
-            <div align="center">
+            <div align="center" style="margin-bottom: 10px;">
                 <button>Cancel</button>
-                <button>Launch</button>
+                <button id="launchApplication">Launch</button>
             </div>
         </div>
 
     </div>
 
+    <div style="display: none;" aria-hidden="true" aria-labelledby="delicious-modal" role="dialog" tabindex="-1"
+         class="modal fade in" id="loadingAppLaunchModal">
+        <div class="modal-dialog modal-dialog-signin modal-dialog-narrow">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div align="center">
+                        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="terminalPage">

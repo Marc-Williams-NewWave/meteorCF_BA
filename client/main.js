@@ -260,8 +260,20 @@ Template.statusApp.events({
     }
 });
 
-Template.appDeployment.helpers({
+Template.appDeployment.events({
+    'click #launchApplication': function () {
 
+//        $('#transparent').show();
+        $('#loadingAppLaunchModal').modal();
+        Meteor.call('pythonParse', $('#appNameLabel').val(), $('#appGitUrlLabel').val(), function (err, result){
+            if(result == true){
+                alert("Success!");
+                $('#loadingAppLaunchModal').modal('toggle');
+//                $('#appCreationModal').modal('toggle');
+//                $('#transparent').hide();
+            }
+        });
+    }
 });
 
 Template.serviceStatus.events({
